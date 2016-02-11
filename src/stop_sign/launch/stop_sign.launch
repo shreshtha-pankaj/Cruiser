@@ -5,11 +5,11 @@
   
   <!-- State Machine Parameters-->
   <param name="/master_state_machine/stop_motor" type="double" value="0.0" />
-  <param name="/master_state_machine/slow_motor" type="double" value="-0.2" />
-  <param name="/master_state_machine/servo_zero" type="double" value="0.155" />
-  <param name="/master_state_machine/high_speed" type="double" value="-0.2" />
+  <param name="/master_state_machine/slow_motor" type="double" value="-0.32" />
+  <param name="/master_state_machine/servo_zero" type="double" value="0.135" />
+  <param name="/master_state_machine/high_speed" type="double" value="-0.32" />
   <param name="/master_state_machine/turn_depth" type="double" value="3500" />
-  <param name="/master_state_machine/reverse_motor" type="double" value="0.95" />
+  <param name="/master_state_machine/reverse_motor" type="double" value="0" />
 
   <!-- Depth parametrs !-->
   <param name="depth_stream/frame_rate" type="int" value="30" />
