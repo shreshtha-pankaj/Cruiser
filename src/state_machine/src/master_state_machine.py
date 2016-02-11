@@ -141,7 +141,7 @@ class StateMachine(object):
         global turn_depth
         if self.start_flag:
             tim = time.time()
-            while(time.time() - tim < 1.0):
+            while(time.time() - tim < 2.0):
                 self.straight.move(self, servo=0.135, motor=-0.55)
             self.start_flag = False
         cur_time = time.time()
