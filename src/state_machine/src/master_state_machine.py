@@ -41,7 +41,7 @@ class Right(State):
     def __init__(self, state_name):
         self.state_name = state_name
 
-    def turn(self, state_machine, servo=-0.6, motor =0.45):
+    def turn(self, state_machine, servo=-0.6, motor =-0.25):
         turn_time = 0.05 # TODO: Should turn time be a parameter?
         end_time = time.time() + turn_time
         print("Depth while turning:left, center, right ", state_machine.left_depth,state_machine.center_depth,state_machine.right_depth)
@@ -86,11 +86,11 @@ class StateMachine(object):
         self.is_stop_sign = False
         self.curr_turn = 1
         self.turn_state_flag = False
-        self.start_flag = True
+        self.start_flag = False
         self.is_in_turn = False
         self.turn_timestamp = time.time() -1
-        self.time_wait = 4.8
-        self.slow_down_depth = turn_depth + 3500
+        self.time_wait = 2 #4.8
+        self.slow_down_depth = turn_depth + 3200
 
     def sub_depth_callback(self, data):
         self.center_depth = data.center_depth
@@ -141,8 +141,8 @@ class StateMachine(object):
         global turn_depth
         if self.start_flag:
             tim = time.time()
-            while(time.time() - tim < 2.0):
-                self.straight.move(self, servo=0.135, motor=-0.55)
+            while(time.time() - tim < 3.5):
+                self.straight.move(self, servo=0.135, motor=-0.6)
             self.start_flag = False
         cur_time = time.time()
         if self.is_stop_sign:
@@ -165,6 +165,7 @@ class StateMachine(object):
             curr_time = time.time()
             self.turn_timestamp = curr_time
             turn_depth = 4800
+            self.slow_down_depth = 9000
             while time.time() - curr_time < 0.3:
                 self.straight.move(self,servo=0.5,motor=-0.5)
             #while time.time() - curr_time < 2:
@@ -209,10 +210,10 @@ if __name__ =='__main__':
     sub_topic_stop_sign = '/is_stop_sign'
     pub_topic = '/car_state'
     rospy.init_node('car_state_pub')
-    time.sleep(3.5)
     ss = StateMachine(pub_topic, sub_topic_depth,sub_topic_pid,sub_topic_stop_sign)
+    ss.straight.move(ss,servo = servo_zero,motor = 0)
+    time.sleep(3.5)
     rospy.loginfo('Initializing Master State Machine')
-#    ss.initial_run()
     while not rospy.is_shutdown():
         # if True:#not ss.is_in_turn:
         ss.determine_state()

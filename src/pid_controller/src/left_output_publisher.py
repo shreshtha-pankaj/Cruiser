@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+servo_zero = 0.135
 import PID
 import time
 import numpy as np
@@ -63,11 +63,11 @@ class pid_node(object):
 
     def output_publisher(self, current_error):
         output = self.pid.update(current_error)
-        output += 0.135
-        if output > 0.64:
-            output = 0.505
-        if output < -0.64:
-            outpout = -0.37
+        output += servo_zero
+        if output > 0.7:
+            output = 0.7
+        if output < -0.7:
+            outpout = -0.7
         self.output_pub.publish(output)
 
 if __name__ == "__main__":
