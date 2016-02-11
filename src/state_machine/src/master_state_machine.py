@@ -57,9 +57,9 @@ class Stop(State):
         self.state_name = state_name
         self.reverse_flag= True
 
-    def stop(self, state_machine, servo=servo_zero, motor=stop_motor):
+    def stop(self, state_machine, servo=servo_zero, motor=reverse_motor):
         state_machine.create_trajectory_Motor_cmd_3('servo',servo)
-        state_machine.create_trajectory_Motor_cmd_3('brushless_motor', reverse_motor)
+        state_machine.create_trajectory_Motor_cmd_3('brushless_motor', motor)
 
 
 class StateMachine(object):
@@ -141,6 +141,7 @@ class Polulu_Command:
         mtr = MotorCommand()
         mtr.joint_name = jntName
         mtr.position = pos
+        print("Sending motor: ",jntName, pos)
         mtr.speed = speed  # /self.MaxSpeed#pololu take 0 to 1.0 as speed, check the correct division
         mtr.acceleration = 1.0
         self.pub.publish(mtr)

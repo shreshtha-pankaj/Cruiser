@@ -28,14 +28,14 @@ if __name__ == '__main__':
     pololu = Polulu_Command()
     while not rospy.is_shutdown():
         print "Enter servo Position: "
-        servo_pos = raw_input()
+        servo_pos = float(raw_input())
         print ("Got servo input %f", servo_pos)
         print ("Enter motor Position: ")
-        motor_pos = raw_input()
+        motor_pos = float(raw_input())
         print ("Got motor input %f", motor_pos)
 
-        pololu.send_command(self.joint_name_servo,servo_pos)
-        pololu.send_command(self.joint_name_brushless_motor,motor_pos)
+        pololu.send_command(pololu.joint_name_servo,servo_pos)
+        pololu.send_command(pololu.joint_name_brushless_motor,motor_pos)
 
     # Shutdown
     pololu.send_command(self.joint_name_servo, 0.135)
