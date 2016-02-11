@@ -16,8 +16,8 @@ high_speed = rospy.get_param('/master_state_machine/high_speed', -0.22)
 turn_depth = rospy.get_param('/master_state_machine/turn_depth', 4500)
 reverse_motor = rospy.get_param('/master_state_machine/reverse_motor', 0.6)
 
-servo_left = 0.41
-servo_right = -0.26
+servo_left = 0.45
+servo_right = -0.18
 backoff_reverse_duration = 2
 backoff_turn_duration = 0.3
 backoff_straight_duration = 0.5
@@ -181,6 +181,7 @@ if __name__ =='__main__':
     pub_topic = '/car_state'
     rospy.init_node('car_state_pub')
     ss = StateMachine(pub_topic, sub_topic_depth, sub_topic_pid, sub_topic_ball)
+    time.sleep(3)
     ss.client.wait_for_server()
     while not rospy.is_shutdown():
         ss.determine_state()

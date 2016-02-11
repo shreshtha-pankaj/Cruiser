@@ -40,7 +40,7 @@ class BlobDetector:
             frame = self.bridge.imgmsg_to_cv2(data,"bgr8")
             width, height = 320, 240
             frame = cv2.resize(frame,(width, height))
-            frame = frame[0: height / 2, width / 3: width * 2 / 3]
+            frame = frame[height/4: height , width / 4: width * 3 / 4]
      
 #            frame = imutils.resize(frame, width=200)
             blurred = cv2.GaussianBlur(frame, (11, 11), 0)
@@ -58,13 +58,13 @@ class BlobDetector:
             if len(cnts) > 0:
                 c = max(cnts, key=cv2.contourArea)
                 ((x, y), radius) = cv2.minEnclosingCircle(c)
-                M = cv2.moments(c)
-                center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+                #M = cv2.moments(c)
+                #center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 
                 # only detect ball if the radius meets a minimum size
                 if radius > 10:
-                    cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 255), 1)
-                    cv2.circle(frame, center, 5, (0, 0, 255), -1)
+                    #cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 255), 1)
+                    #cv2.circle(frame, center, 5, (0, 0, 255), -1)
                     # publish only while transitioning from ball detected to not
                     if self.is_ball == False:
                         self.is_ball = True
@@ -75,12 +75,16 @@ class BlobDetector:
                         self.is_ball = False
                         self.pub.publish(self.is_ball)
                         rospy.loginfo("Ball Detection: We don't see a ball anymore")
-
+            else:
+                if self.is_ball:
+                    self.is_ball = False
+                    self.pub.publish(self.is_ball)
+                    rospy.loginfo("Ball Detection: We don't see a ball anymore")
             # Removed tracking code as we don't need it
           
             # show the frame to our screen
-           cv2.imshow("Frame", frame)
-           key = cv2.waitKey(1) & 0xFF
+            #cv2.imshow("Frame", frame)
+            #key = cv2.waitKey(1) & 0xFF
         except CvBridgeError as e:
             rospy.logerr(str(e))
             

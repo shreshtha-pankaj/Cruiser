@@ -6,11 +6,11 @@
 
    <node pkg="state_machine" type="state_machine_ball.py" name="master_state_machine" output="screen">
      <param name="stop_motor" type="double" value="0.0" />
-     <param name="slow_motor" type="double" value="-0.22" />
+     <param name="slow_motor" type="double" value="0" />
      <param name="servo_zero" type="double" value="0.135" />
-     <param name="high_speed" type="double" value="-0.22" />
-     <param name="turn_depth" type="double" value="4000" />
-     <param name="reverse_motor" type="double" value="0.6" />
+     <param name="high_speed" type="double" value="0" />
+     <param name="turn_depth" type="double" value="4500" />
+     <param name="reverse_motor" type="double" value="0" />
    </node>
 
   <node pkg="camera" type ="depth" name="depth_stream" output="screen">
