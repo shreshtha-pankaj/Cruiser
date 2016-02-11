@@ -42,13 +42,13 @@ class Right(State):
         self.state_name = state_name
 
     def turn(self, state_machine, servo=-0.6, motor =0.4):
-        turn_time = 0.2 # TODO: Should turn time be a parameter?
+        turn_time = 0.08# TODO: Should turn time be a parameter?
         end_time = time.time() + turn_time
         print("Depth while turning:left, center, right ", state_machine.left_depth,state_machine.center_depth,state_machine.right_depth)
         while time.time() < end_time:
             self.state = 'right'
             state_machine.create_trajectory_Motor_cmd_3(state_machine.pololu.joint_name_servo, servo)
-            state_machine.create_trajectory_Motor_cmd_3(state_machine.pololu.joint_name_brushless_motor, motor)
+            state_machine.create_trajectory_Motor_cmd_3(state_machine.pololu.joint_name_brushless_motor, reverse_motor)
             #state_machine.create_trajectory_Motor_cmd_2([servo,motor])
 
 class Stop(State):
@@ -139,9 +139,10 @@ class StateMachine(object):
 
     def determine_state(self):
         global turn_depth
+        global reverse_motor
         if self.start_flag:
             tim = time.time()
-            while(time.time() - tim < 2.0):
+            while(time.time() - tim < 2.5):
                 self.straight.move(self, servo=0.135, motor=-0.55)
             self.start_flag = False
         cur_time = time.time()
@@ -155,7 +156,7 @@ class StateMachine(object):
             rospy.loginfo('Car is moving straight(l, c, r): %f, %f, %f', self.left_depth, self.center_depth, self.right_depth)
             if self.center_depth < self.slow_down_depth  and time.time() - self.turn_timestamp > self.time_wait:
                 rospy.loginfo("slowing down------->>>>>>>")
-                self.straight.move(self,servo = self.pid_value,motor=0.75)
+                self.straight.move(self,servo = self.pid_value,motor=high_speed)
             else:
                 self.straight.move(self,servo = self.pid_value,motor=high_speed)
 
@@ -164,8 +165,10 @@ class StateMachine(object):
         elif self.center_depth > turn_depth and self.turn_state_flag:
             curr_time = time.time()
             self.turn_timestamp = curr_time
-            turn_depth = 4800
-            while time.time() - curr_time < 0.3:
+            turn_depth = 5200
+            reverse_motor -= 0.1
+
+            while time.time() - curr_time < 0.9:
                 self.straight.move(self,servo=0.5,motor=-0.5)
             #while time.time() - curr_time < 2:
                 #self.straight.move(self,servo=self.pid_value,motor=-0.4)
