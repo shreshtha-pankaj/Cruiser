@@ -2,7 +2,7 @@
    <include file="$(find ros_pololu_servo)/launch/pololu_example.launch"/>
 
   <!-- Paramter Configuration for the race only-->
-   <node pkg="state_machine" type="master_state_machine_backoff.py" name="master_state_machine" output="screen">
+   <node pkg="state_machine" type="back_off_state_machine.py" name="master_state_machine" output="screen">
      <param name="stop_motor" type="double" value="0.0" />
      <param name="slow_motor" type="double" value="-0.32" />
      <param name="servo_zero" type="double" value="0.155" />
