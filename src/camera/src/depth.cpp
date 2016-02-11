@@ -115,8 +115,8 @@ int main(int argc, char **argv){
 
   int width_dim = 50;
   int height_dim = 50;
-  int width_dim_LR = 30;
-  int height_dim_LR = 90;
+  int width_dim_LR = 50;
+  int height_dim_LR = 50;
   int cx = depth_width / 2;
   int cy = depth_height / 2;
   float* corners = getCorners(width_dim, height_dim, cx, cy);

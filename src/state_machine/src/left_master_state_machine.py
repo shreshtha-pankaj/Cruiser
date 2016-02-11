@@ -107,13 +107,14 @@ class StateMachine(object):
         self.is_in_turn = False
         self.turn_timestamp = time.time() + 0
         self.time_wait = 4.8
-        self.slow_down_depth = turn_depth + 3200
+        self.slow_down_depth = turn_depth + 2800
         rospy.loginfo("slow_down_depth %f", self.slow_down_depth)
-
+        self.di = 0
     def sub_depth_callback(self, data):
         self.center_depth = data.center_depth
         self.left_depth = data.left_depth
         self.right_depth = data.right_depth
+        self.di = data.di
 
     def sub_pid_callback(self, data):
         self.pid_value = data.data
@@ -157,10 +158,11 @@ class StateMachine(object):
 
     def determine_state(self):
         global turn_depth
+        global slow_down_depth
         if self.start_flag:
             tim = time.time()
             while(time.time() - tim < 2.5):
-                self.straight.move(self, servo=0.08, motor=-0.55)
+                self.straight.move(self, servo=0.13, motor=-0.55)
             self.start_flag = False
         cur_time = time.time()
         if self.is_stop_sign:
@@ -170,7 +172,7 @@ class StateMachine(object):
 
         # move straight when we above a certain depth threshold and not in the turning state
         if (self.center_depth > turn_depth or time.time() - self.turn_timestamp < self.time_wait) and not self.turn_state_flag:
-            rospy.loginfo('Car is moving straight(l, c, r): %f, %f, %f', self.left_depth, self.center_depth, self.right_depth)
+            rospy.loginfo('Car is moving straight(l, c, r, di): %f, %f, %f, %f', self.left_depth, self.center_depth, self.right_depth, self.di)
             if self.center_depth < self.slow_down_depth  and time.time() - self.turn_timestamp > self.time_wait:
                 rospy.loginfo("slowing down------->>>>>>>")
                 self.straight.move(self,servo = self.pid_value,motor=0.75)
@@ -183,6 +185,7 @@ class StateMachine(object):
             curr_time = time.time()
             self.turn_timestamp = curr_time
             turn_depth= 4800
+            slow_down_depth = 9000
             while time.time() - curr_time < 0.3:
                 self.straight.move(self,servo=-0.33,motor=-0.5)
             #while time.time() - curr_time < 2:

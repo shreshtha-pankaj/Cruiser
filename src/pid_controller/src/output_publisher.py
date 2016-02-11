@@ -33,6 +33,8 @@ class pid_node(object):
         self.pid = PID.PID(-1.8/1000,0,0)
         self.pid.clear()
         self.current_pose = 0
+        self.pid_2 = PID.PID(0.25/2000,0,0)
+        self.pid_2.clear()
         self.current_state = 0
 
     def kp_callback(self,data):
@@ -71,18 +73,33 @@ class pid_node(object):
     def depth_callback_light(self, data):
          #    data.right_depth = 1800
         error = data.di
+        #if data.left_depth < 3500 and data.right_depth < 3500:
+         #   error = data.right_depth - data.left_depth
+          #  if abs(error) <= 200:
+           #     error = 0
+           # self.output_publisher_2(error)
+           # return
         if abs(error) <= 15:
             error = 0
         self.output_publisher(error)
 
+    def output_publisher_2(self, current_error):
+        output = self.pid_2.update(current_error)
+        output += 0.05
+        if output > 0.64:
+            output = 0.59
+        if output < -0.64:
+            outpout = -0.55
+        self.output_pub.publish(output)
+
 
     def output_publisher(self, current_error):
         output = self.pid.update(current_error)
-        output += 0.135
+        output += 0.13
         if output > 0.64:
-            output = 0.505
+            output = 0.59
         if output < -0.64:
-            outpout = -0.37
+            outpout = -0.55
         self.output_pub.publish(output)
 
 if __name__ == "__main__":
