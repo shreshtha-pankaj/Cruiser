@@ -112,6 +112,7 @@ class StateMachine(object):
         self.light_flag = False
         rospy.loginfo("slow_down_depth %f", self.slow_down_depth)
         self.turn_count = 0
+        self.no_of_turns = 0
 
     def sub_depth_callback(self, data):
         self.center_depth = data.center_depth
@@ -193,9 +194,19 @@ class StateMachine(object):
             print('Correcting after turn state with center depth: ',self.center_depth)
             self.turn_timestamp = curr_time
             if self.turn_count >4:
-                turn_depth= 4800
-                self.time_wait = 4.8
-                self.light_flag = True
+                self.no_of_turns +=1
+                print("Turn completed :",self.no_of_turns)
+                if self.no_of_turns ==1:
+                    turn_depth= 4800
+                    self.slow_down_depth = 9000
+                #self.time_wait = 4.8
+                    self.light_flag = True
+                else:
+                    self.slow_down_depth = 3000
+                    self.light_flag = False
+
+
+                
             while time.time() - curr_time < 0.3:
                 self.straight.move(self,servo=-0.33,motor=-0.5)
             self.turn_state_flag = False
