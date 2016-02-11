@@ -22,7 +22,7 @@ class pid_node(object):
         rospy.Subscriber("/current_state", Int16 ,self.current_state_callback)
         rospy.Subscriber("/camera/depth", Depth ,self.depth_callback)
         self.lastgains = []
-        self.left_avg, self.right_avg, beta = 2000, 2000, 0.05
+        self.left_avg, self.right_avg, self.beta = 2000, 2000, 0.05
         #self.pid = PID.PID(0.223/2000,0,5*0.223/(10**6))
         self.pid = PID.PID(0.25/2000,0,0)
         self.pid.clear()
@@ -40,9 +40,10 @@ class pid_node(object):
     def depth_callback(self, data):
         if data.left_depth > 3750:
             data.left_depth = 1800
-        self.left_avg = self.left_avg * (1 - self.beta) + self.left_depth * self.beta
-        self.right_avg = self.right_avg * (1 - self.beta) + self.right_depth * self.beta
-        error = data.right_avg - data.left_avg
+        self.left_avg = self.left_avg * (1 - self.beta) + data.left_depth * self.beta
+        self.right_avg = self.right_avg * (1 - self.beta) + data.right_depth * self.beta
+        #error = data.right_depth - data.left_depth
+        error = self.right_avg - self.left_avg
         if abs(error) <= 200:
                 error = 0
         self.output_publisher(error)
