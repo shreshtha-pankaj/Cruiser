@@ -1,8 +1,8 @@
 <launch>
 
   <!-- Launch State Machine -->
-  <include file="$(find state_machine)/launch/master.launch"/>
-  
+<!--  <include file="$(find state_machine)/launch/master.launch"/>
+-->  
   <!-- State Machine Parameters-->
   <param name="/master_state_machine/stop_motor" type="double" value="0.0" />
   <param name="/master_state_machine/slow_motor" type="double" value="-0.25" />

@@ -19,7 +19,7 @@ cyanUpper = (180, 255, 255)
 
 class BlobDetector:
     def __init__(self):
-        rgb_topic = '/camera/rgb'
+        rgb_topic = '/camera/image'
         # depth_topic = '/camera/depth'
 
         # Set up the detector with default parameters.
@@ -31,9 +31,9 @@ class BlobDetector:
     
     def rgb_callback(self, data):
         try:
+            start_time = time.time()
             #  check if it should be bgr8 or rgb8
             frame = self.bridge.imgmsg_to_cv2(data,"bgr8")
-            
             # frame = imutils.resize(frame, width=600)
             blurred = cv2.GaussianBlur(frame, (11, 11), 0)
             hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
@@ -46,7 +46,6 @@ class BlobDetector:
                 cv2.CHAIN_APPROX_SIMPLE)
             cnts = imutils.grab_contours(cnts)
             center = None
-
             # only proceed if at least one contour was found
             if len(cnts) > 0:
                 c = max(cnts, key=cv2.contourArea)
@@ -72,10 +71,12 @@ class BlobDetector:
             # Removed tracking code as we don't need it
           
             # show the frame to our screen
-            cv2.imshow("Frame", frame)
+            #cv2.imshow("Frame", frame)
             key = cv2.waitKey(1) & 0xFF
+            print("TIme taken: ",time.time()-start_time)
         except CvBridgeError as e:
             rospy.logerr(str(e))
+            
         
 if __name__ == '__main__':
     rospy.init_node('ball_detection', log_level = rospy.INFO, anonymous=True)
