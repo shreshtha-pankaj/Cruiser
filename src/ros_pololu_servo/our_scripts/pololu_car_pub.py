@@ -8,46 +8,37 @@ from trajectory_msgs.msg import JointTrajectoryPoint
 
 names=['servo','brushless_motor']
 
+
+class Polulu_Command:
+    def __init__(self):
+        self.joint_name_servo = 'servo'
+        self.joint_name_brushless_motor = 'brushless_motor'
+        self.pub = rospy.Publisher("/pololu/command", MotorCommand, queue_size=10)
+
+    def send_command(self, jntName, pos, speed=0):
+        mtr = MotorCommand()
+        mtr.joint_name = jntName
+        mtr.position = pos
+        mtr.speed = speed  # /self.MaxSpeed#pololu take 0 to 1.0 as speed, check the correct division
+        mtr.acceleration = 1.0
+        self.pub.publish(mtr)
+
 if __name__ == '__main__':
     rospy.init_node('pololu_car_pub')
-    client = actionlib.SimpleActionClient('pololu_trajectory_action_server', pololu_trajectoryAction)
-    print('Here')
-    client.wait_for_server()
-    print("connected to server")
-    print("hello")
+    pololu = Polulu_Command()
     while not rospy.is_shutdown():
         print "Enter servo Position: "
-        servo_pos = raw_input()
+        servo_pos = float(raw_input())
         print ("Got servo input %f", servo_pos)
         print ("Enter motor Position: ")
-        motor_pos = raw_input()
+        motor_pos = float(raw_input())
         print ("Got motor input %f", motor_pos)
 
-        goal = pololu_trajectoryGoal()
-        traj = goal.joint_trajectory
-        traj.header.stamp = rospy.Time.now()
-        traj.joint_names.append(names[0])
-        traj.joint_names.append(names[1])
-        pts=JointTrajectoryPoint()
-        pts.time_from_start=rospy.Duration(0.0)
-        pts.positions.append(float(servo_pos))
-        pts.positions.append(float(motor_pos))
-        pts.velocities.append(1.0)
-        pts.velocities.append(1.0)
-        traj.points.append(pts)
-        client.send_goal(goal)
-        client.wait_for_result(rospy.Duration.from_sec(3.0))
-
-
+        pololu.send_command(pololu.joint_name_servo,servo_pos)
+        pololu.send_command(pololu.joint_name_brushless_motor,motor_pos)
 
     # Shutdown
-    pts = JointTrajectoryPoint()
-    pts.time_from_start = rospy.Duration(0.0)
-    pts.positions.append(0.0)
-    pts.positions.append(0.0)
-    pts.velocities.append(0.0)
-    pts.velocities.append(0.0)
-    traj.points.append(pts)
-    client.send_goal(goal)
-    client.wait_for_result(rospy.Duration.from_sec(5.0))
+    pololu.send_command(self.joint_name_servo, 0.135)
+    pololu.send_command(self.joint_name_brushless_motor, 0.0)
     print "Reset and Shutdown successful!"
+
