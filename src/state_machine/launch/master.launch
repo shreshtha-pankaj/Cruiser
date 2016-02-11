@@ -6,11 +6,11 @@
   <!-- Paramter Configuration for the race only-->
    <node pkg="state_machine" type="master_state_machine.py" name="master_state_machine" output="screen">
      <param name="stop_motor" type="double" value="0.0" />
-     <param name="slow_motor" type="double" value="-0.25" />
+     <param name="slow_motor" type="double" value="-0.22" />
      <param name="servo_zero" type="double" value="0.155" />
-     <param name="high_speed" type="double" value="-0.0" />
-     <param name="turn_depth" type="double" value="5500" />
-     <param name="reverse_motor" type="double" value="0.6" />
+     <param name="high_speed" type="double" value="-0.70" />
+     <param name="turn_depth" type="double" value="6500" />
+     <param name="reverse_motor" type="double" value="0.5" />
    </node>
 
   <!-- Paramter configuration for depth information-->
@@ -21,5 +21,7 @@
    </node>
 
     <node pkg="pid_controller" type ="output_publisher.py" name="output_publisher" output="screen"/>
+    
+<!--    <node pkg="pid_controller" type ="kp_publisher.py" name="kp_publisher" output="screen"/> -->
 
 </launch>
