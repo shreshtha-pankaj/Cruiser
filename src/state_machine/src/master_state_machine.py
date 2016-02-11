@@ -138,6 +138,7 @@ class StateMachine(object):
         self.is_stop_sign = data.data
 
     def determine_state(self):
+        global turn_depth
         if self.start_flag:
             tim = time.time()
             while(time.time() - tim < 1.0):
@@ -163,7 +164,8 @@ class StateMachine(object):
         elif self.center_depth > turn_depth and self.turn_state_flag:
             curr_time = time.time()
             self.turn_timestamp = curr_time
-            self.slow_down_depth += 1000
+            self.slow_down_depth += 700
+            turn_depth -= 2500
             while time.time() - curr_time < 0.3:
                 self.straight.move(self,servo=0.5,motor=-0.5)
             #while time.time() - curr_time < 2:
