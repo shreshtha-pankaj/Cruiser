@@ -16,10 +16,10 @@ high_speed = rospy.get_param('/master_state_machine/high_speed', -0.22)
 turn_depth = rospy.get_param('/master_state_machine/turn_depth', 4500)
 reverse_motor = rospy.get_param('/master_state_machine/reverse_motor', 0.6)
 
-servo_left = 0.4
-servo_right = -0.25
+servo_left = 0.41
+servo_right = -0.26
 backoff_reverse_duration = 2
-backoff_turn_duration = 0.5
+backoff_turn_duration = 0.3
 backoff_straight_duration = 0.5
 
 print("State Machine Parameters: ", stop_motor, slow_motor, servo_zero, high_speed, turn_depth, reverse_motor)

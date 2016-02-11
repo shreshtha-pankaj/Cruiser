@@ -30,7 +30,7 @@ class BlobDetector:
         self.frame_count = 0
     
     def rgb_callback(self, data):
-        if self.frame_count %4 !=0:
+        if self.frame_count % 1 !=0:
             self.frame_count +=1
             return
         self.frame_count = 1
