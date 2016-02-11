@@ -165,7 +165,7 @@ class StateMachine(object):
             curr_time = time.time()
             self.turn_timestamp = curr_time
             self.slow_down_depth += 700
-            turn_depth -= 2500
+            turn_depth -= 2650
             while time.time() - curr_time < 0.3:
                 self.straight.move(self,servo=0.5,motor=-0.5)
             #while time.time() - curr_time < 2:
