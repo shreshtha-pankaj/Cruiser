@@ -36,7 +36,7 @@ class pid_node(object):
         #Published by state machine 1 - straight 2 - turn right
         self.current_state = data.data
 
-    def depth_callback(self,data):
+    def depth_callback_(self,data):
 	if data.left_depth > 3750:
 	    data.left_depth = 1800
 #        if data.right_depth > 4000:
@@ -46,7 +46,7 @@ class pid_node(object):
             error = 0
 	self.output_publisher(error)
 
-    def depth_callback_(self,data):
+    def depth_callback(self,data):
 	    # if data.left_depth > 3700:
 	    #     data.left_depth = 1800
         #     error = data.right_depth - data.left_depth

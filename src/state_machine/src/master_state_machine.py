@@ -71,7 +71,7 @@ class StateMachine(object):
         self.sub_pid = rospy.Subscriber(sub_topic_pid, Float32, callback=self.sub_pid_callback)
         self.sub_stop_sign = rospy.Subscriber(sub_topic_stop_sign, Bool, callback=self.sub_stop_sign_callback)
         self.center_depth, self.left_depth, self.right_depth = 0, 0, 0
-        self.center_avg, self.right_avg, self.left_avg, self.beta = 12000, 2000, 2000, 0.1
+        self.center_avg, self.right_avg, self.left_avg, self.beta = 12000, 2000, 2000, 0.03
         self.straight = Straight("Move-Straight")
         self.right = Right("Move-Right")
         self.stop = Stop("Stop")
