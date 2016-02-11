@@ -18,8 +18,8 @@ reverse_motor = rospy.get_param('/master_state_machine/reverse_motor', 0.4)
 
 servo_left = 0.56
 servo_right = -0.29
-backoff_reverse_duration = 1
-backoff_turn_duration = 1.5
+backoff_reverse_duration = 2
+backoff_turn_duration = 1.2
 backoff_straight_duration = 1
 
 
@@ -83,25 +83,24 @@ class Reverse(State):
         # Move in reverse
         t0 = time.time()
         while(time.time() - t0 < backoff_reverse_duration and not rospy.is_shutdown() ):
-            rospy.loginfo("Backoff: Giving reverse motor control: %f`", state_machine.center_depth)
+      #      rospy.loginfo("Backoff: Giving reverse motor control: %f`", state_machine.center_depth)
             state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
 
-        t0 =time.time()
-        while(time.time()-t0 <0.3):
-            rospy.loginfo("Backoff: Stopping the servo")
-            state_machine.create_trajectory_Motor_cmd('servo',servo_zero)
-            state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
+#        state_machine.create_trajectory_Motor_cmd('servo',servo_zero)
+#        state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
 
         action_left = True
         if(state_machine.left_depth > state_machine.right_depth):
-            rospy.loginfo("Backoff: Turning the servo left")
+            rospy.loginfo("-------Backoff: Turning the servo left")
             action_left = True
-            self.move_left(state_machine, servo_left)
+            #self.move_left(state_machine, servo_left)
+            state_machine.create_trajectory_Motor_cmd('servo',servo_left)
             #turn left
         else:
-            rospy.loginfo("Backoff: Turning the servo right")
+            rospy.loginfo("Backoff: Turning the servo right---------")
             action_left = False
-            self.move_right(state_machine, servo_right)
+            state_machine.create_trajectory_Motor_cmd('servo',servo_right)
+          #  self.move_right(state_machine, servo_right)
             #turn right
         rospy.loginfo("Backoff: Going straight")
         t0 = time.time()

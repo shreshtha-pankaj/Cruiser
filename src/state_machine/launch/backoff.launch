@@ -4,11 +4,11 @@
   <!-- Paramter Configuration for the race only-->
    <node pkg="state_machine" type="master_state_machine_backoff.py" name="master_state_machine" output="screen">
      <param name="stop_motor" type="double" value="0.0" />
-     <param name="slow_motor" type="double" value="-0.25" />
+     <param name="slow_motor" type="double" value="-0.32" />
      <param name="servo_zero" type="double" value="0.155" />
-     <param name="high_speed" type="double" value="-0.25" />
+     <param name="high_speed" type="double" value="-0.32" />
      <param name="turn_depth" type="double" value="4000" />
-     <param name="reverse_motor" type="double" value="0.4" />
+     <param name="reverse_motor" type="double" value="0.35" />
    </node>
 
   <!-- Paramter configuration for depth information-->
