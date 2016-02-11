@@ -29,13 +29,13 @@ class Right(State):
     def __init__(self, state_name):
         self.state_name = state_name
     
-    def turn(self, state_machine, servo=-0.3, motor =slow_motor):
-        turn_time = 0.1
+    def turn(self, state_machine, servo=-0.5, motor =slow_motor):
+        turn_time = 0.15
         end_time = time.time() + turn_time
 
-    while time.time() < end_time:
-        state_machine.create_trajectory_Motor_cmd('servo', -0.4)
-        state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
+        while time.time() < end_time:
+            state_machine.create_trajectory_Motor_cmd('servo', servo)
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
 
 class Stop(State):
     def __init__(self, state_name):
@@ -68,7 +68,7 @@ class state_machine(object):
         #  get the pid value
         self.pid_value = data.data + servo_zero
         print("Current PID Value :",self.pid_value)
-        def create_trajectory_Motor_cmd(self, jntName, pos, speed=0):
+    def create_trajectory_Motor_cmd(self, jntName, pos, speed=0):
         goal = pololu_trajectoryGoal()
         traj = goal.joint_trajectory
         traj.header.stamp = rospy.Time.now()
@@ -82,7 +82,7 @@ class state_machine(object):
         self.client.wait_for_result(rospy.Duration.from_sec(3.0))
 
     def sub_stop_sign_callback(self, data):
-        self.is_stop_sign = data
+        self.is_stop_sign = data.data
 
 
 
@@ -94,9 +94,9 @@ class state_machine(object):
         if self.is_stop_sign:
             self.stop.stop(self)
 
-        if depth_data >3200:
+        if depth_data >3000:
             self.straight.move(self,servo = self.pid_value)
-        elif depth_data <=3199 and depth_data > 1200:
+        elif depth_data <=3000 and depth_data > 1500:
             #Lakshya Code - Hard Coded Turn
             print("depth", depth_data)
             self.right.turn(self)
@@ -107,7 +107,8 @@ class state_machine(object):
 if __name__ =='__main__':
 
     # publishing to ros_pololu_servo right now
-
+    import time
+    time.sleep(5)
     # publish pos and vel data
     sub_topic_depth = '/depth_frames'
     sub_topic_pid = '/pid_output'
