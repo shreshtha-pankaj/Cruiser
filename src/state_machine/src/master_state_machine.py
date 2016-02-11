@@ -11,7 +11,7 @@ import time
 # Default parameters to be used for the race, for other tasks, modify in the launch file
 stop_motor = rospy.get_param('/master_state_machine/stop_motor', 0.0)
 slow_motor = rospy.get_param('/master_state_machine/slow_motor', -0.22)
-servo_zero = rospy.get_param('/master_state_machine/servo_zero', 0.155)
+servo_zero = rospy.get_param('/master_state_machine/servo_zero', 0.08)
 high_speed = rospy.get_param('/master_state_machine/high_speed', -0.70)
 turn_depth = rospy.get_param('/master_state_machine/turn_depth', 6000)
 reverse_motor = rospy.get_param('/master_state_machine/reverse_motor', 0.6)
@@ -87,22 +87,29 @@ class StateMachine(object):
         self.is_stop_sign = False
         self.curr_turn = 1
         self.turn_state_flag = False
-        self.start_flag = False
+        self.start_flag = True
         self.is_in_turn = False
         self.turn_timestamp = time.time() -1
-        self.time_wait = 0 #4.8
+        self.time_wait = 0
         self.slow_down_depth = turn_depth + 2500
         self.turn_count = 0
         self.light_flag = False
         self.no_of_turns = 0
+        self.start_time = time.time()
 
     def sub_depth_callback(self, data):
         self.center_depth = data.center_depth
         self.left_depth = data.left_depth
         self.right_depth = data.right_depth
+        if self.left_depth == 0:
+            self.left_depth = 1800
 
     def sub_pid_callback(self, data):
         self.pid_value = data.data
+        if self.pid_value > 0.2:
+            self.pid_value = 0.2
+        elif self.pid_value < -0.12:
+            self.pid_value = -0.12
         
     def sub_pid_light_callback(self, data):
         self.pid_light_value = data.data
@@ -145,16 +152,17 @@ class StateMachine(object):
         self.is_stop_sign = data.data
 
     def determine_state(self):
+        if time.time()-self.start_time > 16.5:
+            self.straight.move(self, servo = self.pid_value, motor = high_speed)
         global turn_depth
         if self.start_flag:
             tim = time.time()
-            while(time.time() - tim < 3.5):
-                self.straight.move(self, servo=0.135, motor=-0.6)
+            while(time.time() - tim < 3):
+                self.straight.move(self, servo = servo_zero, motor = high_speed)
             self.start_flag = False
+            print('Finished start')
         cur_time = time.time()
-        if self.is_stop_sign:
-            self.stop.stop(self)
-            return
+        
 
 
         # move straight when we above a certain depth threshold and not in the turning state
@@ -169,24 +177,25 @@ class StateMachine(object):
                     self.straight.move(self,servo = self.pid_light_value, motor=high_speed)
                 else:
                     self.straight.move(self,servo = self.pid_value, motor=high_speed)
+            self.turn_count = 0
 
 
         # TODO: Explain what is happening here
         elif self.center_depth > turn_depth and self.turn_state_flag:
             curr_time = time.time()
+            turn_depth = 5500
             self.turn_timestamp = curr_time
             print('Correcting after turn: ',self.center_depth)
             if self.turn_count > 4:
                 self.no_of_turns += 1
                 print('Turn Completed :',self.no_of_turns)
                 if self.no_of_turns == 1:
-                    self.slow_down_depth = 9000
-                    turn_depth = 4800
-                    self.turn_count = 0
+                    self.slow_down_depth = 8000
+                    turn_depth = 4300
                     self.light_flag = False
                 else:
                     self.light_flag = False
-                    self.slow_down_depth = 3000
+            self.turn_count = 0
             while time.time() - curr_time < 0.3:
                 self.straight.move(self,servo=0.5,motor=-0.5)
             #while time.time() - curr_time < 2:
@@ -202,6 +211,7 @@ class StateMachine(object):
         # Car is turning right
         elif self.center_depth < turn_depth:
             self.right.turn(self)
+            turn_depth = 5700
             self.turn_state_flag = True
             self.turn_count +=1
 
@@ -233,9 +243,9 @@ if __name__ =='__main__':
     sub_topic_stop_sign = '/is_stop_sign'
     pub_topic = '/car_state'
     rospy.init_node('car_state_pub')
+    time.sleep(3.5)
     ss = StateMachine(pub_topic, sub_topic_depth, sub_topic_pid, sub_topic_pid_light, sub_topic_stop_sign)
     ss.straight.move(ss,servo = servo_zero,motor = 0)
-    time.sleep(3.5)
     rospy.loginfo('Initializing Master State Machine')
     while not rospy.is_shutdown():
         # if True:#not ss.is_in_turn:

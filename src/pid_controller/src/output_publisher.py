@@ -1,5 +1,5 @@
 #!/usr/bin/python
-servo_zero = 0.08
+servo_zero = 0.05
 import PID
 import time
 import numpy as np
@@ -51,6 +51,7 @@ class pid_node(object):
     def depth_callback_1(self,data):
         if data.left_depth > 3750:
             data.left_depth = 1800
+
         error = data.right_depth - data.left_depth
         if abs(error) <= 200:
             error = 0
@@ -58,7 +59,9 @@ class pid_node(object):
 
     def depth_callback(self, data):
          #    data.right_depth = 1800
-        turn_thresh = 3500
+        if data.left_depth == 0:
+            data.left_depth = 1800
+        turn_thresh = 3300
         if (data.right_depth >= turn_thresh and data.left_depth >= turn_thresh) or (data.left_depth<turn_thresh and data.right_depth <turn_thresh):
             error = data.right_depth - data.left_depth
         elif data.left_depth > turn_thresh:

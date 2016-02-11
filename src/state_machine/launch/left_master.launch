@@ -5,10 +5,10 @@
    <node pkg="state_machine" type="left_master_state_machine.py" name="master_state_machine" output="screen">
      <param name="stop_motor" type="double" value="0.0" />
      <param name="slow_motor" type="double" value="-0.22" />
-     <param name="servo_zero" type="double" value="0.08" />
-     <param name="high_speed" type="double" value="-0.63" />
+     <param name="servo_zero" type="double" value="0.05" />
+     <param name="high_speed" type="double" value="-0.58" />
      <param name="turn_depth" type="double" value="5500" />
-     <param name="reverse_motor" type="double" value="0.85" />
+     <param name="reverse_motor" type="double" value="0.7" />
    </node>
 
   <!-- Paramter configuration for depth information-->

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-servo_zero = 0.08
+servo_zero = 0.05
 import PID
 import time
 import numpy as np
@@ -31,7 +31,7 @@ class pid_node(object):
 
         # Changes for light
         rospy.Subscriber("/camera/depth", Depth, self.depth_callback_light)
-        self.pid_light = PID.PID(-5 / 1000, 0, 0)
+        self.pid_light = PID.PID(-3.6 / 1000, 0, 0)
         self.pid_light.clear()
 
     def kp_callback(self,data):
