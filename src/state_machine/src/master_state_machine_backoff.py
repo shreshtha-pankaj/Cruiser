@@ -18,7 +18,7 @@ reverse_motor = rospy.get_param('/master_state_machine/reverse_motor', 0.4)
 
 servo_left = 0.56
 servo_right = -0.29
-backoff_reverse_duration = 2
+backoff_reverse_duration = 1
 backoff_turn_duration = 1.5
 backoff_straight_duration = 1
 
@@ -75,11 +75,6 @@ class Reverse(State):
 
     def stop_and_reverse(self, state_machine, servo=servo_zero, motor=stop_motor):
         #brake
-        state_machine.create_trajectory_Motor_cmd('servo',servo_zero)
-        state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
-        time.sleep(0.5)
-        #zeror - reverse - zero 
-        t0 = time.time()
         rospy.loginfo("Backoff: Stopping the servo")
         state_machine.create_trajectory_Motor_cmd('servo',servo_zero)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)

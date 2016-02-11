@@ -55,7 +55,7 @@ class pid_node(object):
 
     def output_publisher(self, current_error):
         output = self.pid.update(current_error)
-        output += 0.135
+        output += 0.05
         if output > 0.64:
             output = 0.505
         if output < -0.64:

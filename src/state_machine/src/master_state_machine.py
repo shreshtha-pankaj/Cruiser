@@ -42,7 +42,7 @@ class Right(State):
     def __init__(self, state_name):
         self.state_name = state_name
 
-    def turn(self, state_machine, servo=-0.5, motor =reverse_motor):
+    def turn(self, state_machine, servo=-0.5, motor =stop_motor):
         turn_time = 0.017 # TODO: Should turn time be a parameter?
         end_time = time.time() + turn_time
         print("Depth while turning:left, center, right ", state_machine.left_depth,state_machine.center_depth,state_machine.right_depth)
@@ -58,7 +58,7 @@ class Stop(State):
         self.state_name = state_name
         self.reverse_flag= True
 
-    def stop(self, state_machine, servo=servo_zero, motor=reverse_motor):
+    def stop(self, state_machine, servo=servo_zero, motor=stop_motor):
         state_machine.create_trajectory_Motor_cmd('servo',servo)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
 
