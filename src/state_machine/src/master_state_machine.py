@@ -89,7 +89,7 @@ class StateMachine(object):
         self.start_flag = True
         self.is_in_turn = False
         self.turn_timestamp = time.time() -4
-        self.time_wait = 4
+        self.time_wait = 4.8
         self.slow_down_depth = turn_depth + 500
 
     def sub_depth_callback(self, data):
@@ -141,7 +141,7 @@ class StateMachine(object):
         if self.start_flag:
             tim = time.time()
             while(time.time() - tim < 1.0):
-                self.straight.move(self, servo=0.08, motor=-0.55)
+                self.straight.move(self, servo=0.135, motor=-0.55)
             self.start_flag = False
         cur_time = time.time()
         if self.is_stop_sign:
@@ -163,8 +163,8 @@ class StateMachine(object):
         elif self.center_depth > turn_depth and self.turn_state_flag:
             curr_time = time.time()
             self.turn_timestamp = curr_time
-            self.slow_down_depth += 2000
-            while time.time() - curr_time < 0.5:
+            self.slow_down_depth += 1000
+            while time.time() - curr_time < 0.3:
                 self.straight.move(self,servo=0.5,motor=-0.5)
             #while time.time() - curr_time < 2:
                 #self.straight.move(self,servo=self.pid_value,motor=-0.4)
