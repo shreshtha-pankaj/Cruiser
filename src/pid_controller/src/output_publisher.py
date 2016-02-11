@@ -30,7 +30,7 @@ class pid_node(object):
         # self.kd = self.straight_state["kd"]
 
         self.lastgains = []
-        self.pid = PID.PID(0.1/1000,0,0)
+        self.pid = PID.PID(-1.8/1000,0,0)
         self.pid.clear()
         self.current_pose = 0
         self.current_state = 0

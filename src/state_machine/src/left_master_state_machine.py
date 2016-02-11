@@ -107,7 +107,7 @@ class StateMachine(object):
         self.is_in_turn = False
         self.turn_timestamp = time.time() + 0
         self.time_wait = 4.8
-        self.slow_down_depth = turn_depth + 3500
+        self.slow_down_depth = turn_depth + 3200
         rospy.loginfo("slow_down_depth %f", self.slow_down_depth)
 
     def sub_depth_callback(self, data):

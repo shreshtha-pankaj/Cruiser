@@ -90,12 +90,14 @@ class StateMachine(object):
         self.is_in_turn = False
         self.turn_timestamp = time.time() -1
         self.time_wait = 4.8
-        self.slow_down_depth = turn_depth + 3500
+        self.slow_down_depth = turn_depth + 3200
+        self.di = 0
 
     def sub_depth_callback(self, data):
         self.center_depth = data.center_depth
         self.left_depth = data.left_depth
         self.right_depth = data.right_depth
+        self.di = data.di
 
     def sub_pid_callback(self, data):
         self.pid_value = data.data
@@ -139,6 +141,7 @@ class StateMachine(object):
 
     def determine_state(self):
         global turn_depth
+        global slow_down_depth
         if self.start_flag:
             tim = time.time()
             while(time.time() - tim < 2.0):
@@ -152,10 +155,10 @@ class StateMachine(object):
 
         # move straight when we above a certain depth threshold and not in the turning state
         if (self.center_depth > turn_depth or time.time() - self.turn_timestamp < self.time_wait) and not self.turn_state_flag:
-            rospy.loginfo('Car is moving straight(l, c, r): %f, %f, %f', self.left_depth, self.center_depth, self.right_depth)
+            rospy.loginfo('Car is moving straight(l, c, r, di): %f, %f, %f, %f', self.left_depth, self.center_depth, self.right_depth, self.di)
             if self.center_depth < self.slow_down_depth  and time.time() - self.turn_timestamp > self.time_wait:
                 rospy.loginfo("slowing down------->>>>>>>")
-                self.straight.move(self,servo = self.pid_value,motor=0.75)
+                self.straight.move(self,servo = 0.07,motor=0.75)
             else:
                 self.straight.move(self,servo = self.pid_value,motor=high_speed)
 
@@ -165,6 +168,7 @@ class StateMachine(object):
             curr_time = time.time()
             self.turn_timestamp = curr_time
             turn_depth = 4800
+            slow_down_depth = 9000
             while time.time() - curr_time < 0.3:
                 self.straight.move(self,servo=0.5,motor=-0.5)
             #while time.time() - curr_time < 2:
