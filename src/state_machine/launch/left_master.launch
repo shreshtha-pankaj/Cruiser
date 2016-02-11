@@ -7,8 +7,8 @@
      <param name="slow_motor" type="double" value="-0.22" />
      <param name="servo_zero" type="double" value="0.135" />
      <param name="high_speed" type="double" value="-0.68" />
-     <param name="turn_depth" type="double" value="6800" />
-     <param name="reverse_motor" type="double" value="0.6" />
+     <param name="turn_depth" type="double" value="5500" />
+     <param name="reverse_motor" type="double" value="0.85" />
    </node>
 
   <!-- Paramter configuration for depth information-->
