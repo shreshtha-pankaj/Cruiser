@@ -89,8 +89,8 @@ class StateMachine(object):
         self.start_flag = False
         self.is_in_turn = False
         self.turn_timestamp = time.time() -1
-        self.time_wait = 2 #4.8
-        self.slow_down_depth = turn_depth + 3200
+        self.time_wait = 0 #4.8
+        self.slow_down_depth = turn_depth + 2500
         self.turn_count = 0
 
     def sub_depth_callback(self, data):
@@ -182,7 +182,7 @@ class StateMachine(object):
             self.stop.stop(self)
 
         # Car is turning right
-        elif self.center_depth < 6000:
+        elif self.center_depth < turn_depth:
             self.right.turn(self)
             self.turn_state_flag = True
             self.turn_count +=1

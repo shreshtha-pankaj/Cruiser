@@ -174,7 +174,7 @@ class StateMachine(object):
             return
 
 
-        # move straight when we above a certain depth threshold and not in the turning state
+        # if self.center_depth < turn_d move straight when we above a certain depth threshold and not in the turning state
         if (self.center_depth > turn_depth or time.time() - self.turn_timestamp < self.time_wait) and not self.turn_state_flag:
             rospy.loginfo('Car is moving straight(l, c, r): %f, %f, %f', self.left_depth, self.center_depth, self.right_depth)
             if self.center_depth < self.slow_down_depth  and time.time() - self.turn_timestamp > self.time_wait:
@@ -190,7 +190,7 @@ class StateMachine(object):
         # TODO: Explain what is happening here
         elif self.center_depth > turn_depth and self.turn_state_flag:
             curr_time = time.time()
-            print('Correcting after turn state')
+            print('Correcting after turn state with center depth: ',self.center_depth)
             self.turn_timestamp = curr_time
             if self.turn_count >4:
                 turn_depth= 4800
