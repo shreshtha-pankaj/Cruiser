@@ -32,7 +32,7 @@ class Right(State):
     def __init__(self, state_name):
         self.state_name = state_name
 
-    def turn(self, state_machine, servo=-0.22, motor =slow_motor):
+    def turn(self, state_machine, servo=-0.20, motor =slow_motor):
         turn_time = 0.012
         end_time = time.time() + turn_time
 
@@ -60,16 +60,28 @@ class Reverse(State):
         self.state_name = state_name
 
     def stop_and_reverse(self, state_machine, servo=servo_zero, motor=stop_motor):
+        #if(self.reversed)
+        #     return
         # Stop the car
+        state_machine.create_trajectory_Motor_cmd('servo',-0.4)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
+
+        time.sleep(1)
+        # Move in reverse
+	t0 = time.time()
+	while(time.time()-t0 < 1.5):
+            print("Giving reverse motor control: ", state_machine.cnt_wall_distance)
+#            state_machine.create_trajectory_Motor_cmd('servo', -0.4)
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
+        print("Going straight")
         state_machine.create_trajectory_Motor_cmd('servo',servo)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
 
-        time.sleep(0.5)
-        # Move in reverse
-	t0 = time.time()
-	while(time.time()-t0 < 0.5):
-            print("Giving reverse motor control: ", state_machine.cnt_wall_distance)
-            state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
+        time.sleep(1)
+	while(time.time()-t0 < 2.5):
+            state_machine.create_trajectory_Motor_cmd('servo',servo)
+	    state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
+#        self.reversed =True
 
     def reverse(self, state_machine, servo=servo_zero, motor=stop_motor):
         # Move in reverse
@@ -143,7 +155,7 @@ class state_machine(object):
             is_collided = True
             print("Checking for collision:", self.cnt_wall_distance)
             while(time.time() - t0 < 0.5):
-                if(self.cnt_wall_distance > 550):
+                if(self.cnt_wall_distance > 650):
                     is_collided = False
                     break
             if is_collided:
