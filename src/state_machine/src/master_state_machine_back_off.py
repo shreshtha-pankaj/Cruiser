@@ -14,10 +14,15 @@ names=['servo','brushless_motor']
 stop_motor = 0.0
 slow_motor =  -0.22
 servo_zero = 0.155
-servo_left = 0.3
-servo_right = -0.05
+servo_left = 0.55
+servo_right = -0.25
 high_speed = -0.22
-reverse_motor = 0.3
+reverse_motor = 0.4
+backoff_reverse_duration = 2
+backoff_turn_duration = 1.5
+backoff_straight_duration = 1
+
+
 class State():
     def __init__(self, state_name):
         pass
@@ -67,13 +72,15 @@ class Reverse(State):
         # Stop the car
         state_machine.create_trajectory_Motor_cmd('servo',servo_zero)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
         time.sleep(1)
 
         # Move in reverse
         t0 = time.time()
-        while(time.time()-t0 < 3 or self.cnt_wall_distance < 1000 or not rospy.is_shutdown() ):
+        while(time.time() - t0 < backoff_reverse_duration and  not rospy.is_shutdown() ):
             print("Giving reverse motor control: ", state_machine.cnt_wall_distance)
-            #state_machine.create_trajectory_Motor_cmd('servo', -0.4)
             state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
     
         print("Stopping the servo")
@@ -81,24 +88,36 @@ class Reverse(State):
         state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
         time.sleep(0.5)
         #self.left_wall_distance, self.cnt_wall_distance, self.right_wall_distance
-        if(self.left_wall_distance - self.right_wall_distance > 1000):
+        what_i_did = 1
+        if(state_machine.left_wall_distance - state_machine.right_wall_distance > 1000):
             print("Turning the servo left")
+            what_i_did = 1
             state_machine.create_trajectory_Motor_cmd('servo',servo_left)
             #turn left
         else:
             print("Turning the servo right")
+            what_i_did = 0
             state_machine.create_trajectory_Motor_cmd('servo',servo_right)
             #turn right
         print("Going straight")
         t0 = time.time()
-        while(time.time() - t0<0.5):
+        while(time.time() - t0 < backoff_turn_duration):
             state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
  
         t0 = time.time()
-        while(time.time() - t0<0.5):
+        while(time.time() - t0 < backoff_straight_duration):
             state_machine.create_trajectory_Motor_cmd('servo',servo)
             state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
-      self.reversed =True
+        self.reversed =True
+        
+        t0= time.time()
+	while( time.time() - t0<1):
+            if what_i_did:
+                state_machine.create_trajectory_Motor_cmd('servo',servo_right)
+                state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
+            else:
+                state_machine.create_trajectory_Motor_cmd('servo',servo_left)
+                state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
 
     def reverse(self, state_machine, servo=servo_zero, motor=stop_motor):
         # Move in reverse
@@ -171,7 +190,7 @@ class state_machine(object):
             is_collided = True
             print("Checking for collision:", self.cnt_wall_distance)
             while(time.time() - t0 < 0.5):
-                if(self.cnt_wall_distance > 400):
+                if(self.cnt_wall_distance > 500):
                     is_collided = False
                     break
             if is_collided:
@@ -194,7 +213,7 @@ if __name__ =='__main__':
 
     # publishing to ros_pololu_servo right now
     import time
-    time.sleep(5)
+    time.sleep(2)
     # publish pos and vel data
     sub_topic_depth = '/depth_frames'
     sub_topic_pid = '/pid_output'
@@ -206,3 +225,7 @@ if __name__ =='__main__':
     ss.client.wait_for_server()
     while not rospy.is_shutdown():
         ss.determine_state()
+#! /usr/bin/env python
+
+import rospy
+from trajectory_msgs.msg import JointTrajectoryPoint
