@@ -1,2 +1,2 @@
 - setup-file:
-    local-name: /home/karan/advanced_robotics_ws/devel/setup.sh
+    local-name: /home/odroid/project/devel/setup.sh

@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/karan/advanced_robotics_ws/src
+CMAKE_SOURCE_DIR = /home/odroid/project/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/karan/advanced_robotics_ws/build
+CMAKE_BINARY_DIR = /home/odroid/project/build
 
 # Utility rule file for doxygen.
 
@@ -67,6 +67,6 @@ CMakeFiles/doxygen.dir/clean:
 .PHONY : CMakeFiles/doxygen.dir/clean
 
 CMakeFiles/doxygen.dir/depend:
-	cd /home/karan/advanced_robotics_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/karan/advanced_robotics_ws/src /home/karan/advanced_robotics_ws/src /home/karan/advanced_robotics_ws/build /home/karan/advanced_robotics_ws/build /home/karan/advanced_robotics_ws/build/CMakeFiles/doxygen.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/odroid/project/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/odroid/project/src /home/odroid/project/src /home/odroid/project/build /home/odroid/project/build /home/odroid/project/build/CMakeFiles/doxygen.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/doxygen.dir/depend
 

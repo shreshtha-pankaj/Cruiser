@@ -1,0 +1,8 @@
+prefix=/home/odroid/project/install
+
+Name: real-sense-wrapper
+Description: Description of real-sense-wrapper
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/odroid/project/install/lib 
+Requires: 

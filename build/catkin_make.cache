@@ -1,2 +1,2 @@
-
--DCATKIN_DEVEL_PREFIX=/home/karan/advanced_robotics_ws/devel -DCMAKE_INSTALL_PREFIX=/home/karan/advanced_robotics_ws/install -G Unix Makefiles
+real-sense-wrapper
+-DCATKIN_DEVEL_PREFIX=/home/odroid/project/devel -DCMAKE_INSTALL_PREFIX=/home/odroid/project/install -G Unix Makefiles
