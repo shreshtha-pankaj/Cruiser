@@ -1,0 +1,8 @@
+prefix=/home/karan/advanced_robotics_ws/devel
+
+Name: pololu_car
+Description: Description of pololu_car
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/karan/advanced_robotics_ws/devel/lib 
+Requires: 

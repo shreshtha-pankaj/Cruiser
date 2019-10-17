@@ -8,6 +8,7 @@
 
 # modified environment variables
 export CMAKE_PREFIX_PATH="/home/karan/advanced_robotics_ws/devel:$CMAKE_PREFIX_PATH"
+export LD_LIBRARY_PATH="/home/karan/advanced_robotics_ws/devel/lib:$LD_LIBRARY_PATH"
 export PATH="/opt/ros/kinetic/bin:/home/karan/anaconda3/bin:/home/karan/anaconda3/condabin:/home/karan/.sdkman/candidates/gradle/current/bin:/home/karan/bin:/home/karan/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
 export PWD="/home/karan/advanced_robotics_ws/build"
 export ROSLISP_PACKAGE_DIRECTORIES="/home/karan/advanced_robotics_ws/devel/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"

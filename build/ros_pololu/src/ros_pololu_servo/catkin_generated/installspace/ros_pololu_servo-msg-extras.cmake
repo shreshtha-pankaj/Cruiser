@@ -1,0 +1,2 @@
+set(ros_pololu_servo_MESSAGE_FILES "msg/MotorCalibration.msg;msg/MotorCommand.msg;msg/MotorState.msg;msg/MotorStateList.msg;msg/pololu_trajectoryAction.msg;msg/pololu_trajectoryActionGoal.msg;msg/pololu_trajectoryActionResult.msg;msg/pololu_trajectoryActionFeedback.msg;msg/pololu_trajectoryGoal.msg;msg/pololu_trajectoryResult.msg;msg/pololu_trajectoryFeedback.msg")
+set(ros_pololu_servo_SERVICE_FILES "srv/MotorRange.srv")

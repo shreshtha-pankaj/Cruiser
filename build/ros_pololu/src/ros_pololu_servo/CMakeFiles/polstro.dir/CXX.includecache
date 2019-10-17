@@ -1,0 +1,44 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/include/polstro/PolstroSerialInterface.h
+string
+-
+
+/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/include/polstro/PolstroSerialInterfacePOSIX.h
+PolstroSerialInterface.h
+/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/include/polstro/PolstroSerialInterface.h
+
+/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/include/polstro/PolstroSerialInterfaceWindows.h
+PolstroSerialInterface.h
+/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/include/polstro/PolstroSerialInterface.h
+windows.h
+-
+
+/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/src/polstro/PolstroSerialInterface.cpp
+polstro/PolstroSerialInterface.h
+-
+polstro/PolstroSerialInterfaceWindows.h
+-
+polstro/PolstroSerialInterfacePOSIX.h
+-
+
+/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/src/polstro/PolstroSerialInterfacePOSIX.cpp
+polstro/PolstroSerialInterfacePOSIX.h
+-
+fcntl.h
+-
+stdio.h
+-
+unistd.h
+-
+termios.h
+-
+errno.h
+-
+
