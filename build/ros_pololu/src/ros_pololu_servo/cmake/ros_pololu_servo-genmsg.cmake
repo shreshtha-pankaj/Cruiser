@@ -34,17 +34,17 @@ add_custom_target(_ros_pololu_servo_generate_messages_check_deps_${_filename}
 
 get_filename_component(_filename "/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorStateList.msg" NAME_WE)
 add_custom_target(_ros_pololu_servo_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "ros_pololu_servo" "/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorStateList.msg" "ros_pololu_servo/MotorState:ros_pololu_servo/MotorCalibration"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "ros_pololu_servo" "/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorStateList.msg" "ros_pololu_servo/MotorCalibration:ros_pololu_servo/MotorState"
 )
 
 get_filename_component(_filename "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryAction.msg" NAME_WE)
 add_custom_target(_ros_pololu_servo_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "ros_pololu_servo" "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryAction.msg" "actionlib_msgs/GoalID:ros_pololu_servo/pololu_trajectoryFeedback:ros_pololu_servo/pololu_trajectoryActionGoal:trajectory_msgs/JointTrajectoryPoint:ros_pololu_servo/pololu_trajectoryGoal:std_msgs/Header:actionlib_msgs/GoalStatus:ros_pololu_servo/pololu_trajectoryActionFeedback:ros_pololu_servo/pololu_trajectoryActionResult:trajectory_msgs/JointTrajectory:ros_pololu_servo/pololu_trajectoryResult"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "ros_pololu_servo" "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryAction.msg" "trajectory_msgs/JointTrajectoryPoint:actionlib_msgs/GoalStatus:actionlib_msgs/GoalID:trajectory_msgs/JointTrajectory:ros_pololu_servo/pololu_trajectoryActionResult:ros_pololu_servo/pololu_trajectoryGoal:ros_pololu_servo/pololu_trajectoryActionFeedback:ros_pololu_servo/pololu_trajectoryResult:ros_pololu_servo/pololu_trajectoryFeedback:ros_pololu_servo/pololu_trajectoryActionGoal:std_msgs/Header"
 )
 
 get_filename_component(_filename "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionGoal.msg" NAME_WE)
 add_custom_target(_ros_pololu_servo_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "ros_pololu_servo" "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionGoal.msg" "actionlib_msgs/GoalID:trajectory_msgs/JointTrajectoryPoint:ros_pololu_servo/pololu_trajectoryGoal:std_msgs/Header:trajectory_msgs/JointTrajectory"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "ros_pololu_servo" "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionGoal.msg" "trajectory_msgs/JointTrajectoryPoint:actionlib_msgs/GoalID:trajectory_msgs/JointTrajectory:ros_pololu_servo/pololu_trajectoryGoal:std_msgs/Header"
 )
 
 get_filename_component(_filename "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionResult.msg" NAME_WE)
@@ -54,12 +54,12 @@ add_custom_target(_ros_pololu_servo_generate_messages_check_deps_${_filename}
 
 get_filename_component(_filename "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionFeedback.msg" NAME_WE)
 add_custom_target(_ros_pololu_servo_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "ros_pololu_servo" "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionFeedback.msg" "actionlib_msgs/GoalID:actionlib_msgs/GoalStatus:std_msgs/Header:ros_pololu_servo/pololu_trajectoryFeedback"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "ros_pololu_servo" "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionFeedback.msg" "actionlib_msgs/GoalID:ros_pololu_servo/pololu_trajectoryFeedback:actionlib_msgs/GoalStatus:std_msgs/Header"
 )
 
 get_filename_component(_filename "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg" NAME_WE)
 add_custom_target(_ros_pololu_servo_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "ros_pololu_servo" "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg" "trajectory_msgs/JointTrajectory:std_msgs/Header:trajectory_msgs/JointTrajectoryPoint"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "ros_pololu_servo" "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg" "trajectory_msgs/JointTrajectoryPoint:trajectory_msgs/JointTrajectory:std_msgs/Header"
 )
 
 get_filename_component(_filename "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryResult.msg" NAME_WE)
@@ -104,19 +104,19 @@ _generate_msg_cpp(ros_pololu_servo
 _generate_msg_cpp(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorStateList.msg"
   "${MSG_I_FLAGS}"
-  "/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorState.msg;/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorCalibration.msg"
+  "/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorCalibration.msg;/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorState.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_cpp(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryAction.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionGoal.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionResult.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryResult.msg"
+  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionResult.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryResult.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_cpp(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionGoal.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg"
+  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_cpp(ros_pololu_servo
@@ -128,13 +128,13 @@ _generate_msg_cpp(ros_pololu_servo
 _generate_msg_cpp(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionFeedback.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg"
+  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_cpp(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg"
+  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_cpp(ros_pololu_servo
@@ -225,19 +225,19 @@ _generate_msg_eus(ros_pololu_servo
 _generate_msg_eus(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorStateList.msg"
   "${MSG_I_FLAGS}"
-  "/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorState.msg;/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorCalibration.msg"
+  "/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorCalibration.msg;/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorState.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_eus(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryAction.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionGoal.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionResult.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryResult.msg"
+  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionResult.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryResult.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_eus(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionGoal.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg"
+  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_eus(ros_pololu_servo
@@ -249,13 +249,13 @@ _generate_msg_eus(ros_pololu_servo
 _generate_msg_eus(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionFeedback.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg"
+  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_eus(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg"
+  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_eus(ros_pololu_servo
@@ -346,19 +346,19 @@ _generate_msg_lisp(ros_pololu_servo
 _generate_msg_lisp(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorStateList.msg"
   "${MSG_I_FLAGS}"
-  "/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorState.msg;/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorCalibration.msg"
+  "/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorCalibration.msg;/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorState.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_lisp(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryAction.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionGoal.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionResult.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryResult.msg"
+  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionResult.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryResult.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_lisp(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionGoal.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg"
+  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_lisp(ros_pololu_servo
@@ -370,13 +370,13 @@ _generate_msg_lisp(ros_pololu_servo
 _generate_msg_lisp(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionFeedback.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg"
+  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_lisp(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg"
+  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_lisp(ros_pololu_servo
@@ -467,19 +467,19 @@ _generate_msg_nodejs(ros_pololu_servo
 _generate_msg_nodejs(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorStateList.msg"
   "${MSG_I_FLAGS}"
-  "/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorState.msg;/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorCalibration.msg"
+  "/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorCalibration.msg;/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorState.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_nodejs(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryAction.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionGoal.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionResult.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryResult.msg"
+  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionResult.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryResult.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_nodejs(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionGoal.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg"
+  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_nodejs(ros_pololu_servo
@@ -491,13 +491,13 @@ _generate_msg_nodejs(ros_pololu_servo
 _generate_msg_nodejs(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionFeedback.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg"
+  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_nodejs(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg"
+  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_nodejs(ros_pololu_servo
@@ -588,19 +588,19 @@ _generate_msg_py(ros_pololu_servo
 _generate_msg_py(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorStateList.msg"
   "${MSG_I_FLAGS}"
-  "/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorState.msg;/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorCalibration.msg"
+  "/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorCalibration.msg;/home/karan/advanced_robotics_ws/src/ros_pololu/src/ros_pololu_servo/msg/MotorState.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_py(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryAction.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionGoal.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionResult.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryResult.msg"
+  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionResult.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryResult.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_py(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionGoal.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg"
+  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_py(ros_pololu_servo
@@ -612,13 +612,13 @@ _generate_msg_py(ros_pololu_servo
 _generate_msg_py(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryActionFeedback.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg"
+  "/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalID.msg;/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryFeedback.msg;/opt/ros/kinetic/share/actionlib_msgs/cmake/../msg/GoalStatus.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_py(ros_pololu_servo
   "/home/karan/advanced_robotics_ws/devel/share/ros_pololu_servo/msg/pololu_trajectoryGoal.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg"
+  "/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/kinetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/kinetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/ros_pololu_servo
 )
 _generate_msg_py(ros_pololu_servo

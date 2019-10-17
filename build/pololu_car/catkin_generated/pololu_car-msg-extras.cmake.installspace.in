@@ -1,0 +1,2 @@
+set(pololu_car_MESSAGE_FILES "msg/MotorCalibration.msg;msg/MotorCommand.msg;msg/MotorState.msg;msg/MotorStateList.msg")
+set(pololu_car_SERVICE_FILES "")

@@ -2,28 +2,37 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b4a855b9-2340-4f7f-bacb-6301cb3bf75a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/scripts/pololu_run_pub.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/our_scripts/pololu_car_pub.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeCache.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/CMakeFiles/CMakeRuleHashes.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/CMakeRuleHashes.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/Makefile.cmake" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/Makefile2" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/CMakeFiles/TargetDirectories.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/TargetDirectories.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/progress.marks" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/progress.marks" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/CTestTestfile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/build/CTestTestfile.cmake" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/build/Makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/catkin_generated/order_packages.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/build/catkin_generated/order_packages.cmake" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/catkin_generated/setup_cached.sh" beforeDir="false" afterPath="$PROJECT_DIR$/build/catkin_generated/setup_cached.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/catkin_make.cache" beforeDir="false" afterPath="$PROJECT_DIR$/build/catkin_make.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/cmake_install.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/build/cmake_install.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ros_pololu/build/ros_pololu_servo/CMakeFiles/ros_pololu_servo_node.dir/src/pololu_controller_node.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/src/ros_pololu/build/ros_pololu_servo/CMakeFiles/ros_pololu_servo_node.dir/src/pololu_controller_node.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ros_pololu/devel/lib/ros_pololu_servo/ros_pololu_servo_node" beforeDir="false" afterPath="$PROJECT_DIR$/src/ros_pololu/devel/lib/ros_pololu_servo/ros_pololu_servo_node" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/_ros_pololu_servo_generate_messages_check_deps_MotorStateList.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/_ros_pololu_servo_generate_messages_check_deps_MotorStateList.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/_ros_pololu_servo_generate_messages_check_deps_pololu_trajectoryAction.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/_ros_pololu_servo_generate_messages_check_deps_pololu_trajectoryAction.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/_ros_pololu_servo_generate_messages_check_deps_pololu_trajectoryActionFeedback.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/_ros_pololu_servo_generate_messages_check_deps_pololu_trajectoryActionFeedback.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/_ros_pololu_servo_generate_messages_check_deps_pololu_trajectoryActionGoal.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/_ros_pololu_servo_generate_messages_check_deps_pololu_trajectoryActionGoal.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/_ros_pololu_servo_generate_messages_check_deps_pololu_trajectoryGoal.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/_ros_pololu_servo_generate_messages_check_deps_pololu_trajectoryGoal.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/ros_pololu_servo_generate_messages_cpp.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/ros_pololu_servo_generate_messages_cpp.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/ros_pololu_servo_generate_messages_eus.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/ros_pololu_servo_generate_messages_eus.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/ros_pololu_servo_generate_messages_lisp.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/ros_pololu_servo_generate_messages_lisp.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/ros_pololu_servo_generate_messages_nodejs.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/ros_pololu_servo_generate_messages_nodejs.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/ros_pololu_servo_generate_messages_py.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/CMakeFiles/ros_pololu_servo_generate_messages_py.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/cmake/ros_pololu_servo-genmsg.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/build/ros_pololu/src/ros_pololu_servo/cmake/ros_pololu_servo-genmsg.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pololu_car/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pololu_car/launch/pololu_launch.launch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pololu_car/package.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ros_pololu" beforeDir="false" afterPath="$PROJECT_DIR$/src/ros_pololu" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo" beforeDir="false" afterPath="$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/launch/pololu_motors.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/launch/pololu_motors.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/scripts/itf_trajectory_node.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/scripts/itf_trajectory_node.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/scripts/pololu_action_client_example.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/scripts/pololu_action_client_example.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/scripts/test_itf_trajectory.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/scripts/test_itf_trajectory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/src/pololu_controller_node.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/src/pololu_controller_node.cpp" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,26 +40,72 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="Git.Settings">
-    <option name="ROOT_SYNC" value="DONT_SYNC" />
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/scripts/pololu_action_client_example.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="615">
+              <caret line="54" column="30" lean-forward="true" selection-start-line="54" selection-start-column="30" selection-end-line="54" selection-end-column="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/scripts/pololu_trajectory_action_node.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="653">
+              <caret line="71" column="106" selection-start-line="71" selection-start-column="106" selection-end-line="71" selection-end-column="106" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/launch/pololu_example.launch">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="10" selection-end-line="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/our_scripts/pololu_car_pub.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="390">
+              <caret line="30" column="45" selection-start-line="30" selection-start-column="45" selection-end-line="30" selection-end-column="45" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
-  <component name="ProjectConfigurationFiles">
-    <option name="files">
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
       <list>
-        <option value="$PROJECT_DIR$/.idea/advanced_robotics_ws.iml" />
-        <option value="$PROJECT_DIR$/.idea/misc.xml" />
-        <option value="$PROJECT_DIR$/.idea/vcs.xml" />
-        <option value="$PROJECT_DIR$/.idea/modules.xml" />
-        <option value="$PROJECT_DIR$/.idea/libraries/R_User_Library.xml" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="65" />
-    <option name="y" value="-4" />
+  <component name="Git.Settings">
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/pololu_car/launch/pololu_launch.launch" />
+        <option value="$PROJECT_DIR$/src/pololu_car/src/pololu_car_pub.py" />
+        <option value="$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/scripts/pololu_action_client_example.py" />
+        <option value="$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/our_scripts/pololu_car_pub.py" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="4">
+    <option name="x" value="992" />
+    <option name="y" value="24" />
     <option name="width" value="928" />
-    <option name="height" value="1084" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -58,12 +113,67 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="advanced_robotics_ws" type="b2602c69:ProjectViewProjectNode" />
+              <item name="advanced_robotics_ws" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="advanced_robotics_ws" type="b2602c69:ProjectViewProjectNode" />
+              <item name="advanced_robotics_ws" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="advanced_robotics_ws" type="b2602c69:ProjectViewProjectNode" />
+              <item name="advanced_robotics_ws" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="ros_pololu" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="advanced_robotics_ws" type="b2602c69:ProjectViewProjectNode" />
+              <item name="advanced_robotics_ws" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="ros_pololu" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="advanced_robotics_ws" type="b2602c69:ProjectViewProjectNode" />
+              <item name="advanced_robotics_ws" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="ros_pololu" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="ros_pololu_servo" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="advanced_robotics_ws" type="b2602c69:ProjectViewProjectNode" />
+              <item name="advanced_robotics_ws" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="ros_pololu" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="ros_pololu_servo" type="462c0819:PsiDirectoryNode" />
+              <item name="our_scripts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="advanced_robotics_ws" type="b2602c69:ProjectViewProjectNode" />
+              <item name="advanced_robotics_ws" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="ros_pololu" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="ros_pololu_servo" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -101,10 +211,11 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
+    <frame x="992" y="24" width="928" height="1056" extended-state="4" />
+    <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24958587" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.35067874" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Version Control" />
       <window_info anchor="bottom" id="Python Console" />
@@ -123,5 +234,52 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/pololu_car/launch/pololu_launch.launch">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="69" selection-start-line="11" selection-start-column="69" selection-end-line="11" selection-end-column="69" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pololu_car/src/pololu_car_pub.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="34" lean-forward="true" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="34" />
+          <folding>
+            <element signature="e#1595#1607#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/launch/pololu_example.launch">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/scripts/pololu_trajectory_action_node.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="653">
+          <caret line="71" column="106" selection-start-line="71" selection-start-column="106" selection-end-line="71" selection-end-column="106" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/scripts/pololu_action_client_example.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="615">
+          <caret line="54" column="30" lean-forward="true" selection-start-line="54" selection-start-column="30" selection-end-line="54" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ros_pololu/src/ros_pololu_servo/our_scripts/pololu_car_pub.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="30" column="45" selection-start-line="30" selection-start-column="45" selection-end-line="30" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
   </component>
 </project>
