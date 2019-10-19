@@ -1,0 +1,3 @@
+<launch>
+  <node pkg="camera" type="depth_listener" name="depth_listener" output="screen"/>
+</launch>
