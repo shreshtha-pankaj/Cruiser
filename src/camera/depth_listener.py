@@ -6,8 +6,8 @@ from cv_bridge import CvBridge, CvBridgeError
 
 class ImageListener:
     def __init__(self, topic):
-        self.width_dim, self.height_dim = 16, 8
-        self.corners = self.get_corners(self.width_dim, self.height_dim, 240, 320)
+        self.height_dim, self.width_dim = 8, 16
+        self.corners = self.get_corners(self.height_dim, self.width_dim, 240, 320)
         self.topic = topic
         self.bridge = CvBridge()
         self.sub = rospy.Subscriber(topic, msg_Image, self.imageDepthCallback)
@@ -30,7 +30,7 @@ class ImageListener:
             print(e)
             return
 
-    def get_corners(height, width, cx, cy):
+    def get_corners(self, height, width, cy, cx):
         corners = []
         # left_frame
         corners += [ 0, cy - height / 2 ]
@@ -44,7 +44,8 @@ class ImageListener:
 
 
     def getAverageDepth(self, img, width_dim, height_dim, x, y):
-        sum = 0, ctr = 0
+        sum = 0
+        ctr = 0
         for i in range(y, y + height_dim):
             for j in range(x, x + width_dim):
                 if img[y, x]:
