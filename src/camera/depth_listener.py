@@ -51,6 +51,8 @@ class ImageListener:
                 if img[y, x]:
                     ctr += 1
                     sum = sum + img[y, x]
+        if ctr == 0:
+            return 0
         return (sum / ctr);
 
 
