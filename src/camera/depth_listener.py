@@ -22,9 +22,9 @@ class ImageListener:
             self.msg.left_depth = self.getAverageDepth(cv_image, self.width_dim, self.height_dim, self.corners[0], self.corners[1])
             self.msg.center_depth = self.getAverageDepth(cv_image, self.width_dim, self.height_dim, self.corners[2], self.corners[3])
             self.msg.right_depth = self.getAverageDepth(cv_image, self.width_dim, self.height_dim, self.corners[4], self.corners[5])
-            print("Left Depth: ", left_depth)
-            print("Center Depth: ", center_depth)
-            print("Right Depth: ", right_depth)
+            print("Left Depth: ", self.msg.left_depth)
+            print("Center Depth: ", self.msg.center_depth)
+            print("Right Depth: ", self.msg.right_depth)
             self.pub.publish(self.msg)
             self.rate.sleep()
             # cen_depth = cv_image[pix[1], pix[0]]
