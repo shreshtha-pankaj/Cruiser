@@ -42,6 +42,8 @@ class pololuTrajServer:
         self.TimeOut=120.0
         self.pub=rospy.Publisher("/pololu/command",MotorCommand,queue_size=4)
         self.server = actionlib.SimpleActionServer('pololu_trajectory_action_server', pololu_trajectoryAction, self.execute, False)
+        self.server = actionlib.SimpleActionServer('/car_state', pololu_trajectoryAction,
+                                                   self.execute, False)
         self.server.start()
 
     def moveMotor(self,jntName,pos,speed):
