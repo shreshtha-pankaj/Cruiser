@@ -59,16 +59,12 @@ class state_machine(object):
             self.create_trajectory_Motor_cmd('brushless_motor', 0)
 
 
-
-
-
-
 if __name__ =='__main__':
 
     # publishing to ros_pololu_servo right now
 
     # publish pos and vel data
-    sub_topic = '/xyz'
+    sub_topic = '/depth_frames'
     pub_topic = '/car_state'
     rospy.init_node('car_state_pub')
     ss = state_machine(pub_topic= pub_topic, sub_topic=sub_topic)
