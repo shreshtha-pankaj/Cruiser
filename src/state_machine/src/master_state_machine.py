@@ -12,18 +12,17 @@ names=['servo','brushless_motor']
 
 class state_machine(object):
     def __init__(self, pub_topic, sub_topic):
-        self.client = actionlib.SimpleActionClient('car_state_server', pololu_trajectoryAction)
+        self.client = actionlib.SimpleActionClient('pololu_trajectory_action_server', pololu_trajectoryAction)
 
         self.ptopic = pub_topic
         self.stopic = sub_topic
-        self.sub = rospy.Subscriber(self.stopic, Float64, callback=self.sub_callback)
+        self.sub = rospy.Subscriber(self.stopic, Depth, callback=self.sub_callback)
 
         self.cnt_wall_distance = 0
 
     def sub_callback(self, data):
         #  get the z value
-
-        self.cnt_wall_distance =  rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.data)
+	self.cnt_wall_distance = data.center_depth
 
 
     def create_trajectory_Motor_cmd(self, jntName, pos, speed=0):
@@ -55,6 +54,7 @@ class state_machine(object):
             self.create_trajectory_Motor_cmd('servo', 0.5)
             self.create_trajectory_Motor_cmd('brushless_motor', -0.5)
         else:
+	    
             self.create_trajectory_Motor_cmd('servo', 0)
             self.create_trajectory_Motor_cmd('brushless_motor', 0)
 
@@ -69,3 +69,5 @@ if __name__ =='__main__':
     rospy.init_node('car_state_pub')
     ss = state_machine(pub_topic= pub_topic, sub_topic=sub_topic)
     ss.client.wait_for_server()
+    while not rospy.is_shutdown():
+	   ss.determine_state()
