@@ -3,16 +3,17 @@
 #include <sstream>
 #include <librealsense2/rs.hpp>
 
-int main(int argc, char [][]argv){
+int main(int argc, char **argv){
   ros::init(argc, argv, "depth_stream");
   ros::NodeHandle n;
   // Create a Pipeline - this serves as a top-level API for streaming and processing frames
   rs2::pipeline p;
-
   // Configure and start the pipeline
-  p.start();
-
-  while (true)
+  rs2::config config;
+  config.enable_stream(RS2_STREAM_DEPTH);
+  p.start(config);
+int i= 0;
+  while (i<10)
   {
       // Block program until frames arrive
       rs2::frameset frames = p.wait_for_frames();
@@ -26,10 +27,12 @@ int main(int argc, char [][]argv){
 
       // Query the distance from the camera to the object in the center of the image
       float dist_to_center = depth.get_distance(width / 2, height / 2);
-
+	i++;
       // Print the distance
       ROS_INFO("The camera is facing an object %f meters away \n", dist_to_center);
   }
+
+
 
 
   return 0;
