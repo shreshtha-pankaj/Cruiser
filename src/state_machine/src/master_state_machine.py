@@ -29,8 +29,8 @@ class state_machine(object):
         self.right_wall_distance = data.right_depth
 
     def sub_pid_callback(self, data):
-    #  get the pid value
-    self.pid_value = -1*data.data
+        #  get the pid value
+        self.pid_value = -1*data.data
 
     def create_trajectory_Motor_cmd(self, jntName, pos, speed=0):
         goal = pololu_trajectoryGoal()
@@ -44,6 +44,10 @@ class state_machine(object):
         traj.points.append(pts)
         self.client.send_goal(goal)
         self.client.wait_for_result(rospy.Duration.from_sec(3.0))
+
+
+#MOTOR RANGES: -0.2 (walks) to -0.35
+
 
     def determine_state(self):
         depth_data = self.cnt_wall_distance
