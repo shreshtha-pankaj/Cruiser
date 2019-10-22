@@ -9,6 +9,7 @@ project(camera)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   rospy
+  roscpp
   std_msgs
   message_generation
   sensor_msgs
@@ -204,3 +205,6 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+add_executable(depth depth.cpp)
+target_link_libraries(depth ${catkin_LIBRARIES})
+add_dependencies(depth beginner_tutorials_generate_messages_cpp)
