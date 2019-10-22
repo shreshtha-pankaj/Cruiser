@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 project(camera)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
@@ -206,5 +207,7 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 add_executable(depth depth.cpp)
-target_link_libraries(depth ${catkin_LIBRARIES})
-add_dependencies(depth beginner_tutorials_generate_messages_cpp)
+target_link_libraries(
+depth ${catkin_LIBRARIES}
+realsense2
+)
