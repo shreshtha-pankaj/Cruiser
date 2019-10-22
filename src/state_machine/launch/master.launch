@@ -1,4 +1,5 @@
 <launch>
+   <include file="$(find realsense2_camera)/launch/rs_camera.launch"/>
 
    <include file="$(find ros_pololu_servo)/launch/pololu_example.launch"/>
 
@@ -7,7 +8,5 @@
    <node pkg="state_machine" type="master_state_machine.py" name="master_state_machine" output="screen"/>
 
    <include file="$(find camera)/launch/camera.launch"/>
-
-   <node pkg="camera" type="depth_listener.py" name="depth_listener" output="screen"/>
 
 </launch>

@@ -44,15 +44,19 @@ class state_machine(object):
         self.client.send_goal(goal)
         self.client.wait_for_result(rospy.Duration.from_sec(3.0))
 
+
+#MOTOR RANGES: -0.2 (walks) to -0.35
+
+
     def determine_state(self):
         depth_data = self.cnt_wall_distance
         if depth_data > 5000:
             self.create_trajectory_Motor_cmd('servo', 0)
-            self.create_trajectory_Motor_cmd('brushless_motor', -1.0)
+            self.create_trajectory_Motor_cmd('brushless_motor', -0.35)
 
         elif depth_data <= 5000 and depth_data > 2000:
             self.create_trajectory_Motor_cmd('servo', 0.5)
-            self.create_trajectory_Motor_cmd('brushless_motor', -0.5)
+            self.create_trajectory_Motor_cmd('brushless_motor', -0.2)
         else:
 	    
             self.create_trajectory_Motor_cmd('servo', 0)
