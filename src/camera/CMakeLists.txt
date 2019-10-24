@@ -206,7 +206,7 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
-add_executable(depth depth.cpp)
+add_executable(depth src/depth.cpp)
 target_link_libraries(
 depth ${catkin_LIBRARIES}
 realsense2
