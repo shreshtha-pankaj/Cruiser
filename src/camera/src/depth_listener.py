@@ -24,9 +24,6 @@ class ImageListener:
             self.msg.right_depth = self.getAverageDepth(cv_image, self.width_dim, self.height_dim, self.corners[4], self.corners[5])
             self.pub.publish(self.msg)
             self.rate.sleep()
-            # cen_depth = cv_image[pix[1], pix[0]]
-            # if depth_at_cen
-            # print('%s: Depth at center(%d, %d): %f(mm)\r' % (self.topic, pix[0], pix[1], cv_image[pix[1], pix[0]]))
         except CvBridgeError as e:
             print(e)
             return
@@ -39,7 +36,6 @@ class ImageListener:
         corners += [cx - width / 2, cy - height / 2]
         # right_frame
         corners += [ 640 - width, cy - height / 2] # 640 is the image width
-        print(corners)
         return corners
 
 
