@@ -9,17 +9,17 @@ float getAverageDepth(rs2::depth_frame depth, float width, float height, int x, 
   int ctr = 0;
   for(int i = y; i < y + height; i++) {
     for (int j = x; j < x + width; j++) {
-      float depth = depth.get_distance(x, y);
-      if depth > 0 {
+      float depth_val = depth.get_distance(x, y);
+      if (depth_val > 0) {
         ctr += 1;
-        sum += depth;
+        sum += depth_val;
       }
     }
   }
-  if ctr == 0 {
+  if (ctr == 0) {
     return 0;
   }
-  return (sum / ctr)
+  return (sum / ctr);
 }
 
 float* getCorners(float width, float height, int cx, int cy) {
@@ -30,7 +30,7 @@ float* getCorners(float width, float height, int cx, int cy) {
   corners[3] = cy - height / 2;
   corners[4] = 640 - width;
   corners[5] = cy - height / 2;
-  return corners
+  return corners;
 }
 
 int main(int argc, char **argv){
@@ -74,7 +74,7 @@ int main(int argc, char **argv){
       // Print the distance
 
       // Publish the message
-      depth_pub.publish(msg)
+      depth_pub.publish(msg);
       // ROS_INFO("The camera is facing an object %f meters away \n", dist_to_center);
   }
   return 0;
