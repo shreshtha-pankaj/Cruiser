@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 project(camera)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
@@ -9,6 +10,7 @@ project(camera)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   rospy
+  roscpp
   std_msgs
   message_generation
   sensor_msgs
@@ -204,3 +206,8 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+add_executable(depth src/depth.cpp)
+target_link_libraries(
+depth ${catkin_LIBRARIES}
+realsense2
+)
