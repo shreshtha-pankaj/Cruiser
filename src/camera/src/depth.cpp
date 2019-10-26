@@ -39,7 +39,7 @@ int main(int argc, char **argv){
       // Print the distance
 
       // Publish the message
-      depth_pub.publish(msg)
+      depth_pub.publish(msg);
       // ROS_INFO("The camera is facing an object %f meters away \n", dist_to_center);
   }
   return 0;
