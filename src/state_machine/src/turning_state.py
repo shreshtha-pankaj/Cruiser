@@ -13,18 +13,8 @@ names=['servo','brushless_motor']
 
 
 class turning_state_machine(object):
-	def __init__(self, pub_topic, sub_topic):
+	def __init__(self, pub_topic):
 		self.client = actionlib.SimpleActionClient('pololu_trajectory_action_server', pololu_trajectoryAction)
-
-		self.ptopic = pub_topic
-		self.stopic = sub_topic
-		self.sub = rospy.Subscriber(self.stopic, Depth, callback=self.sub_callback)
-
-		self.cnt_wall_distance = 0
-
-	def sub_callback(self, data):
-		#  get the z value
-		self.cnt_wall_distance = data.center_depth
 
 
 	def create_trajectory_Motor_cmd(self, jntName, pos, speed=0):
@@ -51,19 +41,19 @@ class turning_state_machine(object):
 		end_time = time.time() + straight_time
 
 		while time.time() < end_time:
-			self.create_trajectory_Motor_cmd('servo', 0)
-			self.create_trajectory_Motor_cmd('brushless_motor', -1.0)
+			self.create_trajectory_Motor_cmd('servo',0.155) 
+			self.create_trajectory_Motor_cmd('brushless_motor', -0.4)
 
 		turn_time = 1.5
 
 		end_time = time.time() + turn_time
 
 		while time.time() < end_time:
-			self.create_trajectory_Motor_cmd('servo', 0.5)
-			self.create_trajectory_Motor_cmd('brushless_motor', -0.5)
+			self.create_trajectory_Motor_cmd('servo', -0.3)
+			self.create_trajectory_Motor_cmd('brushless_motor', -0.4)
 		
 		self.create_trajectory_Motor_cmd('servo', 0)
-        self.create_trajectory_Motor_cmd('brushless_motor', 0)
+        	self.create_trajectory_Motor_cmd('brushless_motor', 0)
 
 
 
