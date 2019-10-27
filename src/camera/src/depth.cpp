@@ -54,7 +54,7 @@ int main(int argc, char **argv){
   // config.enable_stream(RS2_STREAM_DEPTH, 640,480, RS2_FORMAT_Z16, 40);
   config.enable_stream(RS2_STREAM_DEPTH);
   p.start(config);
-  while (true)
+  while (ros::ok())
   {
       // Block program until frames arrive
       rs2::frameset frames = p.wait_for_frames();
