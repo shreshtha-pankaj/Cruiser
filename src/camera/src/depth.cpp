@@ -10,7 +10,7 @@ float getAverageDepth(rs2::depth_frame& depth, float width, float height, int x,
   int ctr = 0;
   for(int i = y; i < y + height; i++) {
     for (int j = x; j < x + width; j++) {
-      float depth_val = depth.get_distance(i, j);
+      float depth_val = depth.get_distance(j,i);
       if (depth_val > 0) {
         ctr += 1;
         sum += depth_val;
@@ -20,17 +20,17 @@ float getAverageDepth(rs2::depth_frame& depth, float width, float height, int x,
   if (ctr == 0) {
     return 0;
   }
-  return (sum / ctr);
+  return (1000*sum / ctr);
 }
 
 float* getCorners(float width, float height, int cx, int cy) {
   float *corners = new float[6];
-  corners[0] = scale * 40;
-  corners[1] = scale*(cy - height / 2);
-  corners[2] = scale*(cx - width / 2);
-  corners[3] = scale*(cy - height / 2);
-  corners[4] = scale*(600 - width);
-  corners[5] = scale*(cy - height / 2);
+  corners[0] = 20;
+  corners[1] = (cy - height / 2);
+  corners[2] = (cx - width / 2);
+  corners[3] = (cy - height / 2);
+  corners[4] = (1260 - width);
+  corners[5] = (cy - height / 2);
   return corners;
 }
 
@@ -39,8 +39,8 @@ int main(int argc, char **argv){
   ros::NodeHandle n;
   int width_dim = 100;
   int height_dim = 50;
-  int cx = 320;
-  int cy = 240;
+  int cx = 640;
+  int cy = 360;
   float* corners = getCorners(width_dim, height_dim, cx, cy);
   // Create a publisher node
   ros::Publisher depth_pub = n.advertise<camera::Depth>("depth_frames", 1000);
@@ -51,8 +51,8 @@ int main(int argc, char **argv){
   rs2::pipeline p;
   // Configure and start the pipeline
   rs2::config config;
-  config.enable_stream(RS2_STREAM_DEPTH, 640,480, RS2_FORMAT_Z16, 40);
-  // config.enable_stream(RS2_STREAM_DEPTH);
+  // config.enable_stream(RS2_STREAM_DEPTH, 640,480, RS2_FORMAT_Z16, 40);
+  config.enable_stream(RS2_STREAM_DEPTH);
   p.start(config);
   while (true)
   {
@@ -64,10 +64,9 @@ int main(int argc, char **argv){
 
       // Get the depth frame's dimensions
       float width = depth.get_width();
-      float height = depth.get_height()
+      float height = depth.get_height();
       // Query the distance from the camera to the object in the center of the image
-      // float dist_to_center = depth.get_distance(width / 2, height / 2);
-      // ROS_INFO("The camera is facing an object %f meters away \n", dist_to_center);
+	float dist_to_center = depth.get_distance(1280, 720);
       msg.left_depth = getAverageDepth(depth, width_dim, height_dim, corners[0], corners[1]);
       msg.center_depth = getAverageDepth(depth, width_dim, height_dim, corners[2], corners[3]);
       msg.right_depth = getAverageDepth(depth, width_dim, height_dim, corners[4], corners[5]);
