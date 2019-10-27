@@ -43,7 +43,10 @@ class pid_node(object):
 
     def depth_callback(self,data):
         diff = data.right_depth - data.left_depth
-	self.current_pose = diff
+	    if diff >100:
+            self.current_pose = diff
+        else:
+            self.current_pose = 0
 
 
     def output_publisher(self):
