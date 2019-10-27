@@ -19,7 +19,7 @@ class Straight(State):
     def __init__(self, state_name):
         self.state_name = state_name
     
-    def move(self, state_machine, servo=0, motor =-0.5):
+    def move(self, state_machine, servo=0, motor =-0.35):
         state_machine.create_trajectory_Motor_cmd('servo', servo)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
 
@@ -27,7 +27,7 @@ class Right(State):
     def __init__(self, state_name):
         self.state_name = state_name
     
-    def turn(self, state_machine, servo=-0.1, motor =-0.5):
+    def turn(self, state_machine, servo=-0.3, motor =-0.3):
         state_machine.create_trajectory_Motor_cmd('servo', servo)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
 
@@ -77,7 +77,7 @@ class state_machine(object):
             self.straight.move(self,servo = self.pid_value)
         elif depth_data <=4000 and depth_data > 1500:
             #Lakshya Code
-	    self.right.turn(self, servo = self.pid_value)
+	    self.right.turn(self)#, servo = self.pid_value)
         else:
             #stop the car for now.
             self.straight.move(self,servo = 0.15, motor = 0)       

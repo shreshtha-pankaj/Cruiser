@@ -37,20 +37,20 @@ class turning_state_machine(object):
 		self.client.wait_for_result(rospy.Duration.from_sec(3.0))
 
 	def turn_state(self):
-		straight_time = 1
+		straight_time = 111
 		end_time = time.time() + straight_time
 
 		while time.time() < end_time:
 			self.create_trajectory_Motor_cmd('servo',0.155) 
 			self.create_trajectory_Motor_cmd('brushless_motor', -0.4)
 
-		turn_time = 1.5
+		turn_time = 0.9
 
 		end_time = time.time() + turn_time
 
 		while time.time() < end_time:
-			self.create_trajectory_Motor_cmd('servo', -0.3)
-			self.create_trajectory_Motor_cmd('brushless_motor', -0.4)
+			self.create_trajectory_Motor_cmd('servo', -0.4)
+			self.create_trajectory_Motor_cmd('brushless_motor', -0.3)
 		
 		self.create_trajectory_Motor_cmd('servo', 0)
         	self.create_trajectory_Motor_cmd('brushless_motor', 0)
