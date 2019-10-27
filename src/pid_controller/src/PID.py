@@ -43,7 +43,7 @@ class PID:
         self.sample_time = 0.00
         self.current_time = current_time if current_time is not None else time.time()
         self.last_time = self.current_time
-
+        self.SetPoint = 0
         self.clear()
 
     def clear(self):
@@ -74,10 +74,11 @@ class PID:
 
         """
         error = self.SetPoint - feedback_value
-
+        print(error)
         self.current_time = current_time if current_time is not None else time.time()
         delta_time = self.current_time - self.last_time
         delta_error = error - self.last_error
+        print(delta_error,delta_time)
 
         if (delta_time >= self.sample_time):
             self.PTerm = self.Kp * error
@@ -95,8 +96,10 @@ class PID:
             # Remember last time and last error for next calculation
             self.last_time = self.current_time
             self.last_error = error
-
+            print(self.last_error)
+            print(self.PTerm,self.ITerm,self.DTerm)
             self.output = self.PTerm + (self.Ki * self.ITerm) + (self.Kd * self.DTerm)
+            return self.output
 
     def setKp(self, proportional_gain):
         """Determines how aggressively the PID reacts to the current error with setting Proportional Gain"""

@@ -1,0 +1,11 @@
+# Pololu based motors
+straight:
+  kp: 1
+  ki: 0
+  kd: 0.05
+  desired_state: 0
+right:
+  kp: 1
+  ki: 0
+  kd: 1
+  desired_state: 0
