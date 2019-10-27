@@ -13,7 +13,7 @@ names=['servo','brushless_motor']
 
 class State():
     def __init__(self, state_name):
-	pass
+		pass
 
 class Straight(State):
     def __init__(self, state_name):
@@ -27,9 +27,24 @@ class Right(State):
     def __init__(self, state_name):
         self.state_name = state_name
     
-    def turn(self, state_machine, servo=-0.3, motor =-0.3):
-        state_machine.create_trajectory_Motor_cmd('servo', servo)
-        state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
+    def turn(self, state_machine, servo=-0.1, motor =-0.5):
+        straight_time = 1
+		end_time = time.time() + straight_time
+
+		while time.time() < end_time:
+			self.create_trajectory_Motor_cmd('servo',0.155) 
+			self.create_trajectory_Motor_cmd('brushless_motor', -0.4)
+
+		turn_time = 1.5
+
+		end_time = time.time() + turn_time
+
+		while time.time() < end_time:
+			self.create_trajectory_Motor_cmd('servo', -0.3)
+			self.create_trajectory_Motor_cmd('brushless_motor', -0.4)
+		
+		self.create_trajectory_Motor_cmd('servo', 0.155)
+        	self.create_trajectory_Motor_cmd('brushless_motor', 0)
 
 
 class state_machine(object):
@@ -44,7 +59,7 @@ class state_machine(object):
 
     def sub_depth_callback(self, data):
         #  get the all the depths
-	self.cnt_wall_distance = data.center_depth
+		self.cnt_wall_distance = data.center_depth
         self.left_wall_distance = data.left_depth
         self.right_wall_distance = data.right_depth
 
@@ -72,17 +87,14 @@ class state_machine(object):
     def determine_state(self):
         depth_data = self.cnt_wall_distance
 
-
         if depth_data > 4000:
             self.straight.move(self,servo = self.pid_value)
         elif depth_data <=4000 and depth_data > 1500:
-            #Lakshya Code
-	    self.right.turn(self)#, servo = self.pid_value)
+            #Lakshya Code - Hard Coded Turn
+	    self.right.turn(self)
         else:
             #stop the car for now.
             self.straight.move(self,servo = 0.15, motor = 0)       
-
-
 
 if __name__ =='__main__':
 
