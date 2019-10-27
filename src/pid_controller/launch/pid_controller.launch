@@ -1,0 +1,5 @@
+<launch>
+    <node pkg="pid_controller" type="output_publisher.py" name="output_publisher" output="screen">
+        <param name="parameters_yaml" value="$(find pid_controller)/launch/parameters.yaml" />
+    </node>
+</launch>
