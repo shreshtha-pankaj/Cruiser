@@ -50,6 +50,7 @@ find_package(catkin REQUIRED COMPONENTS
  add_message_files(
    FILES
    pid_data.msg
+   Depth.msg
  )
 
 ## Generate services in the 'srv' folder
@@ -67,10 +68,10 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+ generate_messages(
+   DEPENDENCIES
+   std_msgs
+ )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##

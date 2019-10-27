@@ -6,6 +6,7 @@ import numpy as np
 import rospy
 from std_msgs.msg import *
 import sys
+from pid_controller.msg import *
 import yaml
 #from pid_controller.msg import pid_data
 #Subscibe to /pid_gains , get PID gains from State_machine - Float32[3]
@@ -19,7 +20,7 @@ class pid_node(object):
         
         self.output_pub = rospy.Publisher('/pid_output',Float32, queue_size = 10)
         rospy.Subscriber("/current_state", Int16 ,self.current_state_callback)
-        rospy.Subscriber("/current_pose", Float32 ,self.current_pose_callback)
+        rospy.Subscriber("/depth_frames", Depth ,self.depth_callback)
         # self.straight_state =  rospy.get_param("right")
         #
         # self.kp = self.straight_state["kp"]
@@ -40,9 +41,9 @@ class pid_node(object):
         #Published by state machine 1 - straight 2 - turn right
         self.current_state = data.data
 
-    def current_pose_callback(self,data):
-        self.current_pose = data.data
-        self.output_publisher()
+    def depth_callback(self,data):
+        diff = data.right_depth - data.left_depth
+	self.current_pose = diff
 
 
     def output_publisher(self):

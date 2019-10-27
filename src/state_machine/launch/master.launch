@@ -6,4 +6,7 @@
    <node pkg="state_machine" type="master_state_machine.py" name="master_state_machine" output="screen"/>
 
    <node pkg="camera" type ="depth" name="depth_stream" output="screen"/>
+
+   <node pkg="pid_controller" type ="output_publisher.py" name="output_publisher" output="screen"/>
+
 </launch>
