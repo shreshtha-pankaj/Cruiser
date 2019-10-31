@@ -11,7 +11,7 @@ from trajectory_msgs.msg import JointTrajectoryPoint
 names=['servo','brushless_motor']
 
 stop_motor = 0.0
-slow_motor =  -0.25
+slow_motor =  -0.33
 servo_zero = 0.155
 class State():
     def __init__(self, state_name):
@@ -30,7 +30,7 @@ class Right(State):
 	self.state_name = state_name
     
     def turn(self, state_machine, servo=-0.3, motor =slow_motor):
-	turn_time = 0.15
+	turn_time = 0.1
 	end_time = time.time() + turn_time
 
 	while time.time() < end_time:

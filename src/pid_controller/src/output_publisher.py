@@ -42,8 +42,10 @@ class pid_node(object):
         self.current_state = data.data
 
     def depth_callback(self,data):
+	if data.left_depth > 3750:
+	    data.left_depth = 1650 
         error = data.right_depth - data.left_depth
-	if abs(error) <= 100 or data.left_depth > 4000:
+	if abs(error) <= 100:
             error = 0
 	self.output_publisher(error)
 
