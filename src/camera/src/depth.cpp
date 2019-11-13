@@ -3,6 +3,7 @@
 #include <sstream>
 #include <camera/Depth.h>
 #include <librealsense2/rs.hpp>
+int scale = 1;
 
 float getAverageDepth(rs2::depth_frame& depth, float width, float height, int x, int y) {
   float sum = 0;
@@ -65,7 +66,7 @@ int main(int argc, char **argv){
       float width = depth.get_width();
       float height = depth.get_height();
       // Query the distance from the camera to the object in the center of the image
-	    float dist_to_center = depth.get_distance(1280, 720);
+	float dist_to_center = depth.get_distance(1280, 720);
       msg.left_depth = getAverageDepth(depth, width_dim, height_dim, corners[0], corners[1]);
       msg.center_depth = getAverageDepth(depth, width_dim, height_dim, corners[2], corners[3]);
       msg.right_depth = getAverageDepth(depth, width_dim, height_dim, corners[4], corners[5]);
