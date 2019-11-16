@@ -10,7 +10,7 @@ int main(int argc, char **argv){
   ros::init(argc, argv, "color_stream");
   ros::NodeHandle n;
   // Create a publisher node
-  ros::Publisher depth_pub = n.advertise<camera::Depth>("color_frames", 1000);
+  // ros::Publisher depth_pub = n.advertise<camera::Depth>("color_frames", 1000);
 
   // Create a Pipeline - this serves as a top-level API for streaming and processing frames
   rs2::pipeline pipe;
