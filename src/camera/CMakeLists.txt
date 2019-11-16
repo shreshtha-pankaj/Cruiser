@@ -211,3 +211,8 @@ target_link_libraries(
 depth ${catkin_LIBRARIES}
 realsense2
 )
+add_executable(rgb src/rgb.cpp)
+target_link_libraries(
+rgb ${catkin_LIBRARIES}
+realsense2
+)
