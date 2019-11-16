@@ -51,8 +51,8 @@ int main(int argc, char **argv){
   rs2::pipeline p;
   // Configure and start the pipeline
   rs2::config config;
-  // config.enable_stream(RS2_STREAM_DEPTH, 640,480, RS2_FORMAT_Z16, 40);
-  config.enable_stream(RS2_STREAM_DEPTH);
+  config.enable_stream(RS2_STREAM_DEPTH, 640,480, RS2_FORMAT_Z16, 30);
+//  config.enable_stream(RS2_STREAM_DEPTH);
   p.start(config);
   while (ros::ok())
   {
@@ -65,6 +65,7 @@ int main(int argc, char **argv){
       // Get the depth frame's dimensions
       float width = depth.get_width();
       float height = depth.get_height();
+      ROS_INFO("----%f %f", width, height);
       // Query the distance from the camera to the object in the center of the image
 	float dist_to_center = depth.get_distance(1280, 720);
       msg.left_depth = getAverageDepth(depth, width_dim, height_dim, corners[0], corners[1]);

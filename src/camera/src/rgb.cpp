@@ -2,8 +2,7 @@
 #include "std_msgs/String.h"
 #include <sstream>
 #include <librealsense2/rs.hpp>
-
-// #include <opencv2/opencv.hpp> //? to include in Cmake
+//#include <opencv2/opencv.hpp> //? to include in Cmake
 
 // https://github.com/IntelRealSense/librealsense/blob/master/doc/stepbystep/getting_started_with_openCV.md
 int main(int argc, char **argv){
@@ -35,11 +34,11 @@ int main(int argc, char **argv){
       frames = pipe.wait_for_frames();
 
       // Try to get a frame of a depth image
-      rs2::depth_frame color = frames.get_color_frame();
+      rs2::frame color = frames.get_color_frame();
 
       // Creating OpenCV Matrix from a color image
       // Mat color(Size(640, 480), CV_8UC3, (void*)color_frame.get_data(), Mat::AUTO_STEP);
-
+      ROS_INFO("%d", color.get_data_size());
       // Display in a GUI
       // namedWindow("Display Image", WINDOW_AUTOSIZE );
       // imshow("Display Image", color);
