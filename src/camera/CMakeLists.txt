@@ -208,7 +208,7 @@ include_directories(
 # catkin_add_nosetests(test)
 add_executable(depth src/depth.cpp)
 target_link_libraries(
-depth ${catkin_LIBRARIES}color
+depth ${catkin_LIBRARIES}
 realsense2
 )
 add_executable(rgb src/rgb.cpp)
