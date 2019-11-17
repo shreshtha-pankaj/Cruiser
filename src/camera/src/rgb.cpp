@@ -1,5 +1,7 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
 #include <sstream>
 #include <librealsense2/rs.hpp>
 //#include <opencv2/opencv.hpp> //? to include in Cmake
@@ -10,6 +12,8 @@ int main(int argc, char **argv){
   ros::NodeHandle n;
   // Create a publisher node
   // ros::Publisher depth_pub = n.advertise<camera::Depth>("color_frames", 1000);
+  image_transport::ImageTransport it(n);
+  image_transport::Publisher pub = it.advertise("camera/image", 1);
 
   // Create a Pipeline - this serves as a top-level API for streaming and processing frames
   rs2::pipeline pipe;
@@ -37,7 +41,9 @@ int main(int argc, char **argv){
       rs2::frame color = frames.get_color_frame();
 
       // Creating OpenCV Matrix from a color image
-      // Mat color(Size(640, 480), CV_8UC3, (void*)color_frame.get_data(), Mat::AUTO_STEP);
+      Mat color(Size(640, 480), CV_8UC3, (void*)color_frame.get_data(), Mat::AUTO_STEP);
+      sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", color).toImageMsg();
+      pub.publish(msg);
       ROS_INFO("%d", color.get_data_size());
       // Display in a GUI
       // namedWindow("Display Image", WINDOW_AUTOSIZE );
