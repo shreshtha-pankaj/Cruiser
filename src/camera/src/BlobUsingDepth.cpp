@@ -4,10 +4,11 @@
 #include <camera/Depth.h>
 #include <librealsense2/rs.hpp>
 #include <list> 
+#include "Blob.cpp"
 
 
-int depth_width = 640
-int depth_height = 480
+int depth_width = 640;
+int depth_height = 480;
 
 float getAverageDepth(rs2::depth_frame& depth, float width, float height, int x, int y) {
   float sum = 0;
@@ -68,8 +69,8 @@ int main(int argc, char **argv){
       // Get the depth frame's dimensions
       float width = depth.get_width();
       float height = depth.get_height();
-      list<Blob> blobs = findBlobs(depth, width, height);
-      for(Blob b:blobs){
+      std::list<ns::Blob> blobs = findBlobs(depth, width, height);
+      for(ns::Blob b:blobs){
           ROS_INFO("%f %f %f %f", b.minx, b.miny, b.maxx, b.maxy);
       }
       // Query the distance from the camera to the object in the center of the image
@@ -85,7 +86,7 @@ int main(int argc, char **argv){
 }
 
 
-list<Blob> findBlobs(rs2::depth_frame depthFrame, float width, float height){
+list<ns::Blob> findBlobs(rs2::depth_frame depthFrame, float width, float height){
     float trackedDepth = 2500;
     float threshold = 25;
     
@@ -99,7 +100,7 @@ list<Blob> findBlobs(rs2::depth_frame depthFrame, float width, float height){
 
             if (d < threshold*threshold) {
                 bool found = false;
-                for (Blob b : blobs) {
+                for (ns::Blob b : blobs) {
                     if (b.isNear(x, y)) {
                         b.add(x, y);
                         found = true;
@@ -107,7 +108,7 @@ list<Blob> findBlobs(rs2::depth_frame depthFrame, float width, float height){
                     }
                 }
                 if (!found) {
-                    Blob b = new Blob(x, y);
+                    ns::Blob b = new ns::Blob(x, y);
                     blobs.add(b);
                 }
             }
@@ -125,44 +126,4 @@ float distSqDepth(float d1, float d2) {
   return (d2-d1)*(d2-d1);  
 }
 
-class Blob{
-    float minx;
-    float miny;
-    float maxx;
-    float maxy;
 
-    public: 
-        Blob(float x, float y) {
-            minx = x;
-            miny = y;
-            maxx = x;
-            maxy = y;
-        
-        }
-
-        void add(float x, float y) {
-            minx = std::min(minx, x);
-            miny = std::min(miny, y);
-            maxx = std::max(maxx, x);
-            maxy = std::max(maxy, y);
-        }
-        float size() {
-            return (maxx-minx)*(maxy-miny); 
-        }
-
-        boolean isNear(float x, float y) {
-            float cx = (minx + maxx) / 2;
-            float cy = (miny + maxy) / 2;
-
-            float d = distSq(cx, cy, x, y);
-            if (d < distThreshold*distThreshold) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        float distSq(float x1, float y1, float x2, float y2) {
-            float d = (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1);
-            return d;
-        }
-}

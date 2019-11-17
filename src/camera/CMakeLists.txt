@@ -211,3 +211,10 @@ target_link_libraries(
 depth ${catkin_LIBRARIES}
 realsense2
 )
+
+add_executable(BlobUsingDepth src/BlobUsingDepth.cpp)
+target_link_libraries(
+BlobUsingDepth ${catkin_LIBRARIES}
+realsense2
+)
+  
