@@ -66,9 +66,8 @@ int main(int argc, char **argv){
       // Get the depth frame's dimensions
       float width = depth.get_width();
       float height = depth.get_height();
-	ROS_INFO("%f, %f",width,height);
       // Query the distance from the camera to the object in the center of the image
-     msg.left_depth = getAverageDepth(depth, width_dim, height_dim, corners[0], corners[1]);
+      msg.left_depth = getAverageDepth(depth, width_dim, height_dim, corners[0], corners[1]);
       msg.center_depth = getAverageDepth(depth, width_dim, height_dim, corners[2], corners[3]);
       msg.right_depth = getAverageDepth(depth, width_dim, height_dim, corners[4], corners[5]);
       // Publish the message
