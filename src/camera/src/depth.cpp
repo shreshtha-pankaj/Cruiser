@@ -4,8 +4,8 @@
 #include <camera/Depth.h>
 #include <librealsense2/rs.hpp>
 
-int depth_width = 640
-int depth_height = 480
+int depth_width = 640;
+int depth_height = 480;
 
 float getAverageDepth(rs2::depth_frame& depth, float width, float height, int x, int y) {
   float sum = 0;

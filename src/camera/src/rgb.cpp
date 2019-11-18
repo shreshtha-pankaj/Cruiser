@@ -39,16 +39,16 @@ int main(int argc, char **argv){
       frames = pipe.wait_for_frames();
 
       // Try to get a frame of a depth image
-      rs2::frame color = frames.get_color_frame();
+      rs2::frame color_frames = frames.get_color_frame();
 
       // Creating OpenCV Matrix from a color image
-      Mat color(Size(640, 480), CV_8UC3, (void*)color_frame.get_data(), Mat::AUTO_STEP);
+      cv::Mat color(cv::Size(640, 480), CV_8UC3, (void*)color_frames.get_data(), cv::Mat::AUTO_STEP);
       sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", color).toImageMsg();
       pub.publish(msg);
-      ROS_INFO("%d", color.get_data_size());
+//      ROS_INFO("%d", color.get_data_size());
       // Display in a GUI
-      namedWindow("Display Image", WINDOW_AUTOSIZE );
-      imshow("Display Image", color);
+      //namedWindow("Display Image", WINDOW_AUTOSIZE );
+      //imshow("Display Image", color);
   }
   return 0;
 }
