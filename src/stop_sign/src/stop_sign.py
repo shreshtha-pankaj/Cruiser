@@ -14,8 +14,7 @@ class StopSignDetector:
         self.bridge = CvBridge()
         self.classifier_file = "/home/odroid/Cruiser/src/stop_sign/src/stopsign_classifier.xml"
         self.classifier = cv2.CascadeClassifier(self.classifier_file)
-
-
+        self.is_stop_sign = False
 
     def stopSignDetectorCallback(self, data):
         try:
@@ -24,10 +23,15 @@ class StopSignDetector:
             print('Exception')
             print(e)
         stop_signs = self.classifier.detectMultiScale(cv_image,1.02,10)
+        # Detected Stop Sign
         if len(stop_signs) > 0:
-            self.pub.publish(True)
-    
-    
+            if self.is_stop_sign == False:
+                self.is_stop_sign = True
+                self.pub.publish(self.is_stop_sign)
+        else:
+            if self.is_stop_sign:
+                self.is_stop_sign = False
+                self.pub.publish(self.is_stop_sign)
 
 def main():
     topic = '/camera/image'
@@ -38,5 +42,3 @@ if __name__ == '__main__':
     node_name = 'stop_sign'
     rospy.init_node(node_name, anonymous=True)
     main()
-
-
