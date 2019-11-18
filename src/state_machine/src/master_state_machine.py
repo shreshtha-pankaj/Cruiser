@@ -11,7 +11,7 @@ from trajectory_msgs.msg import JointTrajectoryPoint
 names=['servo','brushless_motor']
 
 stop_motor = 0.0
-slow_motor =  -0.33
+slow_motor =  -0.43
 servo_zero = 0.155
 class State():
     def __init__(self, state_name):
@@ -77,10 +77,11 @@ class state_machine(object):
     def determine_state(self):
 	depth_data = self.cnt_wall_distance
 
-        if depth_data >2800:
+        if depth_data >3200:
 		self.straight.move(self,servo = self.pid_value)
-        elif depth_data <=2799 and depth_data > 1200:
+        elif depth_data <=3199 and depth_data > 1200:
             #Lakshya Code - Hard Coded Turn
+		print("depth", depth_data)
 		self.right.turn(self)
         else:
             #stop the car for now.
