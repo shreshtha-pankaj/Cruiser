@@ -41,12 +41,12 @@ class Stop(State):
     def __init__(self, state_name):
         self.state_name = state_name
 
-    def stop(self, state_machine, servo=0, motor=stop_motor):
+    def stop(self, state_machine, servo=servo_zero, motor=stop_motor):
         state_machine.create_trajectory_Motor_cmd('servo',servo)
         state_machine.create_trajectory_Motor_cmd('brushless_motor',motor)
 
 class state_machine(object):
-    def __init__(self, pub_topic, sub_topic_depth, sub_topic_pid):
+    def __init__(self, pub_topic, sub_topic_depth, sub_topic_pid, sub_topic_stop_sign):
         self.client = actionlib.SimpleActionClient('pololu_trajectory_action_server', pololu_trajectoryAction)
         self.sub_depth = rospy.Subscriber(sub_topic_depth, Depth, callback=self.sub_depth_callback)
         self.sub_pid = rospy.Subscriber(sub_topic_pid, Float32, callback=self.sub_pid_callback)
@@ -67,7 +67,7 @@ class state_machine(object):
     def sub_pid_callback(self, data):
         #  get the pid value
         self.pid_value = data.data + servo_zero
-        print("Current PID Value :",self.pid_value)
+        #print("Current PID Value :",self.pid_value)
     def create_trajectory_Motor_cmd(self, jntName, pos, speed=0):
         goal = pololu_trajectoryGoal()
         traj = goal.joint_trajectory
@@ -92,7 +92,11 @@ class state_machine(object):
     def determine_state(self):
         depth_data = self.cnt_wall_distance
         if self.is_stop_sign:
+            print('*'*50)
+            print(self.is_stop_sign)
+            print('*'*50)
             self.stop.stop(self)
+            return
 
         if depth_data >3000:
             self.straight.move(self,servo = self.pid_value)
@@ -115,7 +119,7 @@ if __name__ =='__main__':
     sub_topic_stop_sign = '/is_stop_sign'
     pub_topic = '/car_state'
     rospy.init_node('car_state_pub')
-    ss = state_machine(pub_topic, sub_topic_depth,sub_topic_pid)
+    ss = state_machine(pub_topic, sub_topic_depth,sub_topic_pid,sub_topic_stop_sign)
     ss.client.wait_for_server()
     while not rospy.is_shutdown():
         ss.determine_state()
