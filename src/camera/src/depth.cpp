@@ -42,8 +42,8 @@ int main(int argc, char **argv){
   n.param("/depth_stream/resolution_height", depth_height, 480);
   n.param("/depth_stream/resolution_width", depth_width, 640);
   ROS_INFO("Depth Parameters: %d, %d, %d", frame_rate, depth_height, depth_width);
-  int width_dim = 100;
-  int height_dim = 50;
+  int width_dim = 50;
+  int height_dim = 25;
   int cx = depth_width / 2;
   int cy = depth_height / 2;
   float* corners = getCorners(width_dim, height_dim, cx, cy);
@@ -53,22 +53,27 @@ int main(int argc, char **argv){
   // Instantiate an instance of a message
   camera::Depth msg;
   // Create a Pipeline - this serves as a top-level API for streaming and processing frames
-  rs2::pipeline p;
+  rs2::pipeline pipe;
   // Configure and start the pipeline
   rs2::config config;
   config.enable_stream(RS2_STREAM_DEPTH, depth_width, depth_height, RS2_FORMAT_Z16, frame_rate);
-  p.start(config);
+  pipe.start(config);
+
+  // Camera warmup - dropping several first frames to let auto-exposure stabilize
+  rs2::frameset frames;
+  for(int i = 0; i < 30; i++)
+  {
+      //Wait for all configured streams to produce a frame
+      frames = pipe.wait_for_frames();
+  }
+
   while (ros::ok())
   {
       // Block program until frames arrive
-      rs2::frameset frames = p.wait_for_frames();
+      frames = pipe.wait_for_frames();
 
       // Try to get a frame of a depth image
       rs2::depth_frame depth = frames.get_depth_frame();
-
-      // Get the depth frame's dimensions
-      float width = depth.get_width();
-      float height = depth.get_height();
       // Query the distance from the camera to the object in the center of the image
       msg.left_depth = getAverageDepth(depth, width_dim, height_dim, corners[0], corners[1]);
       msg.center_depth = getAverageDepth(depth, width_dim, height_dim, corners[2], corners[3]);
