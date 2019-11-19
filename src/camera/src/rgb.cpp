@@ -10,9 +10,12 @@
 int main(int argc, char **argv){
   ros::init(argc, argv, "color_stream");
   ros::NodeHandle n;
-  // Create a publisher node
- // ros::Publisher depth_pub = n.advertise<camera::Depth>("color_frames", 1000);
-  // ros::Publisher depth_pub = n.advertise<camera::Depth>("color_frames", 1000);
+  int height, width, frame_rate;
+  n.param("/color_stream/frame_rate", frame_rate, 30);
+  n.param("/color_stream/resolution_height",height, 480);
+  n.param("/color_stream/resolution_width", width, 640);
+  ROS_INFO("Color parameters: %d, %d, %d", frame_rate, height, width);
+
   image_transport::ImageTransport it(n);
   image_transport::Publisher pub = it.advertise("camera/image", 1);
 
@@ -21,7 +24,7 @@ int main(int argc, char **argv){
 
   // Configure and start the pipeline
   rs2::config config;
-  config.enable_stream(RS2_STREAM_COLOR, 640, 480, RS2_FORMAT_BGR8, 30);
+  config.enable_stream(RS2_STREAM_COLOR, width, height, RS2_FORMAT_BGR8, frame_rate);
 
   pipe.start(config);
 
@@ -45,10 +48,7 @@ int main(int argc, char **argv){
       cv::Mat color(cv::Size(640, 480), CV_8UC3, (void*)color_frames.get_data(), cv::Mat::AUTO_STEP);
       sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", color).toImageMsg();
       pub.publish(msg);
-//      ROS_INFO("%d", color.get_data_size());
-      // Display in a GUI
-      //namedWindow("Display Image", WINDOW_AUTOSIZE );
-      //imshow("Display Image", color);
+      // ROS_INFO("%d", color.get_data_size());
   }
   return 0;
 }

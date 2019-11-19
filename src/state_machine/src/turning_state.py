@@ -41,7 +41,7 @@ class turning_state_machine(object):
 		end_time = time.time() + straight_time
 
 		while time.time() < end_time:
-			self.create_trajectory_Motor_cmd('servo',0.155) 
+			self.create_trajectory_Motor_cmd('servo',0.155)
 			self.create_trajectory_Motor_cmd('brushless_motor', -0.4)
 
 		turn_time = 0.9
@@ -51,16 +51,14 @@ class turning_state_machine(object):
 		while time.time() < end_time:
 			self.create_trajectory_Motor_cmd('servo', -0.4)
 			self.create_trajectory_Motor_cmd('brushless_motor', -0.3)
-		
+
 		self.create_trajectory_Motor_cmd('servo', 0)
         	self.create_trajectory_Motor_cmd('brushless_motor', 0)
 
 
 
 if __name__ =='__main__':
-
 	# publishing to ros_pololu_servo right now
-
 	# publish pos and vel data
 	pub_topic = '/car_state'
 	rospy.init_node('turn_state_pub')

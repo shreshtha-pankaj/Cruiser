@@ -20,7 +20,6 @@ class StopSignDetector:
         try:
             cv_image = self.bridge.imgmsg_to_cv2(data,"bgr8")
         except CvBridgeError as e:
-            print('Exception')
             print(e)
         stop_signs = self.classifier.detectMultiScale(cv_image,1.02,10)
         # Detected Stop Sign

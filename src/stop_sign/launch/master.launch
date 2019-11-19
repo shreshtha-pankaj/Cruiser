@@ -1,0 +1,16 @@
+<launch>
+  <include file="$(find state_machine)/launch/master.launch"/>
+  
+  <param name="master_state_machine/stop_motor" type="double" value="0.0"/>
+  <param name="master_state_machine/slow_motor" type="double" value="-0.45"/>
+  <param name="master_state_machine/servo_zero" type="double" value="0.156"/>
+  <param name="depth_stream/frame_rate" type="int" value="30" />
+  <param name="depth_stream/resolution_height" type="int" value="480" />
+  <param name="depth_stream/resolution_width" type="int" value="640" />
+
+  <node pkg="camera" type ="rgb" name="color_stream" output="screen">
+    <param name="frame_rate" type="int" value="30" />
+    <param name="resolution_height" type="int" value="480" />
+    <param name="resolution_width" type="int" value="640" />
+  </node>
+</launch>
