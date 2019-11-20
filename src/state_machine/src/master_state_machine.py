@@ -92,19 +92,15 @@ class state_machine(object):
     def determine_state(self):
         depth_data = self.cnt_wall_distance
         if self.is_stop_sign:
-            print('*'*50)
-            print(self.is_stop_sign)
-            print('*'*50)
             self.stop.stop(self)
             return
 
         if depth_data >3000:
             self.straight.move(self,servo = self.pid_value)
-        elif depth_data <=3000 and depth_data > 1500:
-            #Lakshya Code - Hard Coded Turn
+        elif depth_data <=3000 and depth_data > 2000:
             print("depth", depth_data)
             self.right.turn(self)
-        else:
+        elif depth_data < 1200:
             #stop the car for now.
             self.stop.stop(self)       
 
