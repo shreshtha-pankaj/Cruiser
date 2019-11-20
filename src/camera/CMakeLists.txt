@@ -76,8 +76,8 @@ generate_messages(
    DEPENDENCIES
    sensor_msgs
    std_msgs
+   camera
 )
-
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
 ################################################
@@ -217,6 +217,7 @@ target_link_libraries(
 depth ${catkin_LIBRARIES}
 realsense2
 )
+add_dependencies(depth camera_generate_messages_cpp)
 add_executable(rgb src/rgb.cpp)
 target_link_libraries(
 rgb ${catkin_LIBRARIES} ${OpenCV_INCLUDE_DIRS}
