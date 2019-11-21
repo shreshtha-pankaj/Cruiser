@@ -4,7 +4,7 @@
 #include <sstream>
 #include <camera/Depth.h>
 #include <librealsense2/rs.hpp>
-#include <list>
+#include <vector>
 using namespace cv;
 
 std::vector<cv::KeyPoint> findBlobs(cv::Mat color);
@@ -29,7 +29,7 @@ std::vector<cv::KeyPoint> findBlobsTest(cv::Mat color){
 	// Show blobs
 	cv::imshow("keypoints", im_with_keypoints );
 	cv::waitKey(0);
-
+	return keypoints;
 }
 
 std::vector<cv::KeyPoint> findBlobs(cv::Mat color){
