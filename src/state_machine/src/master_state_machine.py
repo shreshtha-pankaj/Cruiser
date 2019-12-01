@@ -11,8 +11,10 @@ from trajectory_msgs.msg import JointTrajectoryPoint
 names=['servo','brushless_motor']
 
 stop_motor = 0.0
-slow_motor =  -0.43
+slow_motor =  -0.25
 servo_zero = 0.155
+high_speed = -0.25
+reverse_motor = 0.3
 class State():
     def __init__(self, state_name):
         pass
@@ -30,7 +32,7 @@ class Right(State):
         self.state_name = state_name
     
     def turn(self, state_machine, servo=-0.5, motor =slow_motor):
-        turn_time = 0.15
+        turn_time = 0.05
         end_time = time.time() + turn_time
 
         while time.time() < end_time:
@@ -40,10 +42,17 @@ class Right(State):
 class Stop(State):
     def __init__(self, state_name):
         self.state_name = state_name
+        self.reverse_flag= True
 
     def stop(self, state_machine, servo=servo_zero, motor=stop_motor):
         state_machine.create_trajectory_Motor_cmd('servo',servo)
-        state_machine.create_trajectory_Motor_cmd('brushless_motor',motor)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
+        #time.sleep(0.5)
+        if(self.reverse_flag):
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
+            self.reverse_flag= False
+            time.sleep(0.5)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
 
 class state_machine(object):
     def __init__(self, pub_topic, sub_topic_depth, sub_topic_pid, sub_topic_stop_sign):
@@ -92,12 +101,16 @@ class state_machine(object):
     def determine_state(self):
         depth_data = self.cnt_wall_distance
         if self.is_stop_sign:
-            self.stop.stop(self)
+            start_time = time.time()
+            while(time.time() - start_time < 2.2):
+                self.stop.stop(self)
             return
 
-        if depth_data >3000:
-            self.straight.move(self,servo = self.pid_value)
-        elif depth_data <=3000 and depth_data > 2000:
+        if depth_data >8000:
+            self.straight.move(self,servo = self.pid_value,motor=high_speed)
+        elif depth_data >3500 and depth_data <= 8000:
+            self.straight.move(self,servo=self.pid_value)
+        elif depth_data <=3500 and depth_data > 1200:
             print("depth", depth_data)
             self.right.turn(self)
         elif depth_data < 1200:
