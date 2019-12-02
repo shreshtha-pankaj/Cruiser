@@ -13,7 +13,7 @@ names=['servo','brushless_motor']
 stop_motor = 0.0
 slow_motor =  -0.25
 servo_zero = 0.155
-high_speed = -0.25
+high_speed = -0.45
 reverse_motor = 0.3
 class State():
     def __init__(self, state_name):
@@ -108,22 +108,26 @@ class state_machine(object):
             return
 
         if depth_data > 8000:
+            print('Straight fast', depth_data)
             self.straight.move(self,servo = self.pid_value,motor=high_speed)
         elif depth_data < 1200:
             #stop the car for now.
+            print('Stop', depth_data)
             self.stop.stop(self)
         else:
             # if self.curr_turn == 1:
-            self.depth_for_turn(depth_data, 3500)
+            self.depth_for_turn(depth_data, 4700)
             #     self.curr_turn = 2
             # else:
             #     self.depth_for_turn(depth_data, 3500)
 
     def depth_for_turn(self, depth_data, depth_val):
         if depth_data > depth_val and depth_data <= 8000:
+            print('Straight Slow', depth_data)
             self.straight.move(self,servo=self.pid_value)
         elif depth_data <= depth_val and depth_data > 1200:
-            print("depth", depth_data)
+            print('turn right', depth_data)
+            # print("depth", depth_data)
             self.right.turn(self)
 
 if __name__ =='__main__':
