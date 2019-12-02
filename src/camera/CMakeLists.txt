@@ -226,7 +226,7 @@ realsense2
 
 add_executable(BlobUsingDepth src/BlobUsingDepth.cpp)
 target_link_libraries(
-BlobUsingDepth ${catkin_LIBRARIES}
+BlobUsingDepth ${catkin_LIBRARIES} ${OpenCV_INCLUDE_DIRS}
 realsense2
 )
   
