@@ -1,0 +1,6 @@
+<launch>
+   <include file="$(find state_machine)/launch/master.launch"/>
+
+   <include file="$(find phidgets_drivers)/phidgets_imu/launch/imu.launch"/>
+  
+</launch>
