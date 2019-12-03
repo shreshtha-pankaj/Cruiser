@@ -7,6 +7,7 @@ import time
 from std_msgs.msg import *
 from state_machine.msg import *
 from trajectory_msgs.msg import JointTrajectoryPoint
+from sensor_msgs.msg import Imu as imu_msg
 
 names=['servo','brushless_motor']
 
@@ -61,11 +62,12 @@ class Stop(State):
         state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
 
 class state_machine(object):
-    def __init__(self, pub_topic, sub_topic_depth, sub_topic_pid, sub_topic_stop_sign):
+    def __init__(self, pub_topic, sub_topic_depth, sub_topic_pid, sub_topic_stop_sign, imu_tpoic):
         self.client = actionlib.SimpleActionClient('pololu_trajectory_action_server', pololu_trajectoryAction)
         self.sub_depth = rospy.Subscriber(sub_topic_depth, Depth, callback=self.sub_depth_callback)
         self.sub_pid = rospy.Subscriber(sub_topic_pid, Float32, callback=self.sub_pid_callback)
         self.sub_stop_sign = rospy.Subscriber(sub_topic_stop_sign, Bool, callback=self.sub_stop_sign_callback)
+        self.sub_imu = rospy.Subscriber(imu_tpoic, imu_msg, callback=self.sub_imu_callback)
         self.cnt_wall_distance = 0
         self.straight = Straight("Move-Straight")
         self.right = Right("Move-Right")
@@ -102,7 +104,8 @@ class state_machine(object):
     def sub_stop_sign_callback(self, data):
         self.is_stop_sign = data.data
 
-
+    def sub_imu_callback(self, data):
+        print(data.data)
 
 #MOTOR RANGES: -0.2 (walks) to -0.35
 
@@ -170,7 +173,8 @@ if __name__ =='__main__':
     sub_topic_stop_sign = '/is_stop_sign'
     pub_topic = '/car_state'
     rospy.init_node('car_state_pub')
-    ss = state_machine(pub_topic, sub_topic_depth,sub_topic_pid,sub_topic_stop_sign)
+    imu_tpoic = 'imu/data_raw'
+    ss = state_machine(pub_topic, sub_topic_depth,sub_topic_pid,sub_topic_stop_sign, imu_tpoic)
     ss.client.wait_for_server()
     while not rospy.is_shutdown():
         ss.determine_state()
