@@ -12,10 +12,10 @@ from sensor_msgs.msg import Imu as imu_msg
 names=['servo','brushless_motor']
 
 stop_motor = 0.0
-slow_motor =  -0.25
+slow_motor =  -0.22
 servo_zero = 0.155
-high_speed = -0.25
-reverse_motor = 0.25
+high_speed = -0.22
+reverse_motor = 0.4
 class State():
     def __init__(self, state_name):
         pass
@@ -32,7 +32,7 @@ class Right(State):
     def __init__(self, state_name):
         self.state_name = state_name
 
-    def turn(self, state_machine, servo=-0.5, motor =slow_motor):
+    def turn(self, state_machine, servo=-0.35, motor =slow_motor):
         turn_time = 0.017
         end_time = time.time() + turn_time
 
@@ -64,9 +64,12 @@ class Reverse(State):
         state_machine.create_trajectory_Motor_cmd('servo',servo)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
 
-        time.sleep(0.5)
+        time.sleep(0.6)
         # Move in reverse
-        state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
+	t0 = time.time()
+	while(time.time()-t0 < 1):
+            print("Giving reverse motor control: ", state_machine.cnt_wall_distance)
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
 
     def reverse(self, state_machine, servo=servo_zero, motor=stop_motor):
         # Move in reverse
@@ -78,7 +81,8 @@ class state_machine(object):
         self.sub_depth = rospy.Subscriber(sub_topic_depth, Depth, callback=self.sub_depth_callback)
         self.sub_pid = rospy.Subscriber(sub_topic_pid, Float32, callback=self.sub_pid_callback)
         self.sub_stop_sign = rospy.Subscriber(sub_topic_stop_sign, Bool, callback=self.sub_stop_sign_callback)
-        self.sub_imu = rospy.Subscriber(imu_tpoic, imu_msg, callback=self.sub_imu_callback)
+
+#        self.sub_imu = rospy.Subscriber(imu_tpoic, imu_msg, callback=self.sub_imu_callback)
         self.cnt_wall_distance = 0
         self.straight = Straight("Move-Straight")
         self.right = Right("Move-Right")
@@ -133,21 +137,25 @@ class state_machine(object):
         if depth_data > 3500:
             print('Straight fast', depth_data)
             self.straight.move(self,servo = self.pid_value,motor=high_speed)
-        elif depth_data < 1200:
+        elif depth_data < 800:
             #stop the car for now.
             t0 = time.time()
             is_collided = True
+            print("Checking for collision:", self.cnt_wall_distance)
             while(time.time() - t0 < 0.5):
-                if(depth_data > 400):
+                if(self.cnt_wall_distance > 550):
                     is_collided = False
                     break
             if is_collided:
+                print('We collided, now reversing', self.cnt_wall_distance)
                 self.reverse.stop_and_reverse(self)
-                while(depth_data<1200):
-                    self.reverse.reverse()
+ #               while(self.cnt_wall_distance < 1200 and not rospy.is_shutdown()):
+#                    print("Stil reversing")
+  #                  self.reverse.reverse(self)
                 is_collided = False
         else:
             self.right.turn(self)
+            print("turn right", depth_data)
     
     # def depth_for_turn(self, depth_data, depth_val):
     #     if depth_data > depth_val and depth_data <= 8000:
