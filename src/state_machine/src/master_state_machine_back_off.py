@@ -32,8 +32,8 @@ class Right(State):
     def __init__(self, state_name):
         self.state_name = state_name
 
-    def turn(self, state_machine, servo=-0.35, motor =slow_motor):
-        turn_time = 0.017
+    def turn(self, state_machine, servo=-0.22, motor =slow_motor):
+        turn_time = 0.012
         end_time = time.time() + turn_time
 
         while time.time() < end_time:
@@ -64,10 +64,10 @@ class Reverse(State):
         state_machine.create_trajectory_Motor_cmd('servo',servo)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
 
-        time.sleep(0.6)
+        time.sleep(0.5)
         # Move in reverse
 	t0 = time.time()
-	while(time.time()-t0 < 1):
+	while(time.time()-t0 < 0.5):
             print("Giving reverse motor control: ", state_machine.cnt_wall_distance)
             state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
 
