@@ -105,8 +105,13 @@ class state_machine(object):
         self.is_stop_sign = data.data
 
     def sub_imu_callback(self, data):
-        print(data)
+        print(data.angular_velocity.x)
+        print(data.angular_velocity.y)
+        print(data.angular_velocity.z)
 
+        print(data.linear_acceleration.x)
+        print(data.linear_acceleration.y)
+        print(data.linear_acceleration.z)
 #MOTOR RANGES: -0.2 (walks) to -0.35
 
 
