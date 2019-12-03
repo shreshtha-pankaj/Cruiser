@@ -68,7 +68,6 @@ class Reverse(State):
         # Move in reverse
         state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
 
-    
     def reverse(self, state_machine, servo=servo_zero, motor=stop_motor):
         # Move in reverse
         state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
@@ -84,6 +83,7 @@ class state_machine(object):
         self.straight = Straight("Move-Straight")
         self.right = Right("Move-Right")
         self.stop = Stop("Stop")
+        self.reverse = Reverse("Reverse")
         self.pid_value = 0.15
         self.is_stop_sign = False
         self.curr_turn = 1
@@ -129,29 +129,33 @@ class state_machine(object):
             while(time.time() - start_time < 2.2):
                 self.stop.stop(self)
             return
-
-        if depth_data > 8000:
+        
+        if depth_data > 3500:
             print('Straight fast', depth_data)
             self.straight.move(self,servo = self.pid_value,motor=high_speed)
         elif depth_data < 1200:
             #stop the car for now.
-            print('Stop', depth_data)
-            self.stop.stop(self)
+            t0 = time.time()
+            is_collided = True
+            while(time.time() - t0 < 0.5):
+                if(depth_data > 400):
+                    is_collided = False
+                    break
+            if is_collided:
+                self.reverse.stop_and_reverse(self)
+                while(depth_data<1200):
+                    self.reverse.reverse()
+                is_collided = False
         else:
-            # if self.curr_turn == 1:
-            self.depth_for_turn(depth_data, 4700)
-            #     self.curr_turn = 2
-            # else:
-            #     self.depth_for_turn(depth_data, 3500)
-
-    def depth_for_turn(self, depth_data, depth_val):
-        if depth_data > depth_val and depth_data <= 8000:
-            print('Straight Slow', depth_data)
-            self.straight.move(self,servo=self.pid_value)
-        elif depth_data <= depth_val and depth_data > 1200:
-            print('turn right', depth_data)
-            # print("depth", depth_data)
             self.right.turn(self)
+    
+    # def depth_for_turn(self, depth_data, depth_val):
+    #     if depth_data > depth_val and depth_data <= 8000:
+    #         print('Straight Slow', depth_data)
+    #         self.straight.move(self,servo=self.pid_value)
+    #     elif depth_data <= depth_val and depth_data > 1200:
+    #         print('turn right', depth_data)
+    #         self.right.turn(self)
 
 if __name__ =='__main__':
 
