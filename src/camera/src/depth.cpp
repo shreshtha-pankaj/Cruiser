@@ -53,7 +53,7 @@ int main(int argc, char **argv){
   rs2::pipeline p;
   // Configure and start the pipeline
   rs2::config config;
-  config.enable_stream(RS2_STREAM_DEPTH, depth_width, depth_height, RS2_FORMAT_Z16, 60);
+  config.enable_stream(RS2_STREAM_DEPTH, depth_width, depth_height, RS2_FORMAT_Z16, 30);
   p.start(config);
   while (ros::ok())
   {
