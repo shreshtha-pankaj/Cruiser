@@ -1,3 +1,10 @@
-<launch>
-  <node pkg="camera" type="depth_listener.py" name="depth_listener" output="screen"/>
-</launch>
+<node pkg="camera" type ="rgb" name="color_stream" output="screen">
+    <param name="frame_rate" type="int" value="60" />
+    <param name="resolution_height" type="int" value="480" />
+    <param name="resolution_width" type="int" value="640" />
+</node>
+   <node pkg="camera" type ="depth" name="depth_stream" output="screen">
+     <param name="frame_rate" type="int" value="60" />
+     <param name="resolution_height" type="int" value="480" />
+     <param name="resolution_width" type="int" value="640" />
+   </node>
