@@ -14,8 +14,10 @@ names=['servo','brushless_motor']
 stop_motor = 0.0
 slow_motor =  -0.22
 servo_zero = 0.155
+servo_left = 0.3
+servo_right = -0.05
 high_speed = -0.22
-reverse_motor = 0.4
+reverse_motor = 0.3
 class State():
     def __init__(self, state_name):
         pass
@@ -63,25 +65,40 @@ class Reverse(State):
         #if(self.reversed)
         #     return
         # Stop the car
-        state_machine.create_trajectory_Motor_cmd('servo',-0.4)
+        state_machine.create_trajectory_Motor_cmd('servo',servo_zero)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
-
         time.sleep(1)
+
         # Move in reverse
-	t0 = time.time()
-	while(time.time()-t0 < 1.5):
+        t0 = time.time()
+        while(time.time()-t0 < 3 or self.cnt_wall_distance < 1000 or not rospy.is_shutdown() ):
             print("Giving reverse motor control: ", state_machine.cnt_wall_distance)
-#            state_machine.create_trajectory_Motor_cmd('servo', -0.4)
+            #state_machine.create_trajectory_Motor_cmd('servo', -0.4)
             state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
-        print("Going straight")
-        state_machine.create_trajectory_Motor_cmd('servo',servo)
+    
+        print("Stopping the servo")
+        state_machine.create_trajectory_Motor_cmd('servo',servo_zero)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
-
-        time.sleep(1)
-	while(time.time()-t0 < 2.5):
+        time.sleep(0.5)
+        #self.left_wall_distance, self.cnt_wall_distance, self.right_wall_distance
+        if(self.left_wall_distance - self.right_wall_distance > 1000):
+            print("Turning the servo left")
+            state_machine.create_trajectory_Motor_cmd('servo',servo_left)
+            #turn left
+        else:
+            print("Turning the servo right")
+            state_machine.create_trajectory_Motor_cmd('servo',servo_right)
+            #turn right
+        print("Going straight")
+        t0 = time.time()
+        while(time.time() - t0<0.5):
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
+ 
+        t0 = time.time()
+        while(time.time() - t0<0.5):
             state_machine.create_trajectory_Motor_cmd('servo',servo)
-	    state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
-#        self.reversed =True
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
+      self.reversed =True
 
     def reverse(self, state_machine, servo=servo_zero, motor=stop_motor):
         # Move in reverse
@@ -139,35 +156,31 @@ class state_machine(object):
 
 
     def determine_state(self):
-        depth_data = self.cnt_wall_distance
         if self.is_stop_sign:
             start_time = time.time()
             while(time.time() - start_time < 2.2):
                 self.stop.stop(self)
             return
         
-        if depth_data > 3500:
-            print('Straight fast', depth_data)
+        if self.cnt_wall_distance > 3500:
+            print('Straight fast', self.cnt_wall_distance)
             self.straight.move(self,servo = self.pid_value,motor=high_speed)
-        elif depth_data < 800:
+        elif self.cnt_wall_distance < 800:
             #stop the car for now.
             t0 = time.time()
             is_collided = True
             print("Checking for collision:", self.cnt_wall_distance)
             while(time.time() - t0 < 0.5):
-                if(self.cnt_wall_distance > 650):
+                if(self.cnt_wall_distance > 400):
                     is_collided = False
                     break
             if is_collided:
-                print('We collided, now reversing', self.cnt_wall_distance)
+                print('We collided, now avoid collision', self.left_wall_distance, self.cnt_wall_distance, self.right_wall_distance)
                 self.reverse.stop_and_reverse(self)
- #               while(self.cnt_wall_distance < 1200 and not rospy.is_shutdown()):
-#                    print("Stil reversing")
-  #                  self.reverse.reverse(self)
                 is_collided = False
         else:
             self.right.turn(self)
-            print("turn right", depth_data)
+            print("turn right", self.cnt_wall_distance)
     
     # def depth_for_turn(self, depth_data, depth_val):
     #     if depth_data > depth_val and depth_data <= 8000:
