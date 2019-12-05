@@ -38,18 +38,12 @@ class Right(State):
     def __init__(self, state_name):
         self.state_name = state_name
 
-<<<<<<< HEAD
-    def turn(self, state_machine, servo=-0.5, motor =slow_motor):
-        turn_time = 0.15
-        end_time = time.time() + turn_time
-=======
     def turn(self, state_machine, servo=-0.5, motor =reverse_motor):
         turn_time = 0.017
         end_time = time.time() + turn_time
         #state_machine.prev_cnt_depth = state_machine.cnt_wall_distance
         print("Depth while turning:left,center,right ", state_machine.left_wall_distance,state_machine.cnt_wall_distance,state_machine.right_wall_distance)
 
->>>>>>> master
         while time.time() < end_time:
             self.state = 'right'
             state_machine.create_trajectory_Motor_cmd('servo', servo)
@@ -70,13 +64,8 @@ class Stop(State):
             time.sleep(0.5)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
 
-<<<<<<< HEAD
-class StateMachine(object):
-    def __init__(self, pub_topic, sub_topic_depth, sub_topic_pid):
-=======
 class state_machine(object):
     def __init__(self, pub_topic, sub_topic_depth, sub_topic_pid, sub_topic_stop_sign):
->>>>>>> master
         self.client = actionlib.SimpleActionClient('pololu_trajectory_action_server', pololu_trajectoryAction)
         self.sub_depth = rospy.Subscriber(sub_topic_depth, Depth, callback=self.sub_depth_callback)
         self.sub_pid = rospy.Subscriber(sub_topic_pid, Float32, callback=self.sub_pid_callback)
@@ -99,10 +88,6 @@ class state_machine(object):
     def sub_pid_callback(self, data):
         #  get the pid value
         self.pid_value = data.data + servo_zero
-<<<<<<< HEAD
-
-=======
->>>>>>> master
     def create_trajectory_Motor_cmd(self, jntName, pos, speed=0):
         goal = pololu_trajectoryGoal()
         traj = goal.joint_trajectory
@@ -138,17 +123,6 @@ class state_machine(object):
             #start_time = time.time()
             #while(time.time() - start_time < 2.2):
             self.stop.stop(self)
-<<<<<<< HEAD
-
-        if depth_data > 3000:
-            self.straight.move(self,servo = self.pid_value)
-        elif depth_data <=3000 and depth_data > 1500:
-            print("depth", depth_data)
-            self.right.turn(self)
-        else:
-            #stop the car for now.
-            self.stop.stop(self)
-=======
             return
 
         if depth_data > turn_depth and not self.turn_state_flag:
@@ -184,7 +158,6 @@ class state_machine(object):
         #print('turn right', depth_data)
             # print("depth", depth_data)
         self.right.turn(self)
->>>>>>> master
 
 if __name__ =='__main__':
 
@@ -196,11 +169,7 @@ if __name__ =='__main__':
     sub_topic_stop_sign = '/is_stop_sign'
     pub_topic = '/car_state'
     rospy.init_node('car_state_pub')
-<<<<<<< HEAD
-    ss = StateMachine(pub_topic, sub_topic_depth,sub_topic_pid)
-=======
     ss = state_machine(pub_topic, sub_topic_depth,sub_topic_pid,sub_topic_stop_sign)
->>>>>>> master
     ss.client.wait_for_server()
     while not rospy.is_shutdown():
         ss.determine_state()
