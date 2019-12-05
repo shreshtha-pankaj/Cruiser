@@ -6,6 +6,4 @@
 
    <node pkg="ros_pololu_servo" type="pololu_car_pub.py" name="pololu_car_pub" output="screen"/>
 
-
-
 </launch>
