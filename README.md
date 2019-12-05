@@ -50,3 +50,17 @@ For this project, we are using C++ and Python2.7
 3. Stop Sign: /is_stop_sign
 4. TODO: To be added
 
+## Dependencies
+Intel Real Sense SDK, OpenCV, Python, ROS Kinetic
+
+## Running the code
+In order to run this code, do the following steps
+1. Clone the repository
+```git clone https://github.com/shreshtha-pankaj/Cruiser.git```
+2. Navigate into the cloned repository
+```cd Cruiser```
+3. Now build the code
+```catkin_make```
+4.  Don't forget to source 
+```source devel/setup.bash```
+

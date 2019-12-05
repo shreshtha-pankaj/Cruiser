@@ -20,11 +20,11 @@
      <param name="resolution_width" type="int" value="640" />
    </node>
 
-   <node pkg="pid_controller" type ="output_publisher.py" name="output_publisher" output="screen">
+   <!-- <node pkg="pid_controller" type ="output_publisher.py" name="output_publisher" output="screen"> -->
      <!-- TODO: Add Kp, Kd paramters
     <param name="Kp" type="" value="">
      <param name="Kd" type="" value=""> 
      -->
-   </node>
+   <!-- </node> -->
 
 </launch>

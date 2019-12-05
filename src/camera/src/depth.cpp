@@ -74,7 +74,7 @@ int main(int argc, char **argv){
 
       msg.left_depth = getAverageDepth(depth, width_dim, height_dim, corners[0], corners[1]);
       msg.center_depth = getAverageDepth(depth, width_dim, height_dim, corners[2], corners[3]);
-      msg.right_depth = getAverageDepth(depth, width_dim, height_dim, corners[4], corners[5])
+      msg.right_depth = getAverageDepth(depth, width_dim, height_dim, corners[4], corners[5]);
 
       depth_pub.publish(msg);
 

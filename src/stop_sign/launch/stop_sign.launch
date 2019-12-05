@@ -4,12 +4,12 @@
   <include file="$(find state_machine)/launch/master.launch"/>
   
   <!-- State Machine Parameters-->
-  <param name="stop_motor" type="double" value="0.0" />
-  <param name="slow_motor" type="double" value="-0.25" />
-  <param name="servo_zero" type="double" value="0.155" />
-  <param name="high_speed" type="double" value="-0.25" />
-  <param name="turn_depth" type="double" value="5500" />
-  <param name="reverse_motor" type="double" value="0.6" />
+  <param name="/master_state_machine/stop_motor" type="double" value="0.0" />
+  <param name="/master_state_machine/slow_motor" type="double" value="-0.25" />
+  <param name="/master_state_machine/servo_zero" type="double" value="0.155" />
+  <param name="/master_state_machine/high_speed" type="double" value="-0.25" />
+  <param name="/master_state_machine/turn_depth" type="double" value="4500" />
+  <param name="/master_state_machine/reverse_motor" type="double" value="0.6" />
 
   <!-- Depth parametrs !-->
   <param name="depth_stream/frame_rate" type="int" value="30" />
