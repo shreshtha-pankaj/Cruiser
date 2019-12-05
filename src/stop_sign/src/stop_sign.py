@@ -31,8 +31,9 @@ class StopSignDetector:
             print('Exception')
             print(e)
         #print(cv_image.shape)
-        cv2.imshow("Window",cv_image)
-        cv2.waitKey(2)
+
+        #cv2.imshow("Window",cv_image)
+        #cv2.waitKey(2)
         #print(time.time()-start_time)
         stop_signs = self.classifier.detectMultiScale(cv_image,1.02,10)
         # Detected Stop Sign

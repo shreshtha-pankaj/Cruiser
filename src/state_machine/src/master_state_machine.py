@@ -14,6 +14,7 @@ stop_motor = 0.0
 slow_motor =  -0.25
 servo_zero = 0.155
 high_speed = -0.55
+
 reverse_motor = 0.3
 class State():
     def __init__(self, state_name):
@@ -53,10 +54,10 @@ class Stop(State):
         state_machine.create_trajectory_Motor_cmd('servo',servo)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
         #time.sleep(0.5)
-        #if(self.reverse_flag):
-            #state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
-            #self.reverse_flag= False
-            #time.sleep(0.5)
+        if(self.reverse_flag):
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
+            self.reverse_flag= False
+            time.sleep(0.5)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
 
 class state_machine(object):
