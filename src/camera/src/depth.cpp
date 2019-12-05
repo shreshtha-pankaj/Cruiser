@@ -26,10 +26,12 @@ float getAverageDepth(rs2::depth_frame& depth, float width, float height, int x,
 
 float* getCorners(float width, float height, int cx, int cy) {
   float *corners = new float[6];
-  corners[0] = 10; // need to check what the right value is, with 1280 * 960, we used 20
+  // TODO: need to check what the right value is, with 1280 * 960, we used 20, avoiding noisy edges
+  corners[0] = 10;
   corners[1] = (cy - height / 2);
   corners[2] = (cx - width / 2);
   corners[3] = (cy - height / 2);
+  // TODO: need to check what the right value is, with 1280 * 960, we used 20
   corners[4] = (depth_width - width - 10);
   corners[5] = (cy - height / 2);
   return corners;
