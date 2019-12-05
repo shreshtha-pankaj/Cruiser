@@ -14,11 +14,6 @@ if __name__ == '__main__':
     print('Here')
     client.wait_for_server()
     print("connected to server")
-    goal = pololu_trajectoryGoal()
-    traj = goal.joint_trajectory
-    traj.header.stamp = rospy.Time.now()
-    traj.joint_names.append(names[0])
-    traj.joint_names.append(names[1])
     print("hello")
     while not rospy.is_shutdown():
         print "Enter servo Position: "
@@ -28,6 +23,11 @@ if __name__ == '__main__':
         motor_pos = raw_input()
         print ("Got motor input %f", motor_pos)
 
+        goal = pololu_trajectoryGoal()
+        traj = goal.joint_trajectory
+        traj.header.stamp = rospy.Time.now()
+        traj.joint_names.append(names[0])
+        traj.joint_names.append(names[1])
         pts=JointTrajectoryPoint()
         pts.time_from_start=rospy.Duration(0.0)
         pts.positions.append(float(servo_pos))

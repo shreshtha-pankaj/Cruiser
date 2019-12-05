@@ -28,7 +28,7 @@ class pid_node(object):
         # self.kd = self.straight_state["kd"]
 
         self.lastgains = []
-        self.pid = PID.PID(0.25/2000,0,0)
+        self.pid = PID.PID(0.25/2000,0,0.25/2000000)
         self.pid.clear()
         self.current_pose = 0
         self.current_state = 0
@@ -43,9 +43,11 @@ class pid_node(object):
 
     def depth_callback(self,data):
 	if data.left_depth > 3750:
-	    data.left_depth = 1650 
+	    data.left_depth = 1800
+        if data.right_depth > 4000:
+            data.right_depth = 1800
         error = data.right_depth - data.left_depth
-	if abs(error) <= 100:
+	if abs(error) <= 200:
             error = 0
 	self.output_publisher(error)
 

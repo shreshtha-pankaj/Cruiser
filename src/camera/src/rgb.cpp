@@ -5,7 +5,6 @@
 #include <sstream>
 #include <librealsense2/rs.hpp>
 #include <opencv2/opencv.hpp> //? to include in Cmake
-
 // https://github.com/IntelRealSense/librealsense/blob/master/doc/stepbystep/getting_started_with_openCV.md
 int main(int argc, char **argv){
   ros::init(argc, argv, "color_stream");
@@ -45,7 +44,11 @@ int main(int argc, char **argv){
       rs2::frame color_frames = frames.get_color_frame();
 
       // Creating OpenCV Matrix from a color image
-      cv::Mat color(cv::Size(640, 480), CV_8UC3, (void*)color_frames.get_data(), cv::Mat::AUTO_STEP);
+
+     // cv::Size size(256,192);
+     // cv::Mat color_dest;
+      cv::Mat color(cv::Size(640,480), CV_8UC3, (void*)color_frames.get_data(), cv::Mat::AUTO_STEP);
+     // cv::resize(color, color_dest, size);
       sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", color).toImageMsg();
       pub.publish(msg);
       // ROS_INFO("%d", color.get_data_size());

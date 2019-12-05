@@ -43,7 +43,7 @@ int main(int argc, char **argv){
   n.param("/depth_stream/resolution_width", depth_width, 640);
   ROS_INFO("Depth Parameters: %d, %d, %d", frame_rate, depth_height, depth_width);
   int width_dim = 50;
-  int height_dim = 25;
+  int height_dim = 50;
   int cx = depth_width / 2;
   int cy = depth_height / 2;
   float* corners = getCorners(width_dim, height_dim, cx, cy);
