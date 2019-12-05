@@ -4,8 +4,8 @@
 #include <camera/Depth.h>
 #include <librealsense2/rs.hpp>
 
-int depth_width = 1280;
-int depth_height = 720;
+int depth_width = 640;
+int depth_height = 480;
 
 float getAverageDepth(rs2::depth_frame& depth, float width, float height, int x, int y) {
   float sum = 0;
@@ -39,7 +39,7 @@ float* getCorners(float width, float height, int cx, int cy) {
 int main(int argc, char **argv){
   ros::init(argc, argv, "depth_stream");
   ros::NodeHandle n;
-  int width_dim = 100;
+  int width_dim = 50;
   int height_dim = 50;
   int cx = depth_width / 2;
   int cy = depth_height / 2;
@@ -53,7 +53,7 @@ int main(int argc, char **argv){
   rs2::pipeline p;
   // Configure and start the pipeline
   rs2::config config;
-  config.enable_stream(RS2_STREAM_DEPTH, depth_width, depth_height, RS2_FORMAT_Z16, 30);
+  config.enable_stream(RS2_STREAM_DEPTH, depth_width, depth_height, RS2_FORMAT_Z16, 60);
   p.start(config);
   while (ros::ok())
   {
