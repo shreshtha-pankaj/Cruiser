@@ -10,12 +10,12 @@ from trajectory_msgs.msg import JointTrajectoryPoint
 
 names=['servo','brushless_motor']
 
-stop_motor = 0.0
-slow_motor =  -0.25
+stop_motor = 0.5
+slow_motor =  -0.22
 servo_zero = 0.155
-high_speed = -0.55
-
-reverse_motor = 0.3
+high_speed = -0.22
+turn_depth = 5500
+reverse_motor = 0.6
 class State():
     def __init__(self, state_name):
         self.state = ""
@@ -130,8 +130,10 @@ class state_machine(object):
             self.straight.move(self,servo = self.pid_value,motor=high_speed)
         elif depth_data > 6000 and self.turn_state_flag:
             curr_time = time.time()
-            while time.time() - curr_time < 2:
-                self.straight.move(self,servo=self.pid_value,motor=high_speed)
+            while time.time() - curr_time < 0.5:
+                self.straight.move(self,servo=0.4,motor=high_speed)
+            while time.time()-curr_time < 2: 
+               self.straight.move(self,servo=self.pid_value,motor=high_speed)
             self.turn_state_flag = False
         elif depth_data < 1200:
             #stop the car for now.
