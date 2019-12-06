@@ -77,7 +77,7 @@ class PID:
         self.current_time = current_time if current_time is not None else time.time()
         delta_time = self.current_time - self.last_time
         delta_error = error - self.last_error
-        #print(delta_error,delta_time)
+        #print(delta_error)
 
         if (delta_time >= self.sample_time):
             self.PTerm = self.Kp * error

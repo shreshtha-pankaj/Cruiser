@@ -34,16 +34,16 @@ class Right(State):
     def __init__(self, state_name):
         self.state_name = state_name
 
-    def turn(self, state_machine, servo=-0.5, motor =stop_motor):
-        #turn_time = 0.017
-        #end_time = time.time() + turn_time
+    def turn(self, state_machine, servo=-0.5, motor =reverse_motor):
+        turn_time = 0.017
+        end_time = time.time() + turn_time
         #state_machine.prev_cnt_depth = state_machine.cnt_wall_distance
         print("Depth while turning:left,center,right ", state_machine.left_wall_distance,state_machine.cnt_wall_distance,state_machine.right_wall_distance)
 
-        #while time.time() < end_time:
-        self.state = 'right'
-        state_machine.create_trajectory_Motor_cmd('servo', servo)
-        state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
+        while time.time() < end_time:
+            self.state = 'right'
+            state_machine.create_trajectory_Motor_cmd('servo', servo)
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
 
 class Stop(State):
     def __init__(self, state_name):
@@ -81,11 +81,9 @@ class state_machine(object):
         self.cnt_wall_distance = data.center_depth
         self.left_wall_distance = data.left_depth
         self.right_wall_distance = data.right_depth
-
     def sub_pid_callback(self, data):
         #  get the pid value
         self.pid_value = data.data + servo_zero
-        #print("Current PID Value :",self.pid_value)
     def create_trajectory_Motor_cmd(self, jntName, pos, speed=0):
         goal = pololu_trajectoryGoal()
         traj = goal.joint_trajectory
@@ -108,6 +106,9 @@ class state_machine(object):
 
 
     def determine_state(self):
+    
+        print("Current PID Value :",self.pid_value)
+#        print("Time: ",time.time(), self.left_wall_distance,self.cnt_wall_distance, self.right_wall_distance)
         cur_time = time.time()
         self.prev_cnt_depth = self.cnt_wall_distance
 #        print("Prev, current depth",self.prev_cnt_depth,self.cnt_wall_distance)
@@ -125,10 +126,10 @@ class state_machine(object):
             self.stop.stop(self)
             return
 
-        if depth_data > 6000 and not self.turn_state_flag:
+        if depth_data > turn_depth and not self.turn_state_flag:
             print('Straight fast:left, center, right',self.left_wall_distance, depth_data, self.right_wall_distance)
             self.straight.move(self,servo = self.pid_value,motor=high_speed)
-        elif depth_data > 6000 and self.turn_state_flag:
+        elif depth_data > turn_depth and self.turn_state_flag:
             curr_time = time.time()
             while time.time() - curr_time < 0.5:
                 self.straight.move(self,servo=0.4,motor=high_speed)
@@ -139,8 +140,8 @@ class state_machine(object):
             #stop the car for now.
             print('Stop', depth_data)
             self.stop.stop(self)
-        elif depth_data < 6000 and not self.turn_flag:
-            # if self.curr_turn == 1:
+        elif depth_data < turn_depth and not self.turn_flag:
+            # if self.curr_:turn == 1:
             #if self.turn_flag:
             print("calling turn right --------------------------")
             self.depth_for_turn(depth_data, 4700)

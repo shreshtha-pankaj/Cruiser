@@ -39,7 +39,7 @@ float* getCorners(float width, float height, int cx, int cy) {
 int main(int argc, char **argv){
   ros::init(argc, argv, "depth_stream");
   ros::NodeHandle n;
-  int width_dim = 50;
+  int width_dim = 23;
   int height_dim = 50;
   int cx = depth_width / 2;
   int cy = depth_height / 2;
