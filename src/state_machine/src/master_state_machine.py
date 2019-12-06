@@ -59,12 +59,12 @@ class Stop(State):
 
     def stop(self, state_machine, servo=servo_zero, motor=stop_motor):
         state_machine.create_trajectory_Motor_cmd('servo',servo)
-        state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
         if self.reverse_flag:
             state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
             self.reverse_flag= False
             time.sleep(0.5)
-        state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
 
 
 class StateMachine(object):
@@ -110,8 +110,7 @@ class StateMachine(object):
         self.is_stop_sign = data.data
 
     def determine_state(self):
-        print('Current PID Value :', self.pid_value)
-
+        print("PID Value: ", self.pid_value)
         # TODO: Removed local variable depth_data, don't think we need it, Check this
         # TODO: depth_data = self.center_depth
 
@@ -128,6 +127,8 @@ class StateMachine(object):
         # TODO: Explain what is happening here  
         elif self.center_depth > turn_depth and self.turn_state_flag:
             curr_time = time.time()
+            while time.time() - curr_time < 0.5:
+                self.straight.move(self,servo=0.4,motor=high_speed)
             while time.time() - curr_time < 2:
                 self.straight.move(self,servo=self.pid_value,motor=high_speed)
             self.turn_state_flag = False
