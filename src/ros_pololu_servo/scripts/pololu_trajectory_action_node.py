@@ -50,7 +50,6 @@ class pololuTrajServer:
         mtr.position=pos
         mtr.speed=speed#/self.MaxSpeed#pololu take 0 to 1.0 as speed, check the correct division
         mtr.acceleration=1.0
-        print("mtr message: ",mtr)
         self.pub.publish(mtr)
 
     def execute(self, goal):
