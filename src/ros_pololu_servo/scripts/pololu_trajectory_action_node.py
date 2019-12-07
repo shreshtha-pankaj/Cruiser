@@ -59,7 +59,7 @@ class pololuTrajServer:
         tme=rospy.Time.now()
         frameCount=0
         numFrames=len(self.jntTraj.points)
-        r = rospy.Rate(50) # 50hz or 100hz
+        #r = rospy.Rate(100) # 50hz or 100hz
         processed=False
         tme=rospy.Time.now()
         while not processed:
@@ -73,7 +73,7 @@ class pololuTrajServer:
                         self.moveMotor(self.jntTraj.joint_names[nn],pt,self.jntTraj.points[frameCount].velocities[nn])
                         nn=nn+1
                     frameCount=frameCount+1
-            r.sleep()
+            #r.sleep()
         self.server.set_succeeded()
 
 
