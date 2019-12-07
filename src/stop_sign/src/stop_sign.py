@@ -28,16 +28,10 @@ class StopSignDetector:
             cv_image = self.bridge.imgmsg_to_cv2(data,"mono8")
             cv_image = cv2.resize(cv_image,(253,200))
         except CvBridgeError as e:
-            print('Exception')
             print(e)
-        #print(cv_image.shape)
-
-        #cv2.imshow("Window",cv_image)
-        #cv2.waitKey(2)
-        #print(time.time()-start_time)
         stop_signs = self.classifier.detectMultiScale(cv_image,1.02,10)
+
         # Detected Stop Sign
-        #print(time.time()-start_time, len(stop_signs))
         if len(stop_signs) > 0:
             if self.is_stop_sign == False:
                 self.is_stop_sign = True
@@ -46,7 +40,8 @@ class StopSignDetector:
             if self.is_stop_sign:
                 self.is_stop_sign = False
                 self.pub.publish(self.is_stop_sign)
-        #print(time.time()-start_time)
+
+
 def main():
     topic = '/camera/image'
     listener = StopSignDetector(topic)

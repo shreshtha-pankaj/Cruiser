@@ -8,6 +8,7 @@ from std_msgs.msg import *
 from state_machine.msg import *
 from trajectory_msgs.msg import JointTrajectoryPoint
 from sensor_msgs.msg import Imu as imu_msg
+import time
 
 names=['servo','brushless_motor']
 
@@ -67,9 +68,6 @@ class Reverse(State):
         self.state_name = state_name
 
     def stop_and_reverse(self, state_machine, servo=servo_zero, motor=stop_motor):
-        #if(self.reversed)
-        #     return
-        # Stop the car
         state_machine.create_trajectory_Motor_cmd('servo',servo_zero)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
@@ -120,17 +118,16 @@ class Reverse(State):
                 state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
 
     def reverse(self, state_machine, servo=servo_zero, motor=stop_motor):
-        # Move in reverse
         state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
 
 class state_machine(object):
-    def __init__(self, pub_topic, sub_topic_depth, sub_topic_pid, sub_topic_stop_sign, imu_tpoic):
+    def __init__(self, pub_topic, sub_topic_depth, sub_topic_pid, sub_topic_stop_sign, imu_topic):
         self.client = actionlib.SimpleActionClient('pololu_trajectory_action_server', pololu_trajectoryAction)
         self.sub_depth = rospy.Subscriber(sub_topic_depth, Depth, callback=self.sub_depth_callback)
         self.sub_pid = rospy.Subscriber(sub_topic_pid, Float32, callback=self.sub_pid_callback)
         self.sub_stop_sign = rospy.Subscriber(sub_topic_stop_sign, Bool, callback=self.sub_stop_sign_callback)
 
-#        self.sub_imu = rospy.Subscriber(imu_tpoic, imu_msg, callback=self.sub_imu_callback)
+#        self.sub_imu = rospy.Subscriber(imu_topic, imu_msg, callback=self.sub_imu_callback)
         self.cnt_wall_distance = 0
         self.straight = Straight("Move-Straight")
         self.right = Right("Move-Right")
@@ -147,9 +144,8 @@ class state_machine(object):
         self.right_wall_distance = data.right_depth
 
     def sub_pid_callback(self, data):
-        #  get the pid value
         self.pid_value = data.data + servo_zero
-        #print("Current PID Value :",self.pid_value)
+
     def create_trajectory_Motor_cmd(self, jntName, pos, speed=0):
         goal = pololu_trajectoryGoal()
         traj = goal.joint_trajectory
@@ -166,13 +162,9 @@ class state_machine(object):
     def sub_stop_sign_callback(self, data):
         self.is_stop_sign = data.data
 
-    def sub_imu_callback(self, data):
-        print('-----------------------------------------------------------------------------------------------')
-        print('Angular velocity: ', data.angular_velocity.x, data.angular_velocity.y, data.angular_velocity.z)
-        print('Linear Acceleration', data.linear_acceleration.x, data.linear_acceleration.y, data.linear_acceleration.z)
-        print('-----------------------------------------------------------------------------------------------')
-        #MOTOR RANGES: -0.2 (walks) to -0.35
-
+    # def sub_imu_callback(self, data):
+    #     print('Angular velocity: ', data.angular_velocity.x, data.angular_velocity.y, data.angular_velocity.z)
+    #     print('Linear Acceleration', data.linear_acceleration.x, data.linear_acceleration.y, data.linear_acceleration.z)
 
     def determine_state(self):
         if self.is_stop_sign:
@@ -184,6 +176,7 @@ class state_machine(object):
         if self.cnt_wall_distance > 3500:
             print('Straight fast', self.cnt_wall_distance)
             self.straight.move(self,servo = self.pid_value,motor=high_speed)
+
         elif self.cnt_wall_distance < 800:
             #stop the car for now.
             t0 = time.time()
@@ -200,32 +193,17 @@ class state_machine(object):
         else:
             self.right.turn(self)
             print("turn right", self.cnt_wall_distance)
-    
-    # def depth_for_turn(self, depth_data, depth_val):
-    #     if depth_data > depth_val and depth_data <= 8000:
-    #         print('Straight Slow', depth_data)
-    #         self.straight.move(self,servo=self.pid_value)
-    #     elif depth_data <= depth_val and depth_data > 1200:
-    #         print('turn right', depth_data)
-    #         self.right.turn(self)
 
-if __name__ =='__main__':
-
-    # publishing to ros_pololu_servo right now
-    import time
-    time.sleep(2)
-    # publish pos and vel data
-    sub_topic_depth = '/depth_frames'
+if __name__ =='__main__'
+    sub_topic_depth = '/camera/depth'
     sub_topic_pid = '/pid_output'
     sub_topic_stop_sign = '/is_stop_sign'
     pub_topic = '/car_state'
     rospy.init_node('car_state_pub')
-    imu_tpoic = 'imu/data_raw'
-    ss = state_machine(pub_topic, sub_topic_depth,sub_topic_pid,sub_topic_stop_sign, imu_tpoic)
+    imu_topic = 'imu/data_raw'
+    ss = state_machine(pub_topic, sub_topic_depth,sub_topic_pid,sub_topic_stop_sign, imu_topic)
     ss.client.wait_for_server()
     while not rospy.is_shutdown():
         ss.determine_state()
-#! /usr/bin/env python
 
-import rospy
-from trajectory_msgs.msg import JointTrajectoryPoint
+

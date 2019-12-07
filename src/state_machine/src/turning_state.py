@@ -10,20 +10,12 @@ from trajectory_msgs.msg import JointTrajectoryPoint
 
 names=['servo','brushless_motor']
 
-
-
 class turning_state_machine(object):
 	def __init__(self, pub_topic):
 		self.client = actionlib.SimpleActionClient('pololu_trajectory_action_server', pololu_trajectoryAction)
 
 
 	def create_trajectory_Motor_cmd(self, jntName, pos, speed=0):
-		# mtr = MotorCommand()
-		# mtr.joint_name = jntName
-		# mtr.position = pos
-		# mtr.speed = speed  # /self.MaxSpeed#pololu take 0 to 1.0 as speed, check the correct division
-		# mtr.acceleration = 1.0
-		# self.pub.publish(mtr)
 		goal = pololu_trajectoryGoal()
 		traj = goal.joint_trajectory
 		traj.header.stamp = rospy.Time.now()
@@ -41,7 +33,7 @@ class turning_state_machine(object):
 		end_time = time.time() + straight_time
 
 		while time.time() < end_time:
-			self.create_trajectory_Motor_cmd('servo',0.155) 
+			self.create_trajectory_Motor_cmd('servo',0.155)
 			self.create_trajectory_Motor_cmd('brushless_motor', -0.4)
 
 		turn_time = 0.9
@@ -51,7 +43,7 @@ class turning_state_machine(object):
 		while time.time() < end_time:
 			self.create_trajectory_Motor_cmd('servo', -0.4)
 			self.create_trajectory_Motor_cmd('brushless_motor', -0.3)
-		
+
 		self.create_trajectory_Motor_cmd('servo', 0)
         	self.create_trajectory_Motor_cmd('brushless_motor', 0)
 
@@ -59,9 +51,7 @@ class turning_state_machine(object):
 
 if __name__ =='__main__':
 
-	# publishing to ros_pololu_servo right now
-
-	# publish pos and vel data
+	# Publishing position and velocity data to ros_pololu_servo
 	pub_topic = '/car_state'
 	rospy.init_node('turn_state_pub')
 	ss = turning_state_machine(pub_topic= pub_topic)

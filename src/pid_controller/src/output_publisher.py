@@ -20,7 +20,7 @@ class pid_node(object):
         
         self.output_pub = rospy.Publisher('/pid_output',Float32, queue_size = 10)
         rospy.Subscriber("/current_state", Int16 ,self.current_state_callback)
-        rospy.Subscriber("/depth_frames", Depth ,self.depth_callback)
+        rospy.Subscriber("/camera/depth", Depth ,self.depth_callback)
         # self.straight_state =  rospy.get_param("right")
         #
         # self.kp = self.straight_state["kp"]
@@ -44,8 +44,10 @@ class pid_node(object):
     def depth_callback(self,data):
 	if data.left_depth > 3750:
 	    data.left_depth = 1800
+#        if data.right_depth > 4000:
+#            data.right_depth = 1800
         error = data.right_depth - data.left_depth
-	if abs(error) <= 100:
+	if abs(error) <= 200:
             error = 0
 	self.output_publisher(error)
 

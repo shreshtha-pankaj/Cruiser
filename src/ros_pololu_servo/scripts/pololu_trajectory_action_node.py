@@ -48,7 +48,7 @@ class pololuTrajServer:
         mtr=MotorCommand()
         mtr.joint_name=jntName
         mtr.position=pos
-        mtr.speed=speed#/self.MaxSpeed#pololu take 0 to 1.0 as speed, check the correct division
+        mtr.speed=speed #/self.MaxSpeed#pololu take 0 to 1.0 as speed, check the correct division
         mtr.acceleration=1.0
         self.pub.publish(mtr)
 
@@ -58,7 +58,7 @@ class pololuTrajServer:
         tme=rospy.Time.now()
         frameCount=0
         numFrames=len(self.jntTraj.points)
-        r = rospy.Rate(50) # 50hz or 100hz
+        # r = rospy.Rate(50) # 50hz or 100hz
         processed=False
         tme=rospy.Time.now()
         while not processed:
@@ -72,7 +72,7 @@ class pololuTrajServer:
                         self.moveMotor(self.jntTraj.joint_names[nn],pt,self.jntTraj.points[frameCount].velocities[nn])
                         nn=nn+1
                     frameCount=frameCount+1
-            r.sleep()
+            # r.sleep()
         self.server.set_succeeded()
 
 
