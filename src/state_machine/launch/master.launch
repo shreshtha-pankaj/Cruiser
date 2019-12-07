@@ -8,7 +8,7 @@
      <param name="stop_motor" type="double" value="0.0" />
      <param name="slow_motor" type="double" value="-0.25" />
      <param name="servo_zero" type="double" value="0.155" />
-     <param name="high_speed" type="double" value="-0.0" />
+     <param name="high_speed" type="double" value="-0.55" />
      <param name="turn_depth" type="double" value="5500" />
      <param name="reverse_motor" type="double" value="0.6" />
    </node>

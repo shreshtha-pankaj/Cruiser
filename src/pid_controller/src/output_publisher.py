@@ -28,11 +28,11 @@ class pid_node(object):
         # self.kd = self.straight_state["kd"]
 
         self.lastgains = []
-        self.pid = PID.PID(0.25/2000,0,0)
+        self.pid = PID.PID(0.25/2000,0,0.25/2000000)
         self.pid.clear()
         self.current_pose = 0
         self.current_state = 0
-
+        self.error_thresh = 125
     def stateid_to_gains_reader(self):
         #Lakshya
         pass
@@ -42,12 +42,13 @@ class pid_node(object):
         self.current_state = data.data
 
     def depth_callback(self,data):
-	if data.left_depth > 3750:
+	if data.left_depth > 3300:
+            print("reducing depth of lrft", data.left_depth)
 	    data.left_depth = 1800
 #        if data.right_depth > 4000:
 #            data.right_depth = 1800
         error = data.right_depth - data.left_depth
-	if abs(error) <= 200:
+	if abs(error) <= self.error_thresh:
             error = 0
 	self.output_publisher(error)
 

@@ -11,17 +11,12 @@ names=['servo','brushless_motor']
 if __name__ == '__main__':
     rospy.init_node('pololu_car_pub')
     client = actionlib.SimpleActionClient('pololu_trajectory_action_server', pololu_trajectoryAction)
-    print('Here')
     client.wait_for_server()
-    print("connected to server")
-    print("hello")
     while not rospy.is_shutdown():
         print "Enter servo Position: "
         servo_pos = raw_input()
-        print ("Got servo input %f", servo_pos)
         print ("Enter motor Position: ")
         motor_pos = raw_input()
-        print ("Got motor input %f", motor_pos)
 
         goal = pololu_trajectoryGoal()
         traj = goal.joint_trajectory

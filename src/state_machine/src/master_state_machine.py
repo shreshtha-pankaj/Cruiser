@@ -32,9 +32,10 @@ class Straight(State):
 
     def move(self, state_machine, servo=0, motor =slow_motor):
         self.state = 'straight'
-        state_machine.create_trajectory_Motor_cmd('servo', servo)
-        state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
+        #state_machine.create_trajectory_Motor_cmd('servo', servo)
+        #state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
 
+        state_machine.create_trajectory_Motor_cmd_2([servo,motor])
 
 class Right(State):
 
@@ -47,9 +48,10 @@ class Right(State):
         print("Depth while turning:left, center, right ", state_machine.left_depth,state_machine.center_depth,state_machine.right_depth)
         while time.time() < end_time:
             self.state = 'right'
-            state_machine.create_trajectory_Motor_cmd('servo', servo)
-            state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
+            #state_machine.create_trajectory_Motor_cmd('servo', servo)
+            #state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
 
+            state_machine.create_trajectory_Motor_cmd_2([servo,motor])
 
 class Stop(State):
 
@@ -57,9 +59,10 @@ class Stop(State):
         self.state_name = state_name
         self.reverse_flag= True
 
-    def stop(self, state_machine, servo=servo_zero, motor=stop_motor):
-        state_machine.create_trajectory_Motor_cmd('servo',servo)
-        state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
+    def stop(self, state_machine, servo=servo_zero, motor=reverse_motor):
+        #state_machine.create_trajectory_Motor_cmd('servo',servo)
+        #state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
+        state_machine.create_trajectory_Motor_cmd_2([servo,motor])
         if self.reverse_flag:
             state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
             self.reverse_flag= False
@@ -84,16 +87,32 @@ class StateMachine(object):
         self.curr_turn = 1
         self.turn_flag = False
         self.turn_state_flag = False
+        self.r_c = 0
+        self.l_c = 0
+        self.l_r = 0
 
     def sub_depth_callback(self, data):
+        T0 = time.time()
+        
         self.center_depth = data.center_depth
         self.left_depth = data.left_depth
         self.right_depth = data.right_depth
-
+        
+        try:
+            self.r_c = self.right_depth / self.center_depth
+            self.l_c = self.left_depth / self.center_depth
+            self.l_r = self.left_depth / self.right_depth
+            print('Ratio (r/c, l/c, l/r): ', self.right_depth / self.center_depth, self.left_depth / self.center_depth, self.left_depth / self.right_depth)
+        except Exception as e:
+            pass
+        print('*' * 50)
+        print('Callback time taken : ', time.time() - T0)
+        print('*' * 50)
     def sub_pid_callback(self, data):
         self.pid_value = data.data + servo_zero
 
     def create_trajectory_Motor_cmd(self, jntName, pos, speed=0):
+        T0 = time.time()
         goal = pololu_trajectoryGoal()
         traj = goal.joint_trajectory
         traj.header.stamp = rospy.Time.now()
@@ -105,29 +124,59 @@ class StateMachine(object):
         traj.points.append(pts)
         self.client.send_goal(goal)
         self.client.wait_for_result(rospy.Duration.from_sec(3.0))
+        print('*' * 50)
+        print('Client time taken : ', time.time() - T0)
+        print('*' * 50)
 
+    def create_trajectory_Motor_cmd_2(self, pos, speed=0):
+        T0 = time.time()
+        goal = pololu_trajectoryGoal()
+        traj = goal.joint_trajectory
+        traj.header.stamp = rospy.Time.now()
+        traj.joint_names.append('servo')
+        traj.joint_names.append('brushless_motor')
+        pts = JointTrajectoryPoint()
+        pts.time_from_start = rospy.Duration(0.0)
+        pts.positions.append(float(pos[0]))
+        pts.positions.append(float(pos[1]))
+        pts.velocities.append(speed)
+        pts.velocities.append(speed)
+        traj.points.append(pts)
+        self.client.send_goal(goal)
+        self.client.wait_for_result(rospy.Duration.from_sec(3.0))
+        print('*' * 50)
+        print('Client time taken_2: ', time.time() - T0)
+        print('*' * 50)
     def sub_stop_sign_callback(self, data):
         self.is_stop_sign = data.data
 
     def determine_state(self):
-        print("PID Value: ", self.pid_value)
         # TODO: Removed local variable depth_data, don't think we need it, Check this
         # TODO: depth_data = self.center_depth
 
         cur_time = time.time()
+
         if self.is_stop_sign:
             self.stop.stop(self)
             return
 
         # move straight when we above a certain depth threshold and not in the turning state
+
         if self.center_depth > turn_depth and not self.turn_state_flag:
             print('Car is moving straight(l, c, r)', self.left_depth, self.center_depth, self.right_depth)
-            self.straight.move(self,servo = self.pid_value,motor=high_speed)
-        
+            if False:# self.center_depth < turn_depth + 1000:
+                print('Car is moving straight(l, c, r)- slowing down--', self.left_depth, self.center_depth, self.right_depth)
+                self.straight.move(self,servo = self.pid_value,motor=high_speed+0.15)
+            else:
+                self.straight.move(self,servo = self.pid_value,motor=high_speed)
+            
+            print('*' * 50)        
+            print('Determine state time taken : ', time.time() - cur_time)
+            print('*' * 50)        
         # TODO: Explain what is happening here  
         elif self.center_depth > turn_depth and self.turn_state_flag:
             curr_time = time.time()
-            while time.time() - curr_time < 0.5:
+            while time.time() - curr_time < 0.99:
                 self.straight.move(self,servo=0.4,motor=high_speed)
             while time.time() - curr_time < 2:
                 self.straight.move(self,servo=self.pid_value,motor=high_speed)
@@ -139,9 +188,11 @@ class StateMachine(object):
             print('Car is stopping', self.center_depth)
             self.stop.stop(self)
 
-        # Car is turning right    
-        elif self.center_depth < turn_depth and not self.turn_flag:
-            print('Car is turning right', self.center_depth)
+        # Car is turning right (center - right) is to avoid the doorways on the track
+#        elif self.r_c > 0.8 and self.l_r < 0.8 and 
+        if not self.turn_flag and self.center_depth < turn_depth:
+#        elif self.center_depth < turn_depth:
+            print('Car is turning right', self.left_depth, self.center_depth, self.right_depth)
             self.right.turn(self)
             self.turn_flag = True
             self.turn_state_flag = True
@@ -149,7 +200,6 @@ class StateMachine(object):
         # TODO: Explain what is happening here    
         elif self.center_depth < 3000 and self.turn_flag:
             self.right.turn(self)
-
 
 
 if __name__ =='__main__':
