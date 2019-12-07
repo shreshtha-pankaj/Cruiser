@@ -3,9 +3,9 @@
   <name>camera</name>
   <version>0.0.0</version>
   <description>The camera package</description>
-  <maintainer email="user@todo.todo">user</maintainer>
+  <maintainer email="shreshtha.pankaj@colorado.edu">user</maintainer>
 
-  <license>TODO</license>
+  <license>MIT</license>
 
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>rospy</build_depend>

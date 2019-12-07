@@ -1,0 +1,14 @@
+<launch>
+   <include file="$(find ros_pololu_servo)/launch/pololu_example.launch"/>
+
+   <node pkg="ros_pololu_servo" type="pololu_trajectory_action_node.py" name="pololu_trajectory_action_node" output="screen"/>
+
+   <node pkg="state_machine" type="master_state_machine_back_off.py" name="master_state_machine_back_off" output="screen"/>
+
+   <node pkg="camera" type ="depth" name="depth_stream" output="screen"/>
+
+   <node pkg="pid_controller" type ="output_publisher.py" name="output_publisher" output="screen"/>
+
+   <!-- <include file="$(find phidgets_imu)/launch/imu.launch"/> -->
+  
+</launch>

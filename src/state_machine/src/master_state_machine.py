@@ -110,10 +110,6 @@ class StateMachine(object):
         self.is_stop_sign = data.data
 
     def determine_state(self):
-        print("PID Value: ", self.pid_value)
-        # TODO: Removed local variable depth_data, don't think we need it, Check this
-        # TODO: depth_data = self.center_depth
-
         cur_time = time.time()
         if self.is_stop_sign:
             self.stop.stop(self)
@@ -145,15 +141,13 @@ class StateMachine(object):
             self.right.turn(self)
             self.turn_flag = True
             self.turn_state_flag = True
-
-        # TODO: Explain what is happening here    
+  
         elif self.center_depth < 3000 and self.turn_flag:
             self.right.turn(self)
 
 
 
 if __name__ =='__main__':
-    # TODO: time.sleep(5) : Check if we need these as we drop rgb and depth frames. 
     sub_topic_depth = '/camera/depth'
     sub_topic_pid = '/pid_output'
     sub_topic_stop_sign = '/is_stop_sign'
