@@ -43,19 +43,19 @@ class pid_node(object):
         error_th = 3001
         if data.right_depth > error_th and  data.left_depth > error_th or data.right_depth <= error_th and data.left_depth <= error_th:
             error = data.right_depth - data.left_depth
-            rospy.loginfo('Within bounds (l, c, r, error):  %d, %d, %d' + data.left_depth, data.center_depth, data.right_depth, error)
+            rospy.loginfo('Within bounds (l, c, r, error):  %f, %f, %f, %f', data.left_depth, data.center_depth, data.right_depth, error)
 
 	    if abs(error) <= self.error_thresh:
                 error = 0
         # Use right depth if we find left depth spurious
         elif data.left_depth > data.right_depth:
             error = 2*(data.right_depth - 1850)
-            rospy.loginfo('Spurious left depth (l, c, r, error): %d, %d, %d', data.left_depth, data.center_depth, data.right_depth, error)
+            rospy.loginfo('Spurious left depth (l, c, r, error): %f, %f, %f, %f', data.left_depth, data.center_depth, data.right_depth, error)
 
         # Use left depth if we find right depth spurious    
         else:
             error =2*( 1850 - data.left_depth)
-            rospy.loginfo('Spurious right depth (l, c, r, error):  %d, %d, %d', data.left_depth, data.center_depth, data.right_depth, error)
+            rospy.loginfo('Spurious right depth (l, c, r, error):  %f, %f, %f, %f', data.left_depth, data.center_depth, data.right_depth, error)
 
 	self.output_publisher(error)
         # Use both if they are within bounds

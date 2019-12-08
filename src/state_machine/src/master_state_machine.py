@@ -42,7 +42,7 @@ class Right(State):
     def turn(self, state_machine, servo=-0.5, motor =reverse_motor):
         turn_time = 0.017 # TODO: Should turn time be a parameter?
         end_time = time.time() + turn_time
-        rospy.loginfo("Depth while turning (l, c, r): %d, %d, %d", state_machine.left_depth,state_machine.center_depth,state_machine.right_depth)
+        rospy.loginfo("Depth while turning (l, c, r): %f, %f, %f", state_machine.left_depth,state_machine.center_depth,state_machine.right_depth)
         while time.time() < end_time:
             self.state = 'right'
             state_machine.create_trajectory_Motor_cmd_2([servo,motor])
@@ -136,7 +136,7 @@ class StateMachine(object):
 
         # move straight when we above a certain depth threshold and not in the turning state
         if self.center_depth > turn_depth and not self.turn_state_flag:
-            rospy.loginfo('Car is moving straight(l, c, r): %d, %d, %d', self.left_depth, self.center_depth, self.right_depth)
+            rospy.loginfo('Car is moving straight(l, c, r): %f, %f, %f', self.left_depth, self.center_depth, self.right_depth)
             self.straight.move(self,servo = self.pid_value,motor=high_speed)
 #            self.turn_flag = False
      
@@ -152,12 +152,12 @@ class StateMachine(object):
         # Too close to an obstacle, STOP    
         elif self.center_depth < 1200:
             #stop the car for now.
-            rospy.loginfo('Car is stopping (c): %d', self.center_depth)
+            rospy.loginfo('Car is stopping (c): %f', self.center_depth)
             self.stop.stop(self)
 
         # Car is turning right (center - right) is to avoid the doorways on the track
         if not self.turn_flag and self.center_depth < turn_depth:
-            rospy.loginfo('Car is turning right (l, c, r): %d, %d, %d', self.left_depth, self.center_depth, self.right_depth)
+            rospy.loginfo('Car is turning right (l, c, r): %f, %f, %f', self.left_depth, self.center_depth, self.right_depth)
             self.right.turn(self)
             self.turn_flag = True
             self.turn_state_flag = True
