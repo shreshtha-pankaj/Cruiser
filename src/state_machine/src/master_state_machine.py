@@ -174,7 +174,7 @@ if __name__ =='__main__':
     sub_topic_pid = '/pid_output'
     sub_topic_stop_sign = '/is_stop_sign'
     pub_topic = '/car_state'
-    rospy.init_node('car_state_pub', log_level=rospy.DEBUG)
+    rospy.init_node('car_state_pub', log_level=rospy.INFO)
     ss = StateMachine(pub_topic, sub_topic_depth,sub_topic_pid,sub_topic_stop_sign)
     ss.client.wait_for_server()
     rospy.loginfo('Initializing Master State Machine')

@@ -66,6 +66,6 @@ class pid_node(object):
         self.output_pub.publish(output)
 
 if __name__ == "__main__":
-    rospy.init_node('pid_node', log_level=rospy.DEBUG)
+    rospy.init_node('pid_node', log_level=rospy.INFO)
     pid_node = pid_node()
     rospy.spin()
