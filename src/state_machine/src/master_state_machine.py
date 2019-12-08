@@ -135,7 +135,7 @@ class StateMachine(object):
             return
 
         # move straight when we above a certain depth threshold and not in the turning state
-        if  self.center_depth > turn_depth and not self.turn_state_flag:
+        if self.center_depth > turn_depth and not self.turn_state_flag:
             rospy.loginfo('Car is moving straight(l, c, r): %f, %f, %f', self.left_depth, self.center_depth, self.right_depth)
             self.straight.move(self,servo = self.pid_value,motor=high_speed)
             #self.turn_flag = False
