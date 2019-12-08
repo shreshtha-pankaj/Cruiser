@@ -21,20 +21,14 @@ class pid_node(object):
         self.output_pub = rospy.Publisher('/pid_output',Float32, queue_size = 10)
         rospy.Subscriber("/current_state", Int16 ,self.current_state_callback)
         rospy.Subscriber("/camera/depth", Depth ,self.depth_callback)
-        # self.straight_state =  rospy.get_param("right")
-        #
-        # self.kp = self.straight_state["kp"]
-        # self.ki = self.straight_state["ki"]
-        # self.kd = self.straight_state["kd"]
-
         self.lastgains = []
         self.pid = PID.PID(0.25/2000,0,0.25/2000000)
         self.pid.clear()
         self.current_pose = 0
         self.current_state = 0
         self.error_thresh = 125
+
     def stateid_to_gains_reader(self):
-        #Lakshya
         pass
 
     def current_state_callback(self,data):
@@ -42,15 +36,28 @@ class pid_node(object):
         self.current_state = data.data
 
     def depth_callback(self,data):
-	if data.left_depth > 3700:
-            #print("reducing depth of lrft", data.left_depth)
-	    data.left_depth = 1800
-#        if data.right_depth > 4000:
-#            data.right_depth = 1800
-        error = data.right_depth - data.left_depth
-	if abs(error) <= self.error_thresh:
+	    # if data.left_depth > 3700:
+	    #     data.left_depth = 1800
+        #     error = data.right_depth - data.left_depth
+
+        # Use right depth if we find left depth spurious
+        if data.left_depth > 2200:
+            error = data.right_depth - 1750
+            print('Spurious left depth (l, r, error)', data.left_depth, data.right_depth, error)
+
+        # Use left depth if we find right depth spurious    
+        elif data.right_depth > 2200:
+            error = 1750 - data.left_depth
+            print('Spurious right depth (l, r, error)', data.left_depth, data.right_depth, error)
+
+        # Use both if they are within bounds
+        else:
+            error = data.right_depth - data.left_depth
+            print('Within bounds (l, r, error)', data.left_depth, data.right_depth, error)
+
+	    if abs(error) <= self.error_thresh:
             error = 0
-	self.output_publisher(error)
+	    self.output_publisher(error)
 
 
     def output_publisher(self, current_error):
