@@ -22,7 +22,7 @@ class pid_node(object):
         rospy.Subscriber("/current_state", Int16 ,self.current_state_callback)
         rospy.Subscriber("/camera/depth", Depth ,self.depth_callback)
         self.lastgains = []
-        self.pid = PID.PID(0.25/2000,0,0.25/2000000)
+        self.pid = PID.PID(0.223/2000,0,0.25/2000000)
         self.pid.clear()
         self.current_pose = 0
         self.current_state = 0
@@ -39,25 +39,26 @@ class pid_node(object):
 	    # if data.left_depth > 3700:
 	    #     data.left_depth = 1800
         #     error = data.right_depth - data.left_depth
-
-        # Use right depth if we find left depth spurious
-        if data.left_depth > 2200:
-            error = data.right_depth - 1750
-            print('Spurious left depth (l, r, error)', data.left_depth, data.right_depth, error)
-
-        # Use left depth if we find right depth spurious    
-        elif data.right_depth > 2200:
-            error = 1750 - data.left_depth
-            print('Spurious right depth (l, r, error)', data.left_depth, data.right_depth, error)
-
-        # Use both if they are within bounds
-        else:
+        error = 0
+        error_th = 3001
+        if data.right_depth > error_th and  data.left_depth > error_th or data.right_depth <= error_th and data.left_depth <= error_th:
             error = data.right_depth - data.left_depth
             print('Within bounds (l, r, error)', data.left_depth, data.right_depth, error)
 
 	    if abs(error) <= self.error_thresh:
-            error = 0
-	    self.output_publisher(error)
+                error = 0
+        # Use right depth if we find left depth spurious
+        elif data.left_depth > data.right_depth:
+            error = 2*(data.right_depth - 1850)
+            print('Spurious left depth (l, r, error)', data.left_depth, data.right_depth, error)
+
+        # Use left depth if we find right depth spurious    
+        else:
+            error =2*( 1850 - data.left_depth)
+            print('Spurious right depth (l, r, error)', data.left_depth, data.right_depth, error)
+
+	self.output_publisher(error)
+        # Use both if they are within bounds
 
 
     def output_publisher(self, current_error):

@@ -138,7 +138,7 @@ class StateMachine(object):
         if self.center_depth > turn_depth and not self.turn_state_flag:
             print('Car is moving straight(l, c, r)', self.left_depth, self.center_depth, self.right_depth)
             self.straight.move(self,servo = self.pid_value,motor=high_speed)
-            self.turn_flag = False
+#            self.turn_flag = False
      
         # TODO: Explain what is happening here  
         elif self.center_depth > turn_depth and self.turn_state_flag:
