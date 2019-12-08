@@ -92,22 +92,21 @@ class StateMachine(object):
         self.l_r = 0
 
     def sub_depth_callback(self, data):
-        T0 = time.time()
+        #T0 = time.time()
         
         self.center_depth = data.center_depth
         self.left_depth = data.left_depth
         self.right_depth = data.right_depth
         
-        try:
-            self.r_c = self.right_depth / self.center_depth
-            self.l_c = self.left_depth / self.center_depth
-            self.l_r = self.left_depth / self.right_depth
-            print('Ratio (r/c, l/c, l/r): ', self.right_depth / self.center_depth, self.left_depth / self.center_depth, self.left_depth / self.right_depth)
-        except Exception as e:
-            pass
-        print('*' * 50)
-        print('Callback time taken : ', time.time() - T0)
-        print('*' * 50)
+        #try:
+         #   self.r_c = self.right_depth / self.center_depth
+          #  self.l_c = self.left_depth / self.center_depth
+           # self.l_r = self.left_depth / self.right_depth
+        #except Exception as e:
+         #   pass
+#        print('*' * 50)
+#        print('Callback time taken : ', time.time() - T0)
+#        print('*' * 50)
     def sub_pid_callback(self, data):
         self.pid_value = data.data + servo_zero
 
@@ -124,9 +123,9 @@ class StateMachine(object):
         traj.points.append(pts)
         self.client.send_goal(goal)
         self.client.wait_for_result(rospy.Duration.from_sec(3.0))
-        print('*' * 50)
-        print('Client time taken : ', time.time() - T0)
-        print('*' * 50)
+#        print('*' * 50)
+#        print('Client time taken : ', time.time() - T0)
+#        print('*' * 50)
 
     def create_trajectory_Motor_cmd_2(self, pos, speed=0):
         T0 = time.time()
@@ -144,9 +143,9 @@ class StateMachine(object):
         traj.points.append(pts)
         self.client.send_goal(goal)
         self.client.wait_for_result(rospy.Duration.from_sec(3.0))
-        print('*' * 50)
-        print('Client time taken_2: ', time.time() - T0)
-        print('*' * 50)
+#        print('*' * 50)
+#        print('Client time taken_2: ', time.time() - T0)
+#        print('*' * 50)
     def sub_stop_sign_callback(self, data):
         self.is_stop_sign = data.data
 
@@ -170,13 +169,13 @@ class StateMachine(object):
             else:
                 self.straight.move(self,servo = self.pid_value,motor=high_speed)
             
-            print('*' * 50)        
-            print('Determine state time taken : ', time.time() - cur_time)
-            print('*' * 50)        
+#            print('*' * 50)        
+#            print('Determine state time taken : ', time.time() - cur_time)
+#            print('*' * 50)        
         # TODO: Explain what is happening here  
         elif self.center_depth > turn_depth and self.turn_state_flag:
             curr_time = time.time()
-            while time.time() - curr_time < 0.99:
+            while time.time() - curr_time < 0.5:
                 self.straight.move(self,servo=0.4,motor=high_speed)
             while time.time() - curr_time < 2:
                 self.straight.move(self,servo=self.pid_value,motor=high_speed)
@@ -204,6 +203,7 @@ class StateMachine(object):
 
 if __name__ =='__main__':
     # TODO: time.sleep(5) : Check if we need these as we drop rgb and depth frames. 
+    time.sleep(3.5)
     sub_topic_depth = '/camera/depth'
     sub_topic_pid = '/pid_output'
     sub_topic_stop_sign = '/is_stop_sign'

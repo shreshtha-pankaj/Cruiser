@@ -42,8 +42,8 @@ class pid_node(object):
         self.current_state = data.data
 
     def depth_callback(self,data):
-	if data.left_depth > 3300:
-            print("reducing depth of lrft", data.left_depth)
+	if data.left_depth > 3700:
+            #print("reducing depth of lrft", data.left_depth)
 	    data.left_depth = 1800
 #        if data.right_depth > 4000:
 #            data.right_depth = 1800
