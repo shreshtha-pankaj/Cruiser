@@ -3,7 +3,9 @@
 #include <sstream>
 #include <camera/Depth.h>
 #include <librealsense2/rs.hpp>
-int scale = 1;
+
+int depth_width = 640;
+int depth_height = 480;
 
 float getAverageDepth(rs2::depth_frame& depth, float width, float height, int x, int y) {
   float sum = 0;
@@ -25,11 +27,11 @@ float getAverageDepth(rs2::depth_frame& depth, float width, float height, int x,
 
 float* getCorners(float width, float height, int cx, int cy) {
   float *corners = new float[6];
-  corners[0] = 20;
+  corners[0] = 0; // need to check what the right value is, with 1280 * 960, we used 20
   corners[1] = (cy - height / 2);
   corners[2] = (cx - width / 2);
   corners[3] = (cy - height / 2);
-  corners[4] = (1260 - width);
+  corners[4] = (depth_width - width);
   corners[5] = (cy - height / 2);
   return corners;
 }
@@ -39,8 +41,8 @@ int main(int argc, char **argv){
   ros::NodeHandle n;
   int width_dim = 100;
   int height_dim = 50;
-  int cx = 640;
-  int cy = 360;
+  int cx = depth_width / 2;
+  int cy = depth_height / 2;
   float* corners = getCorners(width_dim, height_dim, cx, cy);
   // Create a publisher node
   ros::Publisher depth_pub = n.advertise<camera::Depth>("depth_frames", 1000);
@@ -51,8 +53,7 @@ int main(int argc, char **argv){
   rs2::pipeline p;
   // Configure and start the pipeline
   rs2::config config;
-  // config.enable_stream(RS2_STREAM_DEPTH, 640,480, RS2_FORMAT_Z16, 40);
-  config.enable_stream(RS2_STREAM_DEPTH);
+  config.enable_stream(RS2_STREAM_DEPTH, depth_width, depth_height, RS2_FORMAT_Z16, 60);
   p.start(config);
   while (ros::ok())
   {
@@ -66,7 +67,6 @@ int main(int argc, char **argv){
       float width = depth.get_width();
       float height = depth.get_height();
       // Query the distance from the camera to the object in the center of the image
-	float dist_to_center = depth.get_distance(1280, 720);
       msg.left_depth = getAverageDepth(depth, width_dim, height_dim, corners[0], corners[1]);
       msg.center_depth = getAverageDepth(depth, width_dim, height_dim, corners[2], corners[3]);
       msg.right_depth = getAverageDepth(depth, width_dim, height_dim, corners[4], corners[5]);
