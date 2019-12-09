@@ -223,3 +223,10 @@ target_link_libraries(
 rgb ${catkin_LIBRARIES} ${OpenCV_INCLUDE_DIRS}
 realsense2
 )
+
+
+add_executable(Blob src/Blob.cpp)
+target_link_libraries(
+Blob ${catkin_LIBRARIES} ${OpenCV_INCLUDE_DIRS}
+realsense2
+)
