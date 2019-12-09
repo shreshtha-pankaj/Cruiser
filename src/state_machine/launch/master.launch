@@ -10,14 +10,14 @@
      <param name="servo_zero" type="double" value="0.155" />
      <param name="high_speed" type="double" value="-0.55" />
      <param name="turn_depth" type="double" value="5800" />
-     <param name="reverse_motor" type="double" value="0.6" />
+     <param name="reverse_motor" type="double" value="0.5" />
    </node>
 
   <!-- Paramter configuration for depth information-->
    <node pkg="camera" type ="depth" name="depth_stream" output="screen">
-     <param name="frame_rate" type="int" value="30" />
-     <param name="resolution_height" type="int" value="720" />
-     <param name="resolution_width" type="int" value="1280" />
+     <param name="frame_rate" type="int" value="60" />
+     <param name="resolution_height" type="int" value="480" />
+     <param name="resolution_width" type="int" value="640" />
    </node>
 
     <node pkg="pid_controller" type ="output_publisher.py" name="output_publisher" output="screen"/>

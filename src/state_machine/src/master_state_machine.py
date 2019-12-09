@@ -144,18 +144,18 @@ class StateMachine(object):
         # TODO: Explain what is happening here  
         elif self.center_depth > turn_depth and self.turn_state_flag:
             curr_time = time.time()
-            #while time.time() - curr_time < 0.75:
-            self.straight.move(self,servo=0.4,motor=high_speed)
+            while time.time() - curr_time < 0.75:
+                self.straight.move(self,servo=0.4,motor=high_speed)
             while time.time() - curr_time < 2:
                 self.straight.move(self,servo=self.pid_value,motor=high_speed)
             self.turn_state_flag = False
             self.turn_flag = False
 
         # Too close to an obstacle, STOP    
-        elif self.center_depth < 1200:
+        elif self.center_depth < 800:
             #stop the car for now.
-            rospy.loginfo('Car is stopping (c): %f', self.center_depth)
-            #self.stop.stop(self)
+#            rospy.loginfo('Car is stopping (c): %f', self.center_depth)
+            self.stop.stop(self)
 
         # Car is turning right (center - right) is to avoid the doorways on the track
         elif not self.turn_flag and self.center_depth < turn_depth:
@@ -168,6 +168,11 @@ class StateMachine(object):
         elif self.center_depth < 3000 and self.turn_flag:
             self.right.turn(self)
 
+    def initial_run(self):
+       t0 = time.time()
+       while(time.time() - t0 < 3):
+            rospy.loginfo('Inital Run - Car is moving straight no matter what(l, c, r): %f, %f, %f', self.left_depth, self.center_depth, self.right_depth)
+            self.straight.move(self,servo = servo_zero ,motor=high_speed)
 
 if __name__ =='__main__':
     # TODO: time.sleep(5) : Check if we need these as we drop rgb and depth frames. 
@@ -180,5 +185,6 @@ if __name__ =='__main__':
     ss = StateMachine(pub_topic, sub_topic_depth,sub_topic_pid,sub_topic_stop_sign)
     ss.client.wait_for_server()
     rospy.loginfo('Initializing Master State Machine')
+#    ss.initial_run()
     while not rospy.is_shutdown():
         ss.determine_state()
