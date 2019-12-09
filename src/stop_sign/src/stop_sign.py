@@ -18,8 +18,6 @@ class StopSignDetector:
         self.frame_count = 0
 
     def stopSignDetectorCallback(self, data):
-        import time
-        start_time = time.time()
         if self.frame_count % 8 != 0:
             self.frame_count += 1
             return
@@ -28,7 +26,7 @@ class StopSignDetector:
             cv_image = self.bridge.imgmsg_to_cv2(data,"mono8")
             cv_image = cv2.resize(cv_image,(253,200))
         except CvBridgeError as e:
-            print(e)
+            rospy.logerr(e)
         stop_signs = self.classifier.detectMultiScale(cv_image,1.02,10)
 
         # Detected Stop Sign
@@ -49,5 +47,5 @@ def main():
 
 if __name__ == '__main__':
     node_name = 'stop_sign'
-    rospy.init_node(node_name, anonymous=True)
+    rospy.init_node(node_name, log_level = rospy.INFO, anonymous=True)
     main()
