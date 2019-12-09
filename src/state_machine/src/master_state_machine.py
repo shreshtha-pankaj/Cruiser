@@ -71,7 +71,7 @@ class StateMachine(object):
         self.sub_pid = rospy.Subscriber(sub_topic_pid, Float32, callback=self.sub_pid_callback)
         self.sub_stop_sign = rospy.Subscriber(sub_topic_stop_sign, Bool, callback=self.sub_stop_sign_callback)
         self.center_depth, self.left_depth, self.right_depth = 0, 0, 0
-        self.center_avg, self.right_avg, self.left_avg, self.beta = 13000, 0, 0, 0.1
+        self.center_avg, self.right_avg, self.left_avg, self.beta = 0, 0, 0, 0.1
         self.straight = Straight("Move-Straight")
         self.right = Right("Move-Right")
         self.stop = Stop("Stop")
@@ -90,6 +90,8 @@ class StateMachine(object):
         self.left_depth = data.left_depth
         self.right_depth = data.right_depth
         self.center_avg = self.center_avg * (1 - self.beta) + self.center_depth * self.beta
+        self.left_avg = self.center_avg * (1 - self.beta) + self.left_depth * self.beta
+        self.right_avg = self.right_avg * (1 - self.beta) + self.right_depth * self.beta
 
    
     def sub_pid_callback(self, data):
@@ -140,7 +142,8 @@ class StateMachine(object):
 
         # move straight when we above a certain depth threshold and not in the turning state
         if self.center_depth > turn_depth and not self.turn_state_flag:
-            rospy.loginfo('Car is moving straight(l, c, r, avg): %f, %f, %f, %f', self.left_depth, self.center_depth, self.right_depth, self.center_avg)
+            rospy.loginfo('Car is moving straight(l, c, r): %f, %f, %f', self.left_depth, self.center_depth, self.right_depth)
+            rospy.loginfo('Car is turning right average (l, c, r): %f, %f, %f', self.left_avg, self.center_avg, self.right_avg)
             self.straight.move(self,servo = self.pid_value,motor=high_speed)
             #self.turn_flag = False
             #return     
@@ -163,7 +166,8 @@ class StateMachine(object):
 
         # Car is turning right
         elif not self.turn_flag and self.center_depth < turn_depth and self.center_avg < 6000:
-            rospy.loginfo('Car is turning right (l, c, r, avg): %f, %f, %f, %f', self.left_depth, self.center_depth, self.right_depth, self.center_avg)
+            rospy.loginfo('Car is turning right (l, c, r): %f, %f, %f', self.left_depth, self.center_depth, self.right_depth)
+            rospy.loginfo('Car is turning right average (l, c, r): %f, %f, %f', self.left_avg, self.center_avg, self.right_avg)
             self.right.turn(self)
             self.turn_flag = True
             self.turn_state_flag = True
