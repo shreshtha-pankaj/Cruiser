@@ -1,0 +1,29 @@
+<launch>
+
+  <!-- Launch State Machine -->
+  <include file="$(find state_machine)/launch/master.launch"/>
+  
+  <!-- State Machine Parameters-->
+  <param name="/master_state_machine/stop_motor" type="double" value="0.0" />
+  <param name="/master_state_machine/slow_motor" type="double" value="-0.25" />
+  <param name="/master_state_machine/servo_zero" type="double" value="0.155" />
+  <param name="/master_state_machine/high_speed" type="double" value="-0.25" />
+  <param name="/master_state_machine/turn_depth" type="double" value="4500" />
+  <param name="/master_state_machine/reverse_motor" type="double" value="0.6" />
+
+  <!-- Depth parametrs !-->
+  <param name="depth_stream/frame_rate" type="int" value="30" />
+  <param name="depth_stream/resolution_height" type="int" value="480" />
+  <param name="depth_stream/resolution_width" type="int" value="640" />
+
+  <!-- Launch RGB Camera for STOP SIGN Detection-->
+  <node pkg="camera" type ="rgb" name="color_stream" output="screen">
+    <param name="frame_rate" type="int" value="30" />
+    <param name="resolution_height" type="int" value="480" />
+    <param name="resolution_width" type="int" value="640" />
+  </node>
+
+  <!-- Launch Ball Detection node-->
+  <node pkg="ball_detection" type="ball_detection.py" name="ball_detection" output="screen"/>
+
+</launch>
