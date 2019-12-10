@@ -20,7 +20,6 @@ cyanUpper = (180, 255, 255)
 class BlobDetector:
     def __init__(self):
         rgb_topic = '/camera/image'
-        # depth_topic = '/camera/depth'
 
         # Set up the detector with default parameters.
         self.detector = cv2.SimpleBlobDetector()
@@ -71,9 +70,8 @@ class BlobDetector:
             # Removed tracking code as we don't need it
           
             # show the frame to our screen
-            #cv2.imshow("Frame", frame)
-            key = cv2.waitKey(1) & 0xFF
-            print("TIme taken: ",time.time()-start_time)
+            # cv2.imshow("Frame", frame)
+            # key = cv2.waitKey(1) & 0xFF
         except CvBridgeError as e:
             rospy.logerr(str(e))
             
