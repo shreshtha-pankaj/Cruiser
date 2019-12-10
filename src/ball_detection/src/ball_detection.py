@@ -17,7 +17,7 @@ cyanUpper = (180, 255, 255)
 class BlobDetector:
     def __init__(self):
         rgb_topic = '/camera/rgb'
-        depth_topic = '/camera/depth'
+        # depth_topic = '/camera/depth'
 
         # Set up the detector with default parameters.
         self.detector = cv2.SimpleBlobDetector()
@@ -75,6 +75,6 @@ class BlobDetector:
             rospy.logerr(str(e))
         
 if __name__ == '__main__':
-    rospy.init_node('blob_detector', log_level = rospy.INFO, anonymous=True)
+    rospy.init_node('ball_detection', log_level = rospy.INFO, anonymous=True)
     listener = BlobDetector()
     rospy.spin()
