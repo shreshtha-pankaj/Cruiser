@@ -19,7 +19,7 @@ cyanUpper = (180, 255, 255)
 
 class BlobDetector:
     def __init__(self):
-        rgb_topic = '/camera/rgb'
+        rgb_topic = '/camera/image'
         # depth_topic = '/camera/depth'
 
         # Set up the detector with default parameters.
