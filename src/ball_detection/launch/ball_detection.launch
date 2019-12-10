@@ -7,9 +7,9 @@
   <!-- Paramter Configuration for the race only-->
    <node pkg="state_machine" type="state_machine_ball.py" name="state_machine_ball" output="screen">
      <param name="stop_motor" type="double" value="0.0" />
-     <param name="slow_motor" type="double" value="-0.20" />
+     <param name="slow_motor" type="double" value="-0.3" />
      <param name="servo_zero" type="double" value="0.155" />
-     <param name="high_speed" type="double" value="-0.20" />
+     <param name="high_speed" type="double" value="-0.3" />
      <param name="turn_depth" type="double" value="4500" />
      <param name="reverse_motor" type="double" value="0.6" />
    </node>

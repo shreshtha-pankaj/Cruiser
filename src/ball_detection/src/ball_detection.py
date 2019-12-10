@@ -30,7 +30,7 @@ class BlobDetector:
         self.frame_count = 0
     
     def rgb_callback(self, data):
-        if self.frame_count %3 !=0:
+        if self.frame_count %4 !=0:
             self.frame_count +=1
             return
         self.frame_count = 1
@@ -59,7 +59,7 @@ class BlobDetector:
                 center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 
                 # only detect ball if the radius meets a minimum size
-                if radius > 12:
+                if radius > 10:
                     cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 255), 1)
                     #cv2.circle(frame, center, 5, (0, 0, 255), -1)
                     # publish only while transitioning from ball detected to not
@@ -76,8 +76,8 @@ class BlobDetector:
             # Removed tracking code as we don't need it
           
             # show the frame to our screen
-            cv2.imshow("Frame", frame)
-            key = cv2.waitKey(1) & 0xFF
+    #        cv2.imshow("Frame", frame)
+    #        key = cv2.waitKey(1) & 0xFF
         except CvBridgeError as e:
             rospy.logerr(str(e))
             

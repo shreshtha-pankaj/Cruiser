@@ -19,8 +19,8 @@ reverse_motor = rospy.get_param('/master_state_machine/reverse_motor', 0.6)
 servo_left = 0.4
 servo_right = -0.25
 backoff_reverse_duration = 2
-backoff_turn_duration = 1.5
-backoff_straight_duration = 1
+backoff_turn_duration = 0.5
+backoff_straight_duration = 0.5
 
 print("State Machine Parameters: ", stop_motor, slow_motor, servo_zero, high_speed, turn_depth, reverse_motor)
 
@@ -67,13 +67,13 @@ class AvoidBall():
             state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
  
         t0 = time.time()
+        state_machine.create_trajectory_Motor_cmd('servo',servo_zero)
         while(time.time() - t0 < backoff_straight_duration):
-            state_machine.create_trajectory_Motor_cmd('servo',servo)
             state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
 
         t0= time.time()
-	while( time.time() - t0<1):
-            state_machine.create_trajectory_Motor_cmd('servo',servo_right)
+        state_machine.create_trajectory_Motor_cmd('servo',servo_right)
+	while( time.time() - t0<0.5):
             state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
 
 class Stop(State):
