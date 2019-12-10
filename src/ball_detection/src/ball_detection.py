@@ -14,7 +14,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 from std_msgs.msg import Bool
 
-cyanLower = (60, 50, 100)
+cyanLower = (80, 110, 120)
 cyanUpper = (180, 255, 255)
 
 class BlobDetector:
@@ -27,13 +27,19 @@ class BlobDetector:
         self.sub = rospy.Subscriber(rgb_topic, Image, self.rgb_callback)
         self.bridge = CvBridge()
         self.is_ball = False
+        self.frame_count = 0
     
     def rgb_callback(self, data):
+        if self.frame_count %3 !=0:
+            self.frame_count +=1
+            return
+        self.frame_count = 1
         try:
             start_time = time.time()
             #  check if it should be bgr8 or rgb8
             frame = self.bridge.imgmsg_to_cv2(data,"bgr8")
-            frame = imutils.resize(frame, width=400)
+            frame = cv2.resize(frame,(320,240))
+#            frame = imutils.resize(frame, width=200)
             blurred = cv2.GaussianBlur(frame, (11, 11), 0)
             hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
 
@@ -53,9 +59,9 @@ class BlobDetector:
                 center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 
                 # only detect ball if the radius meets a minimum size
-                if radius > 20:
-                    cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 255), 2)
-                    cv2.circle(frame, center, 5, (0, 0, 255), -1)
+                if radius > 12:
+                    cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 255), 1)
+                    #cv2.circle(frame, center, 5, (0, 0, 255), -1)
                     # publish only while transitioning from ball detected to not
                     if self.is_ball == False:
                         self.is_ball = True
@@ -70,8 +76,8 @@ class BlobDetector:
             # Removed tracking code as we don't need it
           
             # show the frame to our screen
-            # cv2.imshow("Frame", frame)
-            # key = cv2.waitKey(1) & 0xFF
+            cv2.imshow("Frame", frame)
+            key = cv2.waitKey(1) & 0xFF
         except CvBridgeError as e:
             rospy.logerr(str(e))
             
