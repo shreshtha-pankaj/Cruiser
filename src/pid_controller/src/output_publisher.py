@@ -38,11 +38,11 @@ class pid_node(object):
         self.current_state = data.data
 
     def depth_callback(self, data):
-        seleft_depthlf.left_avg = self.left_avg * (1 - self.beta) + self.left_depth * self.beta
+        if data.left_depth > 3750:
+            data.left_depth = 1800
+        self.left_avg = self.left_avg * (1 - self.beta) + self.left_depth * self.beta
         self.right_avg = self.right_avg * (1 - self.beta) + self.right_depth * self.beta
-        if data.left_avg > 3750:
-            data.left_avg = 1800
-            error = data.right_avg - data.left_avg
+        error = data.right_avg - data.left_avg
         if abs(error) <= 200:
                 error = 0
         self.output_publisher(error)
