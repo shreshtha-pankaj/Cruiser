@@ -33,7 +33,7 @@ class BlobDetector:
             start_time = time.time()
             #  check if it should be bgr8 or rgb8
             frame = self.bridge.imgmsg_to_cv2(data,"bgr8")
-            # frame = imutils.resize(frame, width=600)
+            frame = imutils.resize(frame, width=400)
             blurred = cv2.GaussianBlur(frame, (11, 11), 0)
             hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
 
@@ -53,7 +53,7 @@ class BlobDetector:
                 center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 
                 # only detect ball if the radius meets a minimum size
-                if radius > 10:
+                if radius > 20:
                     cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 255), 2)
                     cv2.circle(frame, center, 5, (0, 0, 255), -1)
                     # publish only while transitioning from ball detected to not

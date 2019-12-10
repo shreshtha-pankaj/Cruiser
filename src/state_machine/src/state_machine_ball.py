@@ -10,13 +10,13 @@ import time
 
 # Default parameters to be used for the race, for other tasks, modify in the launch file
 stop_motor = rospy.get_param('/master_state_machine/stop_motor', 0.0)
-slow_motor = rospy.get_param('/master_state_machine/slow_motor', -0.25)
+slow_motor = rospy.get_param('/master_state_machine/slow_motor', -0.22)
 servo_zero = rospy.get_param('/master_state_machine/servo_zero', 0.155)
-high_speed = rospy.get_param('/master_state_machine/high_speed', -0.55)
-turn_depth = rospy.get_param('/master_state_machine/turn_depth', 5500)
+high_speed = rospy.get_param('/master_state_machine/high_speed', -0.22)
+turn_depth = rospy.get_param('/master_state_machine/turn_depth', 4500)
 reverse_motor = rospy.get_param('/master_state_machine/reverse_motor', 0.6)
 
-servo_left = 0.55
+servo_left = 0.4
 servo_right = -0.25
 backoff_reverse_duration = 2
 backoff_turn_duration = 1.5
@@ -72,7 +72,7 @@ class AvoidBall():
             state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
 
         t0= time.time()
-	    while( time.time() - t0<1):
+	while( time.time() - t0<1):
             state_machine.create_trajectory_Motor_cmd('servo',servo_right)
             state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
 
@@ -111,6 +111,7 @@ class StateMachine(object):
         self.curr_turn = 1
         self.turn_flag = False
         self.turn_state_flag = False
+        self.is_ball = False
 
     def sub_depth_callback(self, data):
         self.center_depth = data.center_depth
@@ -134,11 +135,11 @@ class StateMachine(object):
         self.client.wait_for_result(rospy.Duration.from_sec(3.0))
 
     def sub_ball_callback(self, data):
-        self.sub_ball = data.data
+        self.is_ball = data.data
 
     def determine_state(self):
         if self.is_ball:
-            self.avoid.avoid_ball()
+            self.avoid.avoid_ball(self)
             return
 
         # move straight when we above a certain depth threshold and not in the turning state

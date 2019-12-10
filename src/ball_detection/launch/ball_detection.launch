@@ -1,23 +1,25 @@
 <launch>
 
   <include file="$(find ros_pololu_servo)/launch/pololu_example.launch"/>
-
+  <node pkg="pid_controller" type="output_publisher.py" name="output_publisher" output="screen"/>
   <node pkg="ros_pololu_servo" type="pololu_trajectory_action_node.py" name="pololu_trajectory_action_node" output="screen"/>
 
   <!-- Paramter Configuration for the race only-->
    <node pkg="state_machine" type="state_machine_ball.py" name="state_machine_ball" output="screen">
      <param name="stop_motor" type="double" value="0.0" />
-     <param name="slow_motor" type="double" value="-0.25" />
+     <param name="slow_motor" type="double" value="-0.20" />
      <param name="servo_zero" type="double" value="0.155" />
-     <param name="high_speed" type="double" value="-0.0" />
+     <param name="high_speed" type="double" value="-0.20" />
      <param name="turn_depth" type="double" value="4500" />
      <param name="reverse_motor" type="double" value="0.6" />
    </node>
 
   <!-- Depth parametrs !-->
+  <node pkg="camera" type="depth" name="depth_stream" output="screen">
   <param name="depth_stream/frame_rate" type="int" value="30" />
   <param name="depth_stream/resolution_height" type="int" value="480" />
   <param name="depth_stream/resolution_width" type="int" value="640" />
+  </node>
 
   <!-- Launch RGB Camera for STOP SIGN Detection-->
   <node pkg="camera" type ="rgb" name="color_stream" output="screen">
