@@ -1,7 +1,7 @@
 <launch>
 
   <include file="$(find ros_pololu_servo)/launch/pololu_example.launch"/>
-
+  <node pkg="pid_controller" type="output_publisher.py" name="output_publisher" output="screen"/>
   <node pkg="ros_pololu_servo" type="pololu_trajectory_action_node.py" name="pololu_trajectory_action_node" output="screen"/>
 
   <!-- Paramter Configuration for the race only-->
