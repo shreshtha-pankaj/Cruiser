@@ -22,6 +22,7 @@ class pid_node(object):
         rospy.Subscriber("/current_state", Int16 ,self.current_state_callback)
         rospy.Subscriber("/camera/depth", Depth ,self.depth_callback)
         rospy.Subscriber("/kp", Float32 ,self.kp_callback)
+        self.left_avg, self.right_avg, self.beta = 1800, 1800, 0.8
 
         # self.straight_state =  rospy.get_param("right")
         #
@@ -39,23 +40,20 @@ class pid_node(object):
         self.pid.setKp(data.data*(10**-4))
         print("kp changed to : ",data.data)
 
-    def stateid_to_gains_reader(self):
-        #Lakshya
-        pass
-
     def current_state_callback(self,data):
         #Published by state machine 1 - straight 2 - turn right
         self.current_state = data.data
                                   
     def depth_callback(self,data):
-	if data.left_depth > 3750:
-	    data.left_depth = 1800
-#        if data.right_depth > 4000:
-#            data.right_depth = 1800
-        error = data.right_depth - data.left_depth
-	if abs(error) <= 200:
+        if data.left_depth > 3750:
+            data.left_depth = 1800
+        self.left_avg = self.left_avg * (1 - self.beta) + self.beta * data.left_depth
+        self.right_avg = self.right_avg * (1 - self.beta) + self.beta * data.right_depth
+        rospy.loginfo("PID Controller (l, left_avg, r, right_avg): %f %f, %f, %f, %f", data.left_depth, data.left_avg, data.right_depth, data.right_avg)
+        error = self.right_avg - self.left_avg
+        if abs(error) <= 200:
             error = 0
-	self.output_publisher(error)
+	    self.output_publisher(error)
 
 
     def output_publisher(self, current_error):

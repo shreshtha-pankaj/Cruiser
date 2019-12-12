@@ -166,21 +166,17 @@ class StateMachine(object):
             self.slow_down_depth += 2000
             while time.time() - curr_time < 0.5:
                 self.straight.move(self,servo=0.5,motor=-0.5)
-            #while time.time() - curr_time < 2:
-                #self.straight.move(self,servo=self.pid_value,motor=-0.4)
             self.turn_state_flag = False
 
         # Too close to an obstacle, STOP
         elif self.center_depth < 1200:
             #stop the car for now.
-            #print('Car is stopping', self.center_depth)
             self.stop.stop(self)
 
         # Car is turning right
         elif self.center_depth < 6000:
             self.right.turn(self)
             self.turn_state_flag = True
-
 
        #elif self.center_depth < 5500:# and self.right_depth > 3000:# and self.turn_flag:
             #self.right.turn(self)
