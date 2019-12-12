@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-
 import rospy
 from trajectory_msgs.msg import JointTrajectoryPoint
 import actionlib
@@ -7,61 +6,68 @@ import time
 from std_msgs.msg import *
 from state_machine.msg import *
 from trajectory_msgs.msg import JointTrajectoryPoint
-from sensor_msgs.msg import Imu as imu_msg
 import time
 
-names=['servo','brushless_motor']
+# Default parameters to be used for the race, for other tasks, modify in the launch file
+stop_motor = rospy.get_param('/master_state_machine/stop_motor', 0.0)
+slow_motor = rospy.get_param('/master_state_machine/slow_motor', -0.25)
+servo_zero = rospy.get_param('/master_state_machine/servo_zero', 0.155)
+high_speed = rospy.get_param('/master_state_machine/high_speed', -0.55)
+turn_depth = rospy.get_param('/master_state_machine/turn_depth', 4500)
+reverse_motor = rospy.get_param('/master_state_machine/reverse_motor', 0.4)
 
-stop_motor = 0.0
-slow_motor =  -0.22
-servo_zero = 0.155
 servo_left = 0.55
 servo_right = -0.25
-high_speed = -0.22
-reverse_motor = 0.4
 backoff_reverse_duration = 2
 backoff_turn_duration = 1.5
 backoff_straight_duration = 1
 
 
+print("State Machine Parameters: ", stop_motor, slow_motor, servo_zero, high_speed, turn_depth, reverse_motor)
+
 class State():
+
     def __init__(self, state_name):
+        self.state = ""
         pass
 
+
 class Straight(State):
+
     def __init__(self, state_name):
         self.state_name = state_name
 
     def move(self, state_machine, servo=0, motor =slow_motor):
+        self.state = 'straight'
         state_machine.create_trajectory_Motor_cmd('servo', servo)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
 
+
 class Right(State):
+
     def __init__(self, state_name):
         self.state_name = state_name
 
-    def turn(self, state_machine, servo=-0.20, motor =slow_motor):
-        turn_time = 0.012
+    def turn(self, state_machine, servo=-0.5, motor =reverse_motor):
+        turn_time = 0.017 # TODO: Should turn time be a parameter?
         end_time = time.time() + turn_time
-
+        print("Depth while turning:left, center, right ", state_machine.left_depth,state_machine.center_depth,state_machine.right_depth)
         while time.time() < end_time:
+            self.state = 'right'
             state_machine.create_trajectory_Motor_cmd('servo', servo)
-            state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
+
 
 class Stop(State):
+
     def __init__(self, state_name):
         self.state_name = state_name
         self.reverse_flag= True
 
     def stop(self, state_machine, servo=servo_zero, motor=stop_motor):
         state_machine.create_trajectory_Motor_cmd('servo',servo)
-        state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
-        #time.sleep(0.5)
-        if(self.reverse_flag):
-            state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
-            self.reverse_flag= False
-            time.sleep(0.5)
-        state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
+
 
 class Reverse(State):
     def __init__(self, state_name):
@@ -78,26 +84,26 @@ class Reverse(State):
         # Move in reverse
         t0 = time.time()
         while(time.time() - t0 < backoff_reverse_duration and  not rospy.is_shutdown() ):
-            print("Giving reverse motor control: ", state_machine.cnt_wall_distance)
+            rospy.loginfo("Giving reverse motor control: ", state_machine.cnt_wall_distance)
             state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
     
-        print("Stopping the servo")
+        rospy.loginfo("Stopping the servo")
         state_machine.create_trajectory_Motor_cmd('servo',servo_zero)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
         time.sleep(0.5)
-        #self.left_wall_distance, self.cnt_wall_distance, self.right_wall_distance
-        what_i_did = 1
+
+        action_left = True
         if(state_machine.left_wall_distance - state_machine.right_wall_distance > 1000):
-            print("Turning the servo left")
-            what_i_did = 1
+            rospy.loginfo("Turning the servo left")
+            action_left = True
             state_machine.create_trajectory_Motor_cmd('servo',servo_left)
             #turn left
         else:
-            print("Turning the servo right")
-            what_i_did = 0
+            rospy.loginfo("Turning the servo right")
+            action_left = False
             state_machine.create_trajectory_Motor_cmd('servo',servo_right)
             #turn right
-        print("Going straight")
+        rospy.loginfo("Going straight")
         t0 = time.time()
         while(time.time() - t0 < backoff_turn_duration):
             state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
@@ -109,8 +115,8 @@ class Reverse(State):
         self.reversed =True
         
         t0= time.time()
-	while( time.time() - t0<1):
-            if what_i_did:
+	while(time.time() - t0 < 1):
+            if action_left:
                 state_machine.create_trajectory_Motor_cmd('servo',servo_right)
                 state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
             else:
@@ -120,28 +126,29 @@ class Reverse(State):
     def reverse(self, state_machine, servo=servo_zero, motor=stop_motor):
         state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
 
-class state_machine(object):
-    def __init__(self, pub_topic, sub_topic_depth, sub_topic_pid, sub_topic_stop_sign, imu_topic):
+
+class StateMachine(object):
+
+
+    def __init__(self, pub_topic, sub_topic_depth, sub_topic_pid, sub_topic_stop_sign):
         self.client = actionlib.SimpleActionClient('pololu_trajectory_action_server', pololu_trajectoryAction)
         self.sub_depth = rospy.Subscriber(sub_topic_depth, Depth, callback=self.sub_depth_callback)
         self.sub_pid = rospy.Subscriber(sub_topic_pid, Float32, callback=self.sub_pid_callback)
         self.sub_stop_sign = rospy.Subscriber(sub_topic_stop_sign, Bool, callback=self.sub_stop_sign_callback)
-
-#        self.sub_imu = rospy.Subscriber(imu_topic, imu_msg, callback=self.sub_imu_callback)
-        self.cnt_wall_distance = 0
+        self.center_depth, self.left_depth, self.right_depth = 0, 0, 0
         self.straight = Straight("Move-Straight")
         self.right = Right("Move-Right")
         self.stop = Stop("Stop")
-        self.reverse = Reverse("Reverse")
         self.pid_value = 0.15
         self.is_stop_sign = False
         self.curr_turn = 1
+        self.turn_flag = False
+        self.turn_state_flag = False
 
     def sub_depth_callback(self, data):
-        #  get the all the depths
-        self.cnt_wall_distance = data.center_depth
-        self.left_wall_distance = data.left_depth
-        self.right_wall_distance = data.right_depth
+        self.center_depth = data.center_depth
+        self.left_depth = data.left_depth
+        self.right_depth = data.right_depth
 
     def sub_pid_callback(self, data):
         self.pid_value = data.data + servo_zero
@@ -162,48 +169,58 @@ class state_machine(object):
     def sub_stop_sign_callback(self, data):
         self.is_stop_sign = data.data
 
-    # def sub_imu_callback(self, data):
-    #     print('Angular velocity: ', data.angular_velocity.x, data.angular_velocity.y, data.angular_velocity.z)
-    #     print('Linear Acceleration', data.linear_acceleration.x, data.linear_acceleration.y, data.linear_acceleration.z)
-
     def determine_state(self):
+        cur_time = time.time()
         if self.is_stop_sign:
-            start_time = time.time()
-            while(time.time() - start_time < 2.2):
-                self.stop.stop(self)
+            self.stop.stop(self)
             return
-        
-        if self.cnt_wall_distance > 3500:
-            print('Straight fast', self.cnt_wall_distance)
+
+        # move straight when we above a certain depth threshold and not in the turning state
+        if self.center_depth > turn_depth and not self.turn_state_flag:
+            print('Car is moving straight(l, c, r)', self.left_depth, self.center_depth, self.right_depth)
             self.straight.move(self,servo = self.pid_value,motor=high_speed)
 
-        elif self.cnt_wall_distance < 800:
-            #stop the car for now.
+        elif self.center_depth < 800:
             t0 = time.time()
             is_collided = True
-            print("Checking for collision:", self.cnt_wall_distance)
+            rospy.loginfo("Checking for collision:", self.center_depth)
             while(time.time() - t0 < 0.5):
-                if(self.cnt_wall_distance > 500):
+                if(self.center_depth > 500):
                     is_collided = False
                     break
             if is_collided:
-                print('We collided, now avoid collision', self.left_wall_distance, self.cnt_wall_distance, self.right_wall_distance)
+                rospy.loginfo('We collided, now avoid collision', self.left_depth, self.center_depth, self.right_depth)
                 self.reverse.stop_and_reverse(self)
-                is_collided = False
-        else:
-            self.right.turn(self)
-            print("turn right", self.cnt_wall_distance)
+                is_collided = False    
+        
+        # TODO: Explain what is happening here  
+        elif self.center_depth > turn_depth and self.turn_state_flag:
+            curr_time = time.time()
+            while time.time() - curr_time < 0.5:
+                self.straight.move(self,servo=0.4,motor=high_speed)
+            while time.time() - curr_time < 2:
+                self.straight.move(self,servo=self.pid_value,motor=high_speed)
+            self.turn_state_flag = False
 
-if __name__ =='__main__'
+        # Car is turning right    
+        elif self.center_depth < turn_depth and not self.turn_flag:
+            print('Car is turning right', self.center_depth)
+            self.right.turn(self)
+            self.turn_flag = True
+            self.turn_state_flag = True
+  
+        elif self.center_depth < 3000 and self.turn_flag:
+            self.right.turn(self)
+
+
+
+if __name__ =='__main__':
     sub_topic_depth = '/camera/depth'
     sub_topic_pid = '/pid_output'
     sub_topic_stop_sign = '/is_stop_sign'
     pub_topic = '/car_state'
     rospy.init_node('car_state_pub')
-    imu_topic = 'imu/data_raw'
-    ss = state_machine(pub_topic, sub_topic_depth,sub_topic_pid,sub_topic_stop_sign, imu_topic)
+    ss = StateMachine(pub_topic, sub_topic_depth,sub_topic_pid,sub_topic_stop_sign)
     ss.client.wait_for_server()
     while not rospy.is_shutdown():
         ss.determine_state()
-
-
