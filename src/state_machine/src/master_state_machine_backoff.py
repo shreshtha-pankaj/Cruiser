@@ -84,26 +84,26 @@ class Reverse(State):
         # Move in reverse
         t0 = time.time()
         while(time.time() - t0 < backoff_reverse_duration and  not rospy.is_shutdown() ):
-            rospy.loginfo("Giving reverse motor control: ", state_machine.cnt_wall_distance)
+            rospy.loginfo("Backoff: Giving reverse motor control: ", state_machine.center_depth)
             state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
     
-        rospy.loginfo("Stopping the servo")
+        rospy.loginfo("Backoff: Stopping the servo")
         state_machine.create_trajectory_Motor_cmd('servo',servo_zero)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
         time.sleep(0.5)
 
         action_left = True
-        if(state_machine.left_wall_distance - state_machine.right_wall_distance > 1000):
-            rospy.loginfo("Turning the servo left")
+        if(state_machine.left_depth - state_machine.right_depth > 1000):
+            rospy.loginfo("Backoff: Turning the servo left")
             action_left = True
-            state_machine.create_trajectory_Motor_cmd('servo',servo_left)
+            state_machine.create_trajectory_Motor_cmd('servo', servo_left)
             #turn left
         else:
-            rospy.loginfo("Turning the servo right")
+            rospy.loginfo("Backoff: Turning the servo right")
             action_left = False
-            state_machine.create_trajectory_Motor_cmd('servo',servo_right)
+            state_machine.create_trajectory_Motor_cmd('servo', servo_right)
             #turn right
-        rospy.loginfo("Going straight")
+        rospy.loginfo("Backoff: Going straight")
         t0 = time.time()
         while(time.time() - t0 < backoff_turn_duration):
             state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
@@ -189,7 +189,7 @@ class StateMachine(object):
                     is_collided = False
                     break
             if is_collided:
-                rospy.loginfo('We collided, now avoid collision', self.left_depth, self.center_depth, self.right_depth)
+                rospy.loginfo('We collided, now we will avoid collision', self.left_depth, self.center_depth, self.right_depth)
                 self.reverse.stop_and_reverse(self)
                 is_collided = False    
         
