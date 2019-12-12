@@ -76,6 +76,7 @@ class Reverse(State):
     def stop_and_reverse(self, state_machine, servo=servo_zero, motor=stop_motor):
         state_machine.create_trajectory_Motor_cmd('servo',servo_zero)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
+        time.sleep(0.25)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
@@ -184,7 +185,7 @@ class StateMachine(object):
         elif self.center_depth < 800:
             t0 = time.time()
             is_collided = True
-            rospy.loginfo("Checking for collision: %f", self.center_depth)
+            #########rospy.loginfo("Checking for collision: %f", self.center_depth)
             while(time.time() - t0 < 0.5):
                 if(self.center_depth > 500):
                     is_collided = False
@@ -221,6 +222,7 @@ if __name__ =='__main__':
     sub_topic_stop_sign = '/is_stop_sign'
     pub_topic = '/car_state'
     rospy.init_node('car_state_pub')
+    time.sleep(3)
     ss = StateMachine(pub_topic, sub_topic_depth,sub_topic_pid,sub_topic_stop_sign)
     ss.client.wait_for_server()
     while not rospy.is_shutdown():
