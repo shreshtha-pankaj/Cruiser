@@ -60,11 +60,11 @@ class pid_node(object):
 
     def output_publisher(self, current_error):
         output = self.pid.update(current_error)
-        output += 0.07
-        if output > 0.69:
-            output = 0.69
-        if output < -0.69:
-            outpout = -0.69
+        output += 0.135
+        if output > 0.64:
+            output = 0.505
+        if output < -0.64:
+            outpout = -0.37
         self.output_pub.publish(output)
 
 if __name__ == "__main__":
