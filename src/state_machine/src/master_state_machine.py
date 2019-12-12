@@ -13,7 +13,7 @@ stop_motor = rospy.get_param('/master_state_machine/stop_motor', 0.0)
 slow_motor = rospy.get_param('/master_state_machine/slow_motor', -0.25)
 servo_zero = rospy.get_param('/master_state_machine/servo_zero', 0.155)
 high_speed = rospy.get_param('/master_state_machine/high_speed', -0.55)
-turn_depth = rospy.get_param('/master_state_machine/turn_depth', 5500)
+turn_depth = rospy.get_param('/master_state_machine/turn_depth', 3500)
 reverse_motor = rospy.get_param('/master_state_machine/reverse_motor', 0.6)
 
 print("State Machine Parameters: ", stop_motor, slow_motor, servo_zero, high_speed, turn_depth, reverse_motor)
@@ -148,6 +148,7 @@ if __name__ =='__main__':
     sub_topic_stop_sign = '/is_stop_sign'
     pub_topic = '/car_state'
     rospy.init_node('car_state_pub')
+    time.sleep(3.5)
     ss = StateMachine(pub_topic, sub_topic_depth,sub_topic_pid,sub_topic_stop_sign)
     ss.client.wait_for_server()
     while not rospy.is_shutdown():
