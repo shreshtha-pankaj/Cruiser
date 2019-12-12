@@ -24,6 +24,24 @@ float getAverageDepth(rs2::depth_frame& depth, float width, float height, int x,
   return (1000*sum / ctr);
 }
 
+float getAverageDepthLR(rs2::depth_frame& depth, float width, float height, int x, int y) {
+  float sum = 0;
+  int ctr = 0;
+  for(int i = y; i < y + height; i++) {
+    for (int j = x; j < x + width; j++) {
+      float depth_val = depth.get_distance(j,i);
+      if (depth_val > 0) {
+        ctr += 1;
+        sum += depth_val;
+      }
+    }
+  }
+  if (ctr == 0) {
+    return 0;
+  }
+  return (1000*sum / ctr);
+}
+
 float* getCorners(float width, float height, int cx, int cy) {
   float *corners = new float[6];
   // TODO: need to check what the right value is, with 1280 * 960, we used 20, avoiding noisy edges
@@ -50,6 +68,8 @@ int main(int argc, char **argv){
 
   int width_dim = 50;
   int height_dim = 50;
+  int width_dim_LR = 30;
+  int height_dim_LR = 90;
   int cx = depth_width / 2;
   int cy = depth_height / 2;
   float* corners = getCorners(width_dim, height_dim, cx, cy);
@@ -74,9 +94,9 @@ int main(int argc, char **argv){
       frames = pipe.wait_for_frames();
       rs2::depth_frame depth = frames.get_depth_frame();
 
-      msg.left_depth = getAverageDepth(depth, width_dim, height_dim, corners[0], corners[1]);
+      msg.left_depth = getAverageDepthLR(depth, width_dim_LR, height_dim_LR, corners[0], corners[1]);
       msg.center_depth = getAverageDepth(depth, width_dim, height_dim, corners[2], corners[3]);
-      msg.right_depth = getAverageDepth(depth, width_dim, height_dim, corners[4], corners[5]);
+      msg.right_depth = getAverageDepthLR(depth, width_dim_LR, height_dim_LR, corners[4], corners[5]);
 
       depth_pub.publish(msg);
 
