@@ -51,7 +51,7 @@ class Right(State):
     def turn(self, state_machine, servo=-0.5, motor =reverse_motor):
         turn_time = 0.017 # TODO: Should turn time be a parameter?
         end_time = time.time() + turn_time
-        print("Depth while turning:left, center, right ", state_machine.left_depth,state_machine.center_depth,state_machine.right_depth)
+        rospy.loginfo("Depth while turning:left, center, right: %f, %f, %f ", state_machine.left_depth, state_machine.center_depth, state_machine.right_depth)
         while time.time() < end_time:
             self.state = 'right'
             state_machine.create_trajectory_Motor_cmd('servo', servo)
@@ -177,19 +177,19 @@ class StateMachine(object):
 
         # move straight when we above a certain depth threshold and not in the turning state
         if self.center_depth > turn_depth and not self.turn_state_flag:
-            print('Car is moving straight(l, c, r)', self.left_depth, self.center_depth, self.right_depth)
+            print('Car is moving straight(l, c, r) %f, %f, %f', self.left_depth, self.center_depth, self.right_depth)
             self.straight.move(self,servo = self.pid_value,motor=high_speed)
 
         elif self.center_depth < 800:
             t0 = time.time()
             is_collided = True
-            rospy.loginfo("Checking for collision:", self.center_depth)
+            rospy.loginfo("Checking for collision: %f", self.center_depth)
             while(time.time() - t0 < 0.5):
                 if(self.center_depth > 500):
                     is_collided = False
                     break
             if is_collided:
-                rospy.loginfo('We collided, now we will avoid collision', self.left_depth, self.center_depth, self.right_depth)
+                rospy.loginfo('We collided, now we will avoid collision %f, %f, %f', self.left_depth, self.center_depth, self.right_depth)
                 self.reverse.stop_and_reverse(self)
                 is_collided = False    
         
