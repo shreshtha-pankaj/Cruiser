@@ -38,7 +38,10 @@ class BlobDetector:
             start_time = time.time()
             #  check if it should be bgr8 or rgb8
             frame = self.bridge.imgmsg_to_cv2(data,"bgr8")
-            frame = cv2.resize(frame,(320,240))
+            width, height = 320, 240
+            frame = cv2.resize(frame,(width, height))
+            frame = frame[0: height / 2, width / 3: width * 2 / 3]
+     
 #            frame = imutils.resize(frame, width=200)
             blurred = cv2.GaussianBlur(frame, (11, 11), 0)
             hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
@@ -61,7 +64,7 @@ class BlobDetector:
                 # only detect ball if the radius meets a minimum size
                 if radius > 10:
                     cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 255), 1)
-                    #cv2.circle(frame, center, 5, (0, 0, 255), -1)
+                    cv2.circle(frame, center, 5, (0, 0, 255), -1)
                     # publish only while transitioning from ball detected to not
                     if self.is_ball == False:
                         self.is_ball = True
@@ -76,8 +79,8 @@ class BlobDetector:
             # Removed tracking code as we don't need it
           
             # show the frame to our screen
-    #        cv2.imshow("Frame", frame)
-    #        key = cv2.waitKey(1) & 0xFF
+           cv2.imshow("Frame", frame)
+           key = cv2.waitKey(1) & 0xFF
         except CvBridgeError as e:
             rospy.logerr(str(e))
             
