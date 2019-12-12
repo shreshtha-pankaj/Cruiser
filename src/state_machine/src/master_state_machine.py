@@ -59,12 +59,7 @@ class Stop(State):
 
     def stop(self, state_machine, servo=servo_zero, motor=stop_motor):
         state_machine.create_trajectory_Motor_cmd('servo',servo)
-        state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
-        if self.reverse_flag:
-            state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
-            self.reverse_flag= False
-            time.sleep(0.5)
-        state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
 
 
 class StateMachine(object):

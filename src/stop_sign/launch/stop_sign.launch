@@ -9,7 +9,7 @@
   <param name="/master_state_machine/servo_zero" type="double" value="0.155" />
   <param name="/master_state_machine/high_speed" type="double" value="-0.25" />
   <param name="/master_state_machine/turn_depth" type="double" value="4500" />
-  <param name="/master_state_machine/reverse_motor" type="double" value="0.6" />
+  <param name="/master_state_machine/reverse_motor" type="double" value="0.8" />
 
   <!-- Depth parametrs !-->
   <param name="depth_stream/frame_rate" type="int" value="30" />
