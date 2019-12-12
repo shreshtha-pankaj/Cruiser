@@ -84,7 +84,7 @@ class Reverse(State):
         # Move in reverse
         t0 = time.time()
         while(time.time() - t0 < backoff_reverse_duration and  not rospy.is_shutdown() ):
-            rospy.loginfo("Backoff: Giving reverse motor control: ", state_machine.center_depth)
+            rospy.loginfo("Backoff: Giving reverse motor control: %f`", state_machine.center_depth)
             state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
     
         rospy.loginfo("Backoff: Stopping the servo")
@@ -139,6 +139,7 @@ class StateMachine(object):
         self.straight = Straight("Move-Straight")
         self.right = Right("Move-Right")
         self.stop = Stop("Stop")
+        self.reverse = Reverse("Reverse")
         self.pid_value = 0.15
         self.is_stop_sign = False
         self.curr_turn = 1
