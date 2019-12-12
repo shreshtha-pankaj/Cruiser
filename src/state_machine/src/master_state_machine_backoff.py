@@ -51,7 +51,7 @@ class Right(State):
     def turn(self, state_machine, servo=-0.5, motor =reverse_motor):
         turn_time = 0.017 # TODO: Should turn time be a parameter?
         end_time = time.time() + turn_time
-        rospy.loginfo("Depth while turning:left, center, right: %f, %f, %f ", state_machine.left_depth, state_machine.center_depth, state_machine.right_depth)
+        rospy.loginfo("Depth while turning:left, center, right: %f, %f, %f ", state_machine.left_depth, state_machine.center_depth,state_machine.right_depth)
         while time.time() < end_time:
             self.state = 'right'
             state_machine.create_trajectory_Motor_cmd('servo', servo)
