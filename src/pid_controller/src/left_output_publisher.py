@@ -34,7 +34,6 @@ class pid_node(object):
         self.pid.clear()
         self.current_pose = 0
         self.current_state = 0
-
     def kp_callback(self,data):
         self.pid.setKp(data.data*(10**-4))
         print("kp changed to : ",data.data)
@@ -48,23 +47,27 @@ class pid_node(object):
         self.current_state = data.data
                                   
     def depth_callback(self,data):
-	if data.right_depth > 3750:
-	    data.right_depth = 1800
-#        if data.right_depth > 4000:
-#            data.right_depth = 1800
-        error = data.right_depth - data.left_depth
-	if abs(error) <= 200:
+        #if data.right_depth > 3750:
+        turn_thresh = 3300
+        #    data.right_depth = 1800
+        if (data.right_depth > turn_thresh and data.left_depth >turn_thresh) or (data.left_depth<turn_thresh and data.right_depth <turn_thresh):
+            error = data.right_depth - data.left_depth
+        elif data.left_depth > turn_thresh:
+            error = data.right_depth-1800
+        elif data.right_depth > turn_thresh:
+            error = 1800 - data.left_depth
+        if abs(error) <= 200:
             error = 0
-	self.output_publisher(error)
+        self.output_publisher(error)
 
 
     def output_publisher(self, current_error):
         output = self.pid.update(current_error)
-        output += 0.07
-        if output > 0.69:
-            output = 0.69
-        if output < -0.69:
-            outpout = -0.69
+        output += 0.135
+        if output > 0.64:
+            output = 0.505
+        if output < -0.64:
+            outpout = -0.37
         self.output_pub.publish(output)
 
 if __name__ == "__main__":
