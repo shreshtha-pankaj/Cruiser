@@ -227,9 +227,9 @@ if __name__ =='__main__':
     sub_topic_stop_sign = '/is_stop_sign'
     pub_topic = '/car_state'
     rospy.init_node('car_state_pub')
+    time.sleep(3.5)
     ss = StateMachine(pub_topic, sub_topic_depth,sub_topic_pid,sub_topic_stop_sign)
     rospy.loginfo('Initializing Master State Machine')
-    time.sleep(3.5)
     while not rospy.is_shutdown():
         # if True:#not ss.is_in_turn:
         ss.determine_state()
