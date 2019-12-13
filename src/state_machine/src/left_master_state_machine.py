@@ -105,7 +105,7 @@ class StateMachine(object):
         self.turn_state_flag = False
         self.start_flag = True
         self.is_in_turn = False
-        self.turn_timestamp = time.time() -3
+        self.turn_timestamp = time.time() -1
         self.time_wait = 4.8
         self.slow_down_depth = turn_depth + 800
 
@@ -183,6 +183,7 @@ class StateMachine(object):
             self.turn_timestamp = curr_time
             self.slow_down_depth += 1000
             turn_depth -= 2500
+
             while time.time() - curr_time < 0.3:
                 self.straight.move(self,servo=-0.23,motor=-0.5)
             #while time.time() - curr_time < 2:

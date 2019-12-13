@@ -53,9 +53,9 @@ class pid_node(object):
         if (data.right_depth > turn_thresh and data.left_depth >turn_thresh) or (data.left_depth<turn_thresh and data.right_depth <turn_thresh):
             error = data.right_depth - data.left_depth
         elif data.left_depth > turn_thresh:
-            error = data.right_depth-1800
+            error = 2*(data.right_depth-1800)
         elif data.right_depth > turn_thresh:
-            error = 1800 - data.left_depth
+            error = 2*(1800 - data.left_depth)
         if abs(error) <= 200:
             error = 0
         self.output_publisher(error)
