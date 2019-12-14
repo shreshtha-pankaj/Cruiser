@@ -184,8 +184,8 @@ class StateMachine(object):
             self.slow_down_depth += 1000
             turn_depth -= 2500
 
-            while time.time() - curr_time < 0.3:
-                self.straight.move(self,servo=-0.23,motor=-0.5)
+            while time.time() - curr_time < 0.4:
+                self.straight.move(self,servo=-0.33,motor=-0.5)
             #while time.time() - curr_time < 2:
                 #self.straight.move(self,servo=self.pid_value,motor=-0.4)
             self.turn_state_flag = False
