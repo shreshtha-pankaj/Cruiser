@@ -16,8 +16,8 @@ high_speed = rospy.get_param('/master_state_machine/high_speed', -0.55)
 turn_depth = rospy.get_param('/master_state_machine/turn_depth', 4500)
 reverse_motor = rospy.get_param('/master_state_machine/reverse_motor', 0.4)
 
-servo_left = 0.55
-servo_right = -0.25
+servo_left = 0.56
+servo_right = -0.29
 backoff_reverse_duration = 2
 backoff_turn_duration = 1.5
 backoff_straight_duration = 1
@@ -74,35 +74,39 @@ class Reverse(State):
         self.state_name = state_name
 
     def stop_and_reverse(self, state_machine, servo=servo_zero, motor=stop_motor):
+        #brake
         state_machine.create_trajectory_Motor_cmd('servo',servo_zero)
-        state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
-        time.sleep(0.25)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
-        state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
-        state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
-        time.sleep(1)
-
-        # Move in reverse
+        time.sleep(0.5)
+        #zeror - reverse - zero 
         t0 = time.time()
-        while(time.time() - t0 < backoff_reverse_duration and  not rospy.is_shutdown() ):
-            rospy.loginfo("Backoff: Giving reverse motor control: %f`", state_machine.center_depth)
-            state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
-    
         rospy.loginfo("Backoff: Stopping the servo")
         state_machine.create_trajectory_Motor_cmd('servo',servo_zero)
         state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
-        time.sleep(0.5)
+        time.sleep(0.2)
+        
+        # Move in reverse
+        t0 = time.time()
+        while(time.time() - t0 < backoff_reverse_duration and not rospy.is_shutdown() ):
+            rospy.loginfo("Backoff: Giving reverse motor control: %f`", state_machine.center_depth)
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
+
+        t0 =time.time()
+        while(time.time()-t0 <0.3):
+            rospy.loginfo("Backoff: Stopping the servo")
+            state_machine.create_trajectory_Motor_cmd('servo',servo_zero)
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
 
         action_left = True
-        if(state_machine.left_depth - state_machine.right_depth > 1000):
+        if(state_machine.left_depth > state_machine.right_depth):
             rospy.loginfo("Backoff: Turning the servo left")
             action_left = True
-            state_machine.create_trajectory_Motor_cmd('servo', servo_left)
+            self.move_left(state_machine, servo_left)
             #turn left
         else:
             rospy.loginfo("Backoff: Turning the servo right")
             action_left = False
-            state_machine.create_trajectory_Motor_cmd('servo', servo_right)
+            self.move_right(state_machine, servo_right)
             #turn right
         rospy.loginfo("Backoff: Going straight")
         t0 = time.time()
@@ -111,21 +115,38 @@ class Reverse(State):
  
         t0 = time.time()
         while(time.time() - t0 < backoff_straight_duration):
-            state_machine.create_trajectory_Motor_cmd('servo',servo)
+            if action_left:
+                state_machine.create_trajectory_Motor_cmd('servo',servo)
+            else:
+                state_machine.create_trajectory_Motor_cmd('servo',servo)
             state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
         self.reversed =True
         
         t0= time.time()
-	while(time.time() - t0 < 1):
+        while(time.time() - t0 < 1):
             if action_left:
-                state_machine.create_trajectory_Motor_cmd('servo',servo_right)
+               # self.move_right(state_machine, servo_right)
+                state_machine.create_trajectory_Motor_cmd('servo', servo_right)
                 state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
             else:
-                state_machine.create_trajectory_Motor_cmd('servo',servo_left)
+               # self.move_left(state_machine, servo_left)
+                state_machine.create_trajectory_Motor_cmd('servo', servo_left)
                 state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
 
     def reverse(self, state_machine, servo=servo_zero, motor=stop_motor):
         state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
+
+    def move_right(self, state_machine, servo_right):
+        temp = 0
+        while temp > servo_right:
+           state_machine.create_trajectory_Motor_cmd('servo', temp)
+           temp -=0.09
+
+    def move_left(self, state_machine, servo_left):
+        temp = 0
+        while temp < servo_left:
+            state_machine.create_trajectory_Motor_cmd('servo', temp)
+            temp +=0.14
 
 
 class StateMachine(object):
@@ -182,12 +203,12 @@ class StateMachine(object):
             print('Car is moving straight(l, c, r) %f, %f, %f', self.left_depth, self.center_depth, self.right_depth)
             self.straight.move(self,servo = self.pid_value,motor=high_speed)
 
-        elif self.center_depth < 800:
+        elif self.center_depth < 1499:
             t0 = time.time()
             is_collided = True
             #########rospy.loginfo("Checking for collision: %f", self.center_depth)
             while(time.time() - t0 < 0.5):
-                if(self.center_depth > 500):
+                if(self.center_depth > 800):
                     is_collided = False
                     break
             if is_collided:
@@ -196,7 +217,7 @@ class StateMachine(object):
                 is_collided = False    
         
         # TODO: Explain what is happening here  
-        elif self.center_depth > turn_depth and self.turn_state_flag:
+        elif self.center_depth > turn_depth and self.turn_state_flag and self.center_depth > 1500:
             curr_time = time.time()
             while time.time() - curr_time < 0.5:
                 self.straight.move(self,servo=0.4,motor=high_speed)
@@ -205,7 +226,7 @@ class StateMachine(object):
             self.turn_state_flag = False
 
         # Car is turning right    
-        elif self.center_depth < turn_depth and not self.turn_flag:
+        elif self.center_depth < turn_depth and not self.turn_flag and self.center_depth >1500:
             print('Car is turning right', self.center_depth)
             self.right.turn(self)
             self.turn_flag = True
