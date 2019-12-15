@@ -1,0 +1,17 @@
+<launch>
+   <include file="$(find ros_pololu_servo)/launch/pololu_example.launch"/>
+
+  <!-- Paramter Configuration for the race only-->
+   <node pkg="state_machine" type="slide_state_machine.py" name="slide_state_machine" output="screen"/>
+     
+
+  <!-- Paramter configuration for depth information-->
+   <node pkg="camera" type ="depth" name="depth_stream" output="screen">
+     <param name="frame_rate" type="int" value="60" />
+     <param name="resolution_height" type="int" value="480" />
+     <param name="resolution_width" type="int" value="640" />
+   </node>
+
+    <node pkg="pid_controller" type ="output_publisher.py" name="output_publisher" output="screen"/>
+
+</launch>
