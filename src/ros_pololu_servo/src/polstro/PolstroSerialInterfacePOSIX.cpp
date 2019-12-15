@@ -120,7 +120,7 @@ bool SerialInterfacePOSIX::readBytes( unsigned char* data, unsigned int numBytes
 	}
 	else if ( ret!=numBytesToRead )
 	{
-		printf("Error reading. Read %ld bytes instead of %d\n", ret, numBytesToRead );
+		//printf("Error reading. Read %ld bytes instead of %d\n", ret, numBytesToRead );
 		return false;
 	}
 	return true;
