@@ -41,8 +41,8 @@ class Right(State):
     def __init__(self, state_name):
         self.state_name = state_name
 
-    def turn(self, state_machine, servo=-0.6, motor =0.4):
-        turn_time = 0.2 # TODO: Should turn time be a parameter?
+    def turn(self, state_machine, servo=-0.6, motor =0.45):
+        turn_time = 0.05 # TODO: Should turn time be a parameter?
         end_time = time.time() + turn_time
         print("Depth while turning:left, center, right ", state_machine.left_depth,state_machine.center_depth,state_machine.right_depth)
         while time.time() < end_time:
