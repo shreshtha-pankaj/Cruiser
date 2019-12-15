@@ -32,8 +32,9 @@ class Straight(State):
 
     def move(self, state_machine, servo=0, motor =slow_motor):
         self.state = 'straight'
-        state_machine.create_trajectory_Motor_cmd_3('servo', servo)
-        state_machine.create_trajectory_Motor_cmd_3('brushless_motor', motor)
+        
+        state_machine.create_trajectory_Motor_cmd('servo', servo)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
 
 
 class Right(State):
@@ -47,8 +48,8 @@ class Right(State):
         print("Depth while turning:left, center, right ", state_machine.left_depth,state_machine.center_depth,state_machine.right_depth)
         while time.time() < end_time:
             self.state = 'right'
-            state_machine.create_trajectory_Motor_cmd_3('servo', servo)
-            state_machine.create_trajectory_Motor_cmd_3('brushless_motor', motor)
+            state_machine.create_trajectory_Motor_cmd('servo', servo)
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
 
 
 class Stop(State):
@@ -58,8 +59,8 @@ class Stop(State):
         self.reverse_flag= True
 
     def stop(self, state_machine, servo=servo_zero, motor=reverse_motor):
-        state_machine.create_trajectory_Motor_cmd_3('servo',servo)
-        state_machine.create_trajectory_Motor_cmd_3('brushless_motor', motor)
+        state_machine.create_trajectory_Motor_cmd('servo',servo)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
 
 
 class StateMachine(object):
@@ -88,7 +89,7 @@ class StateMachine(object):
     def sub_pid_callback(self, data):
         self.pid_value = data.data + servo_zero
 
-    def create_trajectory_Motor_cmd_3(self,jnt_name, pos, speed=0):
+    def create_trajectory_Motor_cmd(self,jnt_name, pos, speed=0):
         self.pololu.send_command(jnt_name, pos, speed)
 
     def sub_stop_sign_callback(self, data):

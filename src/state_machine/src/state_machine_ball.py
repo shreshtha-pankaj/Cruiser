@@ -36,8 +36,8 @@ class Straight(State):
         self.state_name = state_name
 
     def move(self, state_machine, servo=0, motor =slow_motor):
-        state_machine.create_trajectory_Motor_cmd_3('servo', servo)
-        state_machine.create_trajectory_Motor_cmd_3('brushless_motor', motor)
+        state_machine.create_trajectory_Motor_cmd('servo', servo)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
 
 
 class Right(State):
@@ -50,8 +50,8 @@ class Right(State):
         end_time = time.time() + turn_time
         print("Depth while turning:left, center, right ", state_machine.left_depth,state_machine.center_depth,state_machine.right_depth)
         while time.time() < end_time:
-            state_machine.create_trajectory_Motor_cmd_3('servo', servo)
-            state_machine.create_trajectory_Motor_cmd_3('brushless_motor', motor)
+            state_machine.create_trajectory_Motor_cmd('servo', servo)
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
 
 
 class AvoidBall():
@@ -61,20 +61,20 @@ class AvoidBall():
 
     def avoid_ball(self, state_machine, servo=0.5, motor=stop_motor):
 
-        state_machine.create_trajectory_Motor_cmd_3('servo',servo_left)
+        state_machine.create_trajectory_Motor_cmd('servo',servo_left)
         t0 = time.time()
         while(time.time() - t0 < backoff_turn_duration):
-            state_machine.create_trajectory_Motor_cmd_3('brushless_motor', slow_motor)
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
  
         t0 = time.time()
-        state_machine.create_trajectory_Motor_cmd_3('servo',servo_zero)
+        state_machine.create_trajectory_Motor_cmd('servo',servo_zero)
         while(time.time() - t0 < backoff_straight_duration):
-            state_machine.create_trajectory_Motor_cmd_3('brushless_motor', slow_motor)
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
 
         t0= time.time()
-        state_machine.create_trajectory_Motor_cmd_3('servo',servo_right)
+        state_machine.create_trajectory_Motor_cmd('servo',servo_right)
 	while( time.time() - t0<0.5):
-            state_machine.create_trajectory_Motor_cmd_3('brushless_motor', slow_motor)
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
 
 class Stop(State):
 
@@ -83,13 +83,13 @@ class Stop(State):
         self.reverse_flag= True
 
     def stop(self, state_machine, servo=servo_zero, motor=stop_motor):
-        state_machine.create_trajectory_Motor_cmd_3('servo',servo)
-        state_machine.create_trajectory_Motor_cmd_3('brushless_motor', motor)
+        state_machine.create_trajectory_Motor_cmd('servo',servo)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
         if self.reverse_flag:
-            state_machine.create_trajectory_Motor_cmd_3('brushless_motor', reverse_motor)
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
             self.reverse_flag= False
             time.sleep(0.5)
-        state_machine.create_trajectory_Motor_cmd_3('brushless_motor', motor)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
 
 
 class StateMachine(object):
@@ -121,7 +121,7 @@ class StateMachine(object):
     def sub_pid_callback(self, data):
         self.pid_value = data.data + servo_zero
 
-    def create_trajectory_Motor_cmd_3(self,jnt_name, pos, speed=0):
+    def create_trajectory_Motor_cmd(self,jnt_name, pos, speed=0):
         self.pololu.send_command(jnt_name, pos, speed)
 
     def sub_ball_callback(self, data):

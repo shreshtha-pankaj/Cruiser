@@ -39,8 +39,8 @@ class Straight(State):
 
     def move(self, state_machine, servo=0, motor =slow_motor):
         self.state = 'straight'
-        state_machine.create_trajectory_Motor_cmd_3('servo', servo)
-        state_machine.create_trajectory_Motor_cmd_3('brushless_motor', motor)
+        state_machine.create_trajectory_Motor_cmd('servo', servo)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
 
 
 class Right(State):
@@ -54,8 +54,8 @@ class Right(State):
         rospy.loginfo("Depth while turning:left, center, right: %f, %f, %f ", state_machine.left_depth, state_machine.center_depth,state_machine.right_depth)
         while time.time() < end_time:
             self.state = 'right'
-            state_machine.create_trajectory_Motor_cmd_3('servo', servo)
-            state_machine.create_trajectory_Motor_cmd_3('brushless_motor', motor)
+            state_machine.create_trajectory_Motor_cmd('servo', servo)
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', motor)
 
 
 class Stop(State):
@@ -65,8 +65,8 @@ class Stop(State):
         self.reverse_flag= True
 
     def stop(self, state_machine, servo=servo_zero, motor=stop_motor):
-        state_machine.create_trajectory_Motor_cmd_3('servo',servo)
-        state_machine.create_trajectory_Motor_cmd_3('brushless_motor', reverse_motor)
+        state_machine.create_trajectory_Motor_cmd('servo',servo)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
 
 
 class Reverse(State):
@@ -75,27 +75,27 @@ class Reverse(State):
 
     def stop_and_reverse(self, state_machine, servo=servo_zero, motor=stop_motor):
         #brake
-        state_machine.create_trajectory_Motor_cmd_3('servo',servo_zero)
-        state_machine.create_trajectory_Motor_cmd_3('brushless_motor', reverse_motor)
+        state_machine.create_trajectory_Motor_cmd('servo',servo_zero)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
         time.sleep(0.5)
         #zeror - reverse - zero 
         t0 = time.time()
         rospy.loginfo("Backoff: Stopping the servo")
-        state_machine.create_trajectory_Motor_cmd_3('servo',servo_zero)
-        state_machine.create_trajectory_Motor_cmd_3('brushless_motor', stop_motor)
+        state_machine.create_trajectory_Motor_cmd('servo',servo_zero)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
         time.sleep(0.2)
         
         # Move in reverse
         t0 = time.time()
         while(time.time() - t0 < backoff_reverse_duration and not rospy.is_shutdown() ):
             rospy.loginfo("Backoff: Giving reverse motor control: %f`", state_machine.center_depth)
-            state_machine.create_trajectory_Motor_cmd_3('brushless_motor', reverse_motor)
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
 
         t0 =time.time()
         while(time.time()-t0 <0.3):
             rospy.loginfo("Backoff: Stopping the servo")
-            state_machine.create_trajectory_Motor_cmd_3('servo',servo_zero)
-            state_machine.create_trajectory_Motor_cmd_3('brushless_motor', stop_motor)
+            state_machine.create_trajectory_Motor_cmd('servo',servo_zero)
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', stop_motor)
 
         action_left = True
         if(state_machine.left_depth > state_machine.right_depth):
@@ -111,41 +111,41 @@ class Reverse(State):
         rospy.loginfo("Backoff: Going straight")
         t0 = time.time()
         while(time.time() - t0 < backoff_turn_duration):
-            state_machine.create_trajectory_Motor_cmd_3('brushless_motor', slow_motor)
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
  
         t0 = time.time()
         while(time.time() - t0 < backoff_straight_duration):
             if action_left:
-                state_machine.create_trajectory_Motor_cmd_3('servo',servo)
+                state_machine.create_trajectory_Motor_cmd('servo',servo)
             else:
-                state_machine.create_trajectory_Motor_cmd_3('servo',servo)
-            state_machine.create_trajectory_Motor_cmd_3('brushless_motor', slow_motor)
+                state_machine.create_trajectory_Motor_cmd('servo',servo)
+            state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
         self.reversed =True
         
         t0= time.time()
         while(time.time() - t0 < 1):
             if action_left:
                # self.move_right(state_machine, servo_right)
-                state_machine.create_trajectory_Motor_cmd_3('servo', servo_right)
-                state_machine.create_trajectory_Motor_cmd_3('brushless_motor', slow_motor)
+                state_machine.create_trajectory_Motor_cmd('servo', servo_right)
+                state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
             else:
                # self.move_left(state_machine, servo_left)
-                state_machine.create_trajectory_Motor_cmd_3('servo', servo_left)
-                state_machine.create_trajectory_Motor_cmd_3('brushless_motor', slow_motor)
+                state_machine.create_trajectory_Motor_cmd('servo', servo_left)
+                state_machine.create_trajectory_Motor_cmd('brushless_motor', slow_motor)
 
     def reverse(self, state_machine, servo=servo_zero, motor=stop_motor):
-        state_machine.create_trajectory_Motor_cmd_3('brushless_motor', reverse_motor)
+        state_machine.create_trajectory_Motor_cmd('brushless_motor', reverse_motor)
 
     def move_right(self, state_machine, servo_right):
         temp = 0
         while temp > servo_right:
-           state_machine.create_trajectory_Motor_cmd_3('servo', temp)
+           state_machine.create_trajectory_Motor_cmd('servo', temp)
            temp -=0.09
 
     def move_left(self, state_machine, servo_left):
         temp = 0
         while temp < servo_left:
-            state_machine.create_trajectory_Motor_cmd_3('servo', temp)
+            state_machine.create_trajectory_Motor_cmd('servo', temp)
             temp +=0.14
 
 
@@ -176,7 +176,7 @@ class StateMachine(object):
     def sub_pid_callback(self, data):
         self.pid_value = data.data + servo_zero
 
-    def create_trajectory_Motor_cmd_3(self,jnt_name, pos, speed=0):
+    def create_trajectory_Motor_cmd(self,jnt_name, pos, speed=0):
         self.pololu.send_command(jnt_name, pos, speed)
 
 
