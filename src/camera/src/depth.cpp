@@ -1,6 +1,7 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include <sstream>
+#include <algorithm>
 #include <camera/Depth.h>
 #include <librealsense2/rs.hpp>
 
@@ -40,6 +41,24 @@ float getAverageDepthLR(rs2::depth_frame& depth, float width, float height, int 
     return 0;
   }
   return (1000*sum / ctr);
+}
+
+float getAverageDepthMedian(rs2::depth_frame& depth, float width, float height, int x, int y) {
+  float sum = 0;
+  int ctr = 0;
+  int size = height*width;
+  int median = size/2;
+  float[size] arr;
+  int c = 0;
+  for(int i = y; i < y + height; i++) {
+    for (int j = x; j < x + width; j++) {
+      float depth_val = depth.get_distance(j,i);
+      arr[c] = depth_val;
+      c++;
+    }
+  }
+  std::sort(data, data + size, std::greater<float>());
+  return arr[median]*1000;
 }
 
 float* getCorners(float width, float height, int cx, int cy) {
@@ -94,10 +113,13 @@ int main(int argc, char **argv){
       frames = pipe.wait_for_frames();
       rs2::depth_frame depth = frames.get_depth_frame();
 
-      msg.left_depth = getAverageDepthLR(depth, width_dim_LR, height_dim_LR, corners[0], corners[1]);
-      msg.center_depth = getAverageDepth(depth, width_dim, height_dim, corners[2], corners[3]);
-      msg.right_depth = getAverageDepthLR(depth, width_dim_LR, height_dim_LR, corners[4], corners[5]);
+      // msg.left_depth = getAverageDepthLR(depth, width_dim_LR, height_dim_LR, corners[0], corners[1]);
+      // msg.center_depth = getAverageDepth(depth, width_dim, height_dim, corners[2], corners[3]);
+      // msg.right_depth = getAverageDepthLR(depth, width_dim_LR, height_dim_LR, corners[4], corners[5]);
 
+      msg.left_depth = getAverageDepthMedian(depth, width_dim_LR, height_dim_LR, corners[0], corners[1]);
+      msg.center_depth = getAverageDepthMedian(depth, width_dim, height_dim, corners[2], corners[3]);
+      msg.right_depth = getAverageDepthMedian(depth, width_dim_LR, height_dim_LR, corners[4], corners[5]);
       depth_pub.publish(msg);
 
   }
