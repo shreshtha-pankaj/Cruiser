@@ -42,7 +42,7 @@ class Right(State):
         self.state_name = state_name
 
     def turn(self, state_machine, servo=-0.6, motor =0.4):
-        turn_time = 0.2 # TODO: Should turn time be a parameter?
+        turn_time = 0.05 # TODO: Should turn time be a parameter?
         end_time = time.time() + turn_time
         print("Depth while turning:left, center, right ", state_machine.left_depth,state_machine.center_depth,state_machine.right_depth)
         while time.time() < end_time:
@@ -56,8 +56,8 @@ class Left(State):
     def __init__(self, state_name):
         self.state_name = state_name
 
-    def turn(self, state_machine, servo=0.73, motor =0.4):
-        turn_time = 0.2 # TODO: Should turn time be a parameter?
+    def turn(self, state_machine, servo=0.73, motor =0.45):
+        turn_time = 0.05 # TODO: Should turn time be a parameter?
         end_time = time.time() + turn_time
         print("Depth while turning:left, center, right ", state_machine.left_depth,state_machine.center_depth,state_machine.right_depth)
         while time.time() < end_time:
@@ -159,7 +159,7 @@ class StateMachine(object):
         global turn_depth
         if self.start_flag:
             tim = time.time()
-            while(time.time() - tim < 1.0):
+            while(time.time() - tim < 2.5):
                 self.straight.move(self, servo=0.08, motor=-0.55)
             self.start_flag = False
         cur_time = time.time()
@@ -183,7 +183,7 @@ class StateMachine(object):
             curr_time = time.time()
             self.turn_timestamp = curr_time
             turn_depth= 4800
-            while time.time() - curr_time < 0.4:
+            while time.time() - curr_time < 0.3:
                 self.straight.move(self,servo=-0.33,motor=-0.5)
             #while time.time() - curr_time < 2:
                 #self.straight.move(self,servo=self.pid_value,motor=-0.4)

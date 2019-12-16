@@ -30,7 +30,7 @@ class pid_node(object):
         # self.kd = self.straight_state["kd"]
 
         self.lastgains = []
-        self.pid = PID.PID(0.15/2000,0,0)
+        self.pid = PID.PID(0.18/2000,0,0)
         self.pid.clear()
         self.current_pose = 0
         self.current_state = 0
@@ -47,10 +47,23 @@ class pid_node(object):
         #Published by state machine 1 - straight 2 - turn right
         self.current_state = data.data
                                   
-    def depth_callback(self,data):
+    def depth_callback_1(self,data):
         if data.left_depth > 3750:
             data.left_depth = 1800
         error = data.right_depth - data.left_depth
+        if abs(error) <= 200:
+            error = 0
+        self.output_publisher(error)
+
+    def depth_callback(self, data):
+         #    data.right_depth = 1800
+        turn_thresh = 3500
+        if (data.right_depth >= turn_thresh and data.left_depth >= turn_thresh) or (data.left_depth<turn_thresh and data.right_depth <turn_thresh):
+            error = data.right_depth - data.left_depth
+        elif data.left_depth > turn_thresh:
+            error = 2*(data.right_depth-1800)
+        elif data.right_depth > turn_thresh:
+            error = 2*(1800 - data.left_depth)
         if abs(error) <= 200:
             error = 0
         self.output_publisher(error)
