@@ -64,12 +64,12 @@ float getAverageDepthMedian(rs2::depth_frame& depth, float width, float height, 
 float* getCorners(float width, float height, int cx, int cy) {
   float *corners = new float[6];
   // TODO: need to check what the right value is, with 1280 * 960, we used 20, avoiding noisy edges
-  corners[0] = 10;
+  corners[0] = 20;
   corners[1] = (cy - height / 2);
   corners[2] = (cx - width / 2);
   corners[3] = (cy - height / 2);
   // TODO: need to check what the right value is, with 1280 * 960, we used 20
-  corners[4] = (depth_width - width - 10);
+  corners[4] = (depth_width - width - 20);
   corners[5] = (cy - height / 2);
   return corners;
 }
@@ -117,9 +117,9 @@ int main(int argc, char **argv){
       // msg.center_depth = getAverageDepth(depth, width_dim, height_dim, corners[2], corners[3]);
       // msg.right_depth = getAverageDepthLR(depth, width_dim_LR, height_dim_LR, corners[4], corners[5]);
 
-      msg.left_depth = getAverageDepthMedian(depth, width_dim_LR, height_dim_LR, corners[0], corners[1]);
-      msg.center_depth = getAverageDepthMedian(depth, width_dim, height_dim, corners[2], corners[3]);
-      msg.right_depth = getAverageDepthMedian(depth, width_dim_LR, height_dim_LR, corners[4], corners[5]);
+      msg.left_depth = getAverageDepthLR(depth, width_dim_LR, height_dim_LR, corners[0], corners[1]);
+      msg.center_depth = getAverageDepth(depth, width_dim, height_dim, corners[2], corners[3]);
+      msg.right_depth = getAverageDepthLR(depth, width_dim_LR, height_dim_LR, corners[4], corners[5]);
       depth_pub.publish(msg);
 
   }
