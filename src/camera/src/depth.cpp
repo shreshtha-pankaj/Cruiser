@@ -62,7 +62,7 @@ int getMedian(rs2::depth_frame& depth, float width, float height) {
     arr[i] = temp[len/2];
 
   }
-  float max = 0;
+  int max = 0;
   for(int i=0; i< size;i++){
     if(arr[i]>arr[max]){
       max = i;
