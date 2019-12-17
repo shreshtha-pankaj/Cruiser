@@ -75,7 +75,7 @@ class pid_node(object):
         if output > 0.75:
             output = 0.75
         if output < -0.75:
-            outpout = -0.75
+            output = -0.75
         self.output_pub.publish(output)
 
 if __name__ == "__main__":

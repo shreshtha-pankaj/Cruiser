@@ -89,9 +89,10 @@ class Stop(State):
 class StateMachine(object):
 
 
-    def __init__(self, pub_topic, sub_topic_depth, sub_topic_pid, sub_topic_stop_sign):
+    def __init__(self, pub_topic, sub_topic_depth, sub_topic_pid, sub_topic_pid_light, sub_topic_stop_sign):
         self.sub_depth = rospy.Subscriber(sub_topic_depth, Depth, callback=self.sub_depth_callback)
         self.sub_pid = rospy.Subscriber(sub_topic_pid, Float32, callback=self.sub_pid_callback)
+        self.sub_pid_light = rospy.Subscriber(sub_topic_pid, Float32, callback=self.sub_pid_light_callback)
         self.sub_stop_sign = rospy.Subscriber(sub_topic_stop_sign, Bool, callback=self.sub_stop_sign_callback)
         self.pololu = Polulu_Command()
         self.center_depth, self.left_depth, self.right_depth = 0, 0, 0
@@ -99,7 +100,7 @@ class StateMachine(object):
         self.right = Right("Move-Right")
         self.left = Left("Move-Left")
         self.stop = Stop("Stop")
-        self.pid_value = 0.15
+        self.pid_value, self.pid_light_value = 0, 0
         self.is_stop_sign = False
         self.curr_turn = 1
         self.turn_state_flag = False
@@ -108,6 +109,7 @@ class StateMachine(object):
         self.turn_timestamp = time.time() + 0
         self.time_wait = 2
         self.slow_down_depth = turn_depth + 2500
+        self.light_flag = False
         rospy.loginfo("slow_down_depth %f", self.slow_down_depth)
         self.turn_count = 0
 
@@ -118,6 +120,9 @@ class StateMachine(object):
 
     def sub_pid_callback(self, data):
         self.pid_value = data.data
+
+    def sub_pid_light_callback(self, data):
+        self.pid_light_value = data.data
 
     def create_trajectory_Motor_cmd(self, jntName, pos, speed=0):
         goal = pololu_trajectoryGoal()
@@ -174,9 +179,12 @@ class StateMachine(object):
             rospy.loginfo('Car is moving straight(l, c, r): %f, %f, %f', self.left_depth, self.center_depth, self.right_depth)
             if self.center_depth < self.slow_down_depth  and time.time() - self.turn_timestamp > self.time_wait:
                 rospy.loginfo("slowing down------->>>>>>>")
-                self.straight.move(self,servo = self.pid_value,motor=0.75)
+                self.straight.move(self,servo = self.pid_value, motor=0.75)
             else:
-                self.straight.move(self,servo = self.pid_value,motor=high_speed)
+                if self.light_flag:
+                    self.straight.move(self,servo = self.pid_light_value, motor = high_speed)
+                else:
+                    self.straight.move(self,servo = self.pid_value, motor = high_speed)
 
 
         # TODO: Explain what is happening here
@@ -187,10 +195,9 @@ class StateMachine(object):
             if self.turn_count >4:
                 turn_depth= 4800
                 self.time_wait = 4.8
+                self.light_flag = True
             while time.time() - curr_time < 0.3:
                 self.straight.move(self,servo=-0.33,motor=-0.5)
-            #while time.time() - curr_time < 2:
-                #self.straight.move(self,servo=self.pid_value,motor=-0.4)
             self.turn_state_flag = False
             self.turn_count=0
 
@@ -230,10 +237,11 @@ class Polulu_Command:
 if __name__ =='__main__':
     sub_topic_depth = '/camera/depth'
     sub_topic_pid = '/pid_output'
+    sub_topic_pid_light = '/pid_output_light'
     sub_topic_stop_sign = '/is_stop_sign'
     pub_topic = '/car_state'
     rospy.init_node('car_state_pub')
-    ss = StateMachine(pub_topic, sub_topic_depth,sub_topic_pid,sub_topic_stop_sign)
+    ss = StateMachine(pub_topic, sub_topic_depth, sub_topic_pid, sub_topic_pid_light, sub_topic_stop_sign)
     ss.pololu.send_command('servo',0)
     time.sleep(3.5)
     rospy.loginfo('Initializing Master State Machine')

@@ -43,6 +43,34 @@ float getAverageDepthLR(rs2::depth_frame& depth, float width, float height, int 
   return (1000*sum / ctr);
 }
 
+int getMedian(rs2::depth_frame& depth, float width, float height) {
+  float sum = 0;
+  int ctr = 0;
+  int size = width;
+  int start = height/2 - 5;
+  int end = height/2 + 5;
+  float arr[size];
+  int len = end -start + 1;
+  float temp[len];
+  int c = 0;
+  for(int i = 0; i < width; i++) {
+    for (int j = start, k =0; j < end ; j++,k++) {
+      float depth_val = depth.get_distance(i,j);
+      temp[k] = depth_val;
+    }
+    std::sort(temp, temp + (len -1));
+    arr[i] = temp[len/2];
+
+  }
+  int max = 0;
+  for(int i=0; i< size;i++){
+    if(arr[i]>arr[max]){
+      max = i;
+    }
+  }
+  return width/2 - max;
+}
+
 float getAverageDepthMedian(rs2::depth_frame& depth, float width, float height, int x, int y) {
   float sum = 0;
   int ctr = 0;
@@ -120,6 +148,7 @@ int main(int argc, char **argv){
       msg.left_depth = getAverageDepthLR(depth, width_dim_LR, height_dim_LR, corners[0], corners[1]);
       msg.center_depth = getAverageDepth(depth, width_dim, height_dim, corners[2], corners[3]);
       msg.right_depth = getAverageDepthLR(depth, width_dim_LR, height_dim_LR, corners[4], corners[5]);
+      msg.di = getMedian(depth, depth_width, depth_height);
       depth_pub.publish(msg);
 
   }
