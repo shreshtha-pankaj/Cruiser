@@ -20,7 +20,7 @@ class pid_node(object):
         
         self.output_pub = rospy.Publisher('/pid_output',Float32, queue_size = 10)
         rospy.Subscriber("/current_state", Int16 ,self.current_state_callback)
-        rospy.Subscriber("/camera/depth", Depth ,self.depth_callback)
+        rospy.Subscriber("/camera/depth", Depth ,self.depth_callback_light)
         rospy.Subscriber("/kp", Float32 ,self.kp_callback)
 
         # self.straight_state =  rospy.get_param("right")
@@ -30,7 +30,7 @@ class pid_node(object):
         # self.kd = self.straight_state["kd"]
 
         self.lastgains = []
-        self.pid = PID.PID(0.18/2000,0,0)
+        self.pid = PID.PID(0.1/1000,0,0)
         self.pid.clear()
         self.current_pose = 0
         self.current_state = 0
@@ -65,6 +65,13 @@ class pid_node(object):
         elif data.right_depth > turn_thresh:
             error = 2*(1800 - data.left_depth)
         if abs(error) <= 200:
+            error = 0
+        self.output_publisher(error)
+
+    def depth_callback_light(self, data):
+         #    data.right_depth = 1800
+        error = data.di
+        if abs(error) <= 15:
             error = 0
         self.output_publisher(error)
 
