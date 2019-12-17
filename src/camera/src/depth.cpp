@@ -48,7 +48,7 @@ int getMedian(rs2::depth_frame& depth, float width, float height) {
   int ctr = 0;
   int size = width;
   int start = height/2 - 5;
-  int end = height/2 + 5
+  int end = height/2 + 5;
   float arr[size];
   int len = end -start + 1;
   float temp[len];
