@@ -48,7 +48,7 @@ float getAverageDepthMedian(rs2::depth_frame& depth, float width, float height, 
   int ctr = 0;
   int size = height*width;
   int median = size/2;
-  float[size] arr;
+  float arr[size];
   int c = 0;
   for(int i = y; i < y + height; i++) {
     for (int j = x; j < x + width; j++) {
@@ -57,7 +57,7 @@ float getAverageDepthMedian(rs2::depth_frame& depth, float width, float height, 
       c++;
     }
   }
-  std::sort(data, data + size, std::greater<float>());
+  std::sort(arr, arr + size);
   return arr[median]*1000;
 }
 
