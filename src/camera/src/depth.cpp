@@ -141,13 +141,13 @@ int main(int argc, char **argv){
       frames = pipe.wait_for_frames();
       rs2::depth_frame depth = frames.get_depth_frame();
 
-      // msg.left_depth = getAverageDepthLR(depth, width_dim_LR, height_dim_LR, corners[0], corners[1]);
-      // msg.center_depth = getAverageDepth(depth, width_dim, height_dim, corners[2], corners[3]);
-      // msg.right_depth = getAverageDepthLR(depth, width_dim_LR, height_dim_LR, corners[4], corners[5]);
+//       msg.left_depth = getAverageDepthLR(depth, width_dim_LR, height_dim_LR, corners[0], corners[1]);
+  //     msg.center_depth = getAverageDepth(depth, width_dim, height_dim, corners[2], corners[3]);
+    //   msg.right_depth = getAverageDepthLR(depth, width_dim_LR, height_dim_LR, corners[4], corners[5]);
 
-      msg.left_depth = getAverageDepthLR(depth, width_dim_LR, height_dim_LR, corners[0], corners[1]);
-      msg.center_depth = getAverageDepth(depth, width_dim, height_dim, corners[2], corners[3]);
-      msg.right_depth = getAverageDepthLR(depth, width_dim_LR, height_dim_LR, corners[4], corners[5]);
+      msg.left_depth = getAverageDepthMedian(depth, width_dim_LR, height_dim_LR, corners[0], corners[1]);
+      msg.center_depth = getAverageDepthMedian(depth, width_dim, height_dim, corners[2], corners[3]);
+      msg.right_depth = getAverageDepthMedian(depth, width_dim_LR, height_dim_LR, corners[4], corners[5]);
       msg.di = getMedian(depth, depth_width, depth_height);
       depth_pub.publish(msg);
 

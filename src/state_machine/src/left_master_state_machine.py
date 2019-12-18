@@ -107,7 +107,7 @@ class StateMachine(object):
         self.start_flag = False
         self.is_in_turn = False
         self.turn_timestamp = time.time() + 0
-        self.time_wait = 2
+        self.time_wait = 0
         self.slow_down_depth = turn_depth + 2500
         self.light_flag = False
         rospy.loginfo("slow_down_depth %f", self.slow_down_depth)
@@ -183,6 +183,7 @@ class StateMachine(object):
                 self.straight.move(self,servo = self.pid_value, motor=0.75)
             else:
                 if self.light_flag:
+                    print('Using light flag:')
                     self.straight.move(self,servo = self.pid_light_value, motor = high_speed)
                 else:
                     self.straight.move(self,servo = self.pid_value, motor = high_speed)

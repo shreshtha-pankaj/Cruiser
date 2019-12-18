@@ -183,7 +183,7 @@ class StateMachine(object):
                     self.slow_down_depth = 9000
                     turn_depth = 4800
                     self.turn_count = 0
-                    self.light_flag = True
+                    self.light_flag = False
                 else:
                     self.light_flag = False
                     self.slow_down_depth = 3000
