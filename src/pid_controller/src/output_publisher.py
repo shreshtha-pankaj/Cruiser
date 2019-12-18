@@ -1,5 +1,5 @@
 #!/usr/bin/python
-servo_zero = 0.135
+servo_zero = 0.115
 import PID
 import time
 import numpy as np

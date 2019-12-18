@@ -1,5 +1,5 @@
 #!/usr/bin/python
-servo_zero = 0.135
+servo_zero = 0.115
 import PID
 import time
 import numpy as np
@@ -53,9 +53,11 @@ class pid_node(object):
         if (data.right_depth > turn_thresh and data.left_depth >turn_thresh) or (data.left_depth<turn_thresh and data.right_depth <turn_thresh):
             error = data.right_depth - data.left_depth
         elif data.left_depth > turn_thresh:
+            print('Using right wall',data.left_depth,data.right_depth)
             error = 2*(data.right_depth-1800)
         elif data.right_depth > turn_thresh:
             error = 2*(1800 - data.left_depth)
+            print('Using left wall',data.left_depth,data.right_depth)
         if abs(error) <= 200:
             error = 0
         self.output_publisher(error)

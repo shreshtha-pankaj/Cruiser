@@ -41,7 +41,7 @@ class Right(State):
     def __init__(self, state_name):
         self.state_name = state_name
 
-    def turn(self, state_machine, servo=-0.6, motor =0.4):
+    def turn(self, state_machine, servo=-0.6, motor =-0.25):
         turn_time = 0.05 # TODO: Should turn time be a parameter?
         end_time = time.time() + turn_time
         print("Depth while turning:left, center, right ", state_machine.left_depth,state_machine.center_depth,state_machine.right_depth)
@@ -56,7 +56,7 @@ class Left(State):
     def __init__(self, state_name):
         self.state_name = state_name
 
-    def turn(self, state_machine, servo=0.73, motor =0.45):
+    def turn(self, state_machine, servo=0.73, motor =-0.25):
         turn_time = 0.05 # TODO: Should turn time be a parameter?
         end_time = time.time() + turn_time
         print("Depth while turning:left, center, right ", state_machine.left_depth,state_machine.center_depth,state_machine.right_depth)
@@ -103,12 +103,13 @@ class StateMachine(object):
         self.is_stop_sign = False
         self.curr_turn = 1
         self.turn_state_flag = False
-        self.start_flag = True
+        self.start_flag = False
         self.is_in_turn = False
         self.turn_timestamp = time.time() + 0
-        self.time_wait = 4.8
-        self.slow_down_depth = turn_depth + 3500
+        self.time_wait = 2
+        self.slow_down_depth = turn_depth + 2500
         rospy.loginfo("slow_down_depth %f", self.slow_down_depth)
+        self.turn_count = 0
 
     def sub_depth_callback(self, data):
         self.center_depth = data.center_depth
@@ -181,13 +182,17 @@ class StateMachine(object):
         # TODO: Explain what is happening here
         elif self.center_depth > turn_depth and self.turn_state_flag:
             curr_time = time.time()
+            print('Correcting after turn state')
             self.turn_timestamp = curr_time
-            turn_depth= 4800
+            if self.turn_count >4:
+                turn_depth= 4800
+                self.time_wait = 4.8
             while time.time() - curr_time < 0.3:
                 self.straight.move(self,servo=-0.33,motor=-0.5)
             #while time.time() - curr_time < 2:
                 #self.straight.move(self,servo=self.pid_value,motor=-0.4)
             self.turn_state_flag = False
+            self.turn_count=0
 
         # Too close to an obstacle, STOP
         elif self.center_depth < 1200:
@@ -199,6 +204,7 @@ class StateMachine(object):
         elif self.center_depth < turn_depth:
             self.left.turn(self)
             self.turn_state_flag = True
+            self.turn_count +=1
 
 
        #elif self.center_depth < 5500:# and self.right_depth > 3000:# and self.turn_flag:
@@ -227,9 +233,9 @@ if __name__ =='__main__':
     sub_topic_stop_sign = '/is_stop_sign'
     pub_topic = '/car_state'
     rospy.init_node('car_state_pub')
-    ss.straight.move(ss,servo=servo_zero,motor=0)
-    time.sleep(3.5)
     ss = StateMachine(pub_topic, sub_topic_depth,sub_topic_pid,sub_topic_stop_sign)
+    ss.pololu.send_command('servo',0)
+    time.sleep(3.5)
     rospy.loginfo('Initializing Master State Machine')
     while not rospy.is_shutdown():
         # if True:#not ss.is_in_turn:
