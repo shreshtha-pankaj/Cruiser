@@ -23,17 +23,18 @@ class pid_node(object):
         rospy.Subscriber("/camera/depth", Depth ,self.depth_callback)
         rospy.Subscriber("/kp", Float32 ,self.kp_callback)
 
-        # self.straight_state =  rospy.get_param("right")
-        #
-        # self.kp = self.straight_state["kp"]
-        # self.ki = self.straight_state["ki"]
-        # self.kd = self.straight_state["kd"]
-
         self.lastgains = []
         self.pid = PID.PID(0.18/2000,0,0)
         self.pid.clear()
         self.current_pose = 0
         self.current_state = 0
+
+
+        # Changes for light
+        rospy.Subscriber("/camera/depth", Depth, self.depth_callback_light)
+        self.output_pub_light = rospy.Publisher('/pid_output_light',Float32, queue_size = 10)
+        self.pid_light = PID.PID(-3.6 / 1000, 0, 0)
+        self.pid_light.clear()
 
     def kp_callback(self,data):
         self.pid.setKp(data.data*(10**-4))
@@ -77,6 +78,21 @@ class pid_node(object):
         if output < -0.75:
             output = -0.75
         self.output_pub.publish(output)
+
+    def depth_callback_light(self, data):
+        error = data.di
+        # if abs(error) <= 15:
+        #     error = 0
+        self.output_publisher_light(error)
+
+    def output_publisher_light(self, current_error):
+        output = self.pid_light.update(current_error)
+        output += servo_zero
+        if output > 0.7:
+            output = 0.7
+        if output < -0.7:
+            output = -0.7
+        self.output_pub_light.publish(output)
 
 if __name__ == "__main__":
     rospy.init_node('pid_node')
